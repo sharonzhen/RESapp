@@ -2,7 +2,6 @@
 
 from flask import (Flask, session, render_template, request,
                     flash, redirect)
-from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db
 import crud
 

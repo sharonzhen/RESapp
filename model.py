@@ -10,15 +10,17 @@ class User(db.Model):
     password = db.Column(db.String(50))
     
     # relationships
-    contact = db.relationship('Contact', uselist=False) # one-to-one
-    resumes = db.relationship('Resume') # one-to-many
+    # one-to-one
+    contact = db.relationship('Contact', uselist=False) 
+    # one-to-many
+    resumes = db.relationship('Resume')                 
     works = db.relationship('Work', backref = 'user')
     courses = db.relationship('Course', backref = 'user')
     projects = db.relationship('Project', backref = 'user')
     techs = db.relationship('Tech', backref = 'user')
 
     def __repr__(self):
-        return f"<>"
+        return f"<User {user_pk} created with login: {login}>"
 
 class Contact(db.Model):
     """data model for user's contact info """
@@ -34,10 +36,11 @@ class Contact(db.Model):
     github = db.Column(db.String(50), nullable=True) 
     linkedin = db.Column(db.String(50), nullable=True)
     # relationships
-    user = db.relationship('User', uselist=False)
+    # one-to-one
+    user = db.relationship('User', uselist=False)   
 
     def __repr__(self):
-        return f"<>"
+        return f"<Contact for user {user_pk} created>"
 
 class Resume(db.Model):
     """ data model for user's resumes """ 
@@ -53,15 +56,17 @@ class Resume(db.Model):
     work_res = db.Column(db.Integer, nullable=True, autoincrement=True)
 
     # relationships
-    user = db.relationship('User')
-    contact = db.relationship('Contact', backref = 'resumes')
+    # many-to-one
+    user = db.relationship('User')  
+    # many-to-many
+    contact = db.relationship('Contact', backref = 'resumes') 
     works = db.relationship('Work', secondary = 'resume_work', backref = 'resumes')
     courses = db.relationship('Course', secondary = 'resume_course', backref = 'resumes')
     projects = db.relationship('Project', secondary = 'resume_project', backref = 'resumes')
     techs = db.relationship('Tech', secondary = 'resume_tech', backref = 'resumes')
 
     def __repr__(self):
-        return f"<>"
+        return f"<Resume {resume_pk} generated>"
 
 class Work(db.Model):
     """ data model for all employment history """
@@ -79,7 +84,7 @@ class Work(db.Model):
     date_to = db.Column(db.DateTime, nullable=True)
 
     def __repr__(self):
-        return f"<>"
+        return f"<Added workplace at {company} for user {user_pk}>"
 
 class Course(db.Model):
     """ data model for all courses """ 
@@ -92,7 +97,7 @@ class Course(db.Model):
     name = db.Column(db.String(50), nullable=False)
     
     def __repr__(self):
-        return f"<>"
+        return f"<Added course {name} for {user_pk}>"
 
 class Project(db.Model):
     """ data model for all projects """ 
@@ -107,7 +112,7 @@ class Project(db.Model):
     link = db.Column(db.String(100), nullable=True)
 
     def __repr__(self):
-        return f"<>"
+        return f"<Added project {name} for user {user_pk}>"
 
 class Tech(db.Model):
     """ data model for all technologies """ 
@@ -121,7 +126,7 @@ class Tech(db.Model):
     values = db.Column(db.Text, nullable=False) # i.e. c++, java, etc.
     
     def __repr__(self):
-        return f"<>"
+        return f"<Added {tech} for {user_pk}>"
 
 class Detail(db.Model):
     """ data model for all details """ 
@@ -136,11 +141,17 @@ class Detail(db.Model):
     work_pk = db.Column(db.Integer, db.ForeignKey('works.work_pk'), nullable=True)
     project_pk = db.Column(db.Integer, db.ForeignKey('projects.project_pk'), nullable=True)
     # relationships
+    # many-to-one
     work = db.relationship('Work', backref = 'details')
     project = db.relationship('Project', backref = 'details')
 
     def __repr__(self):
-        return f"<>"
+        if work:
+            return f"<Added employment detail for user {user_pk}>"
+        elif project:
+            return f"<Added project detail for user {user_pk}>"
+        else:
+            return f"Added detail for neither employment nor project"
 
 ###############################################################
 ################ ASSOCIATION TABLES ###########################
@@ -152,9 +163,6 @@ class ResumeCourse(db.Model):
     course_pk = db.Column(db.Integer, db.ForeignKey('courses.course_pk'), primary_key = True, nullable=False)
     course_res = db.Column(db.Integer, db.ForeignKey('resumes.course_res'), primary_key = True, nullable=False)
     
-    # relationships
-    # resumes = db.relationship('Resume', backref = 'rc')
-    # courses = db.relationship('Course', backref = 'rc')
 
 
 class ResumeProject(db.Model):
@@ -163,9 +171,6 @@ class ResumeProject(db.Model):
     project_pk = db.Column(db.Integer, db.ForeignKey('projects.project_pk'), primary_key = True, nullable=False)
     project_res = db.Column(db.Integer, db.ForeignKey('resumes.project_res'), primary_key = True, nullable=False)
 
-    # relationships
-    # resumes = db.relationship('Resume', backref = 'rp')
-    # projects = db.relationship('Project', backref = 'rp')
 
 
 class ResumeTech(db.Model):
@@ -174,10 +179,6 @@ class ResumeTech(db.Model):
     tech_pk = db.Column(db.Integer, db.ForeignKey('techs.tech_pk'), primary_key = True, nullable=False)
     tech_res = db.Column(db.Integer, db.ForeignKey('resumes.tech_res'), primary_key = True, nullable=False)
 
-    # relationships
-    # resumes = db.relationship('Resume', backref = 'rt')
-    # techs = db.relationship('Tech', backref = 'rt')
-
 
 
 class ResumeWork(db.Model):
@@ -185,10 +186,6 @@ class ResumeWork(db.Model):
     __tablename__ = "resume_work"
     work_pk = db.Column(db.Integer, db.ForeignKey('works.work_pk'), primary_key = True, nullable=False)
     work_res = db.Column(db.Integer, db.ForeignKey('resumes.work_res'), primary_key = True, nullable=False)
-
-    # relationships
-    # resumes = db.relationship('Resume', backref = 'rw')
-    # works = db.relationship('Work', backref = 'rw')
 
 
 ###########################################################
