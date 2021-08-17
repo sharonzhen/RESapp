@@ -2,12 +2,29 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
+class User(db.Model):
+    """ User with primary key, email, password """
+    __tablename__ = "users"
+    user_pk = db.Column(db.Integer, primary_key = True, autoincrement = True)
+    login = db.Column(db.String(50), unique = True)
+    password = db.Column(db.String(50))
+    
+    # relationships
+    contact = db.relationship('Contact', uselist=False) # one-to-one
+    resumes = db.relationship('Resume') # one-to-many
+    works = db.relationship('Work', backref = 'user')
+    courses = db.relationship('Course', backref = 'user')
+    projects = db.relationship('Project', backref = 'user')
+    techs = db.relationship('Tech', backref = 'user')
+
+    def __repr__(self):
+        return f"<>"
+
 class Contact(db.Model):
     """data model for user's contact info """
     __tablename__ = "contacts"
-
-    # primary key
-    contact_pk = db.Column(db.Integer, primary_key=True, autoincrement = True)
+    # primary foreign key
+    user_pk = db.Column(db.Integer, db.ForeignKey('users.user_pk'), primary_key=True)
     # non-nullables
     first = db.Column(db.String(20), nullable=False) 
     last = db.Column(db.String(20), nullable=False) 
@@ -16,8 +33,8 @@ class Contact(db.Model):
     phone = db.Column(db.String(20), nullable=True)
     github = db.Column(db.String(50), nullable=True) 
     linkedin = db.Column(db.String(50), nullable=True)
-    
-    # backrefs: resumes = db.relationship('Resume')
+    # relationships
+    user = db.relationship('User', uselist=False)
 
     def __repr__(self):
         return f"<>"
@@ -28,14 +45,15 @@ class Resume(db.Model):
     # primary key
     resume_pk = db.Column(db.Integer, primary_key=True, autoincrement=True)
     # foreign keys
-    contact_id = db.Column(db.Integer, db.ForeignKey('contacts.contact_pk'), nullable=False)
-    # non-nullables
-    course_res = db.Column(db.Integer, nullable=False, autoincrement = True)  
-    projects_res = db.Column(db.Integer ,nullable=False, autoincrement=True)
-    tech_res = db.Column(db.Integer, nullable=False, autoincrement=True)
-    work_res = db.Column(db.Integer, nullable=False, autoincrement=True)
+    user_pk = db.Column(db.Integer, db.ForeignKey('users.user_pk'), nullable=False)
+    # nullables
+    course_res = db.Column(db.Integer, nullable=True, autoincrement = True)  
+    projects_res = db.Column(db.Integer, nullable=True, autoincrement=True)
+    tech_res = db.Column(db.Integer, nullable=True, autoincrement=True)
+    work_res = db.Column(db.Integer, nullable=True, autoincrement=True)
 
     # relationships
+    user = db.relationship('User')
     contact = db.relationship('Contact', backref = 'resumes')
     works = db.relationship('Work', secondary = 'resume_work', backref = 'resumes')
     courses = db.relationship('Course', secondary = 'resume_course', backref = 'resumes')
@@ -50,6 +68,8 @@ class Work(db.Model):
     __tablename__ = "works"
     # primary key
     work_pk = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    # foreign key
+    user_pk = db.Column(db.Integer, db.ForeignKey('users.user_pk'), nullable=False)
     # non-nullables
     company = db.Column(db.String(20), nullable=False)
     role = db.Column(db.String(50), nullable=False)
@@ -66,6 +86,8 @@ class Course(db.Model):
     __tablename__ = "courses"
     # primary key
     course_pk = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    # foreign key
+    user_pk = db.Column(db.Integer, db.ForeignKey('users.user_pk'), nullable=False)
     # non-nullables
     name = db.Column(db.String(50), nullable=False)
     
@@ -77,6 +99,8 @@ class Project(db.Model):
     __tablename__ = "projects"
     # primary key
     project_pk = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    # foreign key
+    user_pk = db.Column(db.Integer, db.ForeignKey('users.user_pk'), nullable=False)
     # non-nullables
     name = db.Column(db.String(50), nullable=False)
     # nullables
@@ -90,6 +114,8 @@ class Tech(db.Model):
     __tablename__ = "techs"
     # primary key
     tech_pk = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    # foreign key 
+    user_pk = db.Column(db.Integer, db.ForeignKey('users.user_pk'), nullable=False)
     # non-nullable
     label = db.Column(db.String(50), nullable=False) # i.e. proficient in:
     values = db.Column(db.Text, nullable=False) # i.e. c++, java, etc.
@@ -102,11 +128,13 @@ class Detail(db.Model):
     __tablename__ = "details"
     # primary key
     detail_pk = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    # foreign key
+    user_pk = db.Column(db.Integer, db.ForeignKey('users.user_pk'), nullable=False)
     # non-nullable
     bullet = db.Column(db.Text, nullable=False)
     # foreign keys
-    work_pk = db.Column(db.Integer, db.ForeignKey('works.work_pk'), nullable=False)
-    project_pk = db.Column(db.Integer, db.ForeignKey('projects.project_pk'), nullable=False)
+    work_pk = db.Column(db.Integer, db.ForeignKey('works.work_pk'), nullable=True)
+    project_pk = db.Column(db.Integer, db.ForeignKey('projects.project_pk'), nullable=True)
     # relationships
     work = db.relationship('Work', backref = 'details')
     project = db.relationship('Project', backref = 'details')
