@@ -3,8 +3,8 @@
 from flask import (Flask, session, render_template, request,
                     flash, redirect)
 from flask_debugtoolbar import DebugToolbarExtension
-from model import (connect_to_db, Contact, Resume, Work, 
-                    Course, Project, Tech, Detail)
+from model import connect_to_db
+import crud
 
 app = Flask(__name__)
 app.secret_key = "dev"

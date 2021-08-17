@@ -37,10 +37,10 @@ class Resume(db.Model):
 
     # relationships
     contact = db.relationship('Contact', backref = 'resumes')
-    # rc.courses -> db.relationship('Course')
-    # rp.projects -> db.relationship('Project)
-    # rt.techs -> db.relationship('Tech')
-    # rw.works -> db.relationship('Work')
+    works = db.relationship('Work', secondary = 'resume_work', backref = 'resumes')
+    courses = db.relationship('Course', secondary = 'resume_course', backref = 'resumes')
+    projects = db.relationship('Project', secondary = 'resume_project', backref = 'resumes')
+    techs = db.relationship('Tech', secondary = 'resume_tech', backref = 'resumes')
 
     def __repr__(self):
         return f"<>"
@@ -50,8 +50,6 @@ class Work(db.Model):
     __tablename__ = "works"
     # primary key
     work_pk = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    # foreign key 
-    detail = db.Column(db.Integer, db.ForeignKey('details.detail_pk'), nullable=False)
     # non-nullables
     company = db.Column(db.String(20), nullable=False)
     role = db.Column(db.String(50), nullable=False)
@@ -79,8 +77,6 @@ class Project(db.Model):
     __tablename__ = "projects"
     # primary key
     project_pk = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    # foreign keys
-    detail = db.Column(db.Integer, db.ForeignKey('details.detail_pk'), nullable=False)
     # non-nullables
     name = db.Column(db.String(50), nullable=False)
     # nullables
@@ -108,7 +104,13 @@ class Detail(db.Model):
     detail_pk = db.Column(db.Integer, primary_key=True, autoincrement=True)
     # non-nullable
     bullet = db.Column(db.Text, nullable=False)
-    
+    # foreign keys
+    work_pk = db.Column(db.Integer, db.ForeignKey('works.work_pk'), nullable=False)
+    project_pk = db.Column(db.Integer, db.ForeignKey('projects.project_pk'), nullable=False)
+    # relationships
+    work = db.relationship('Work', backref = 'details')
+    project = db.relationship('Project', backref = 'details')
+
     def __repr__(self):
         return f"<>"
 
@@ -116,57 +118,50 @@ class Detail(db.Model):
 ################ ASSOCIATION TABLES ###########################
 ###############################################################
 
-class ResCourse(db.Model):
+class ResumeCourse(db.Model):
     """ Resume-Course association table"""   
-    __tablename__ = "rescourse"
+    __tablename__ = "resume_course"
     course_pk = db.Column(db.Integer, db.ForeignKey('courses.course_pk'), primary_key = True, nullable=False)
     course_res = db.Column(db.Integer, db.ForeignKey('resumes.course_res'), primary_key = True, nullable=False)
     
     # relationships
-    resumes = db.relationship('Resume', backref = 'rc')
-    courses = db.relationship('Course', backref = 'rc')
-
-    def __repr__(self):
-        return f"<>"
+    # resumes = db.relationship('Resume', backref = 'rc')
+    # courses = db.relationship('Course', backref = 'rc')
 
 
-class ResProject(db.Model):
+class ResumeProject(db.Model):
     """ Resume-Project association table""" 
-    __tablename__ = "resproject"
+    __tablename__ = "resume_project"
     project_pk = db.Column(db.Integer, db.ForeignKey('projects.project_pk'), primary_key = True, nullable=False)
     project_res = db.Column(db.Integer, db.ForeignKey('resumes.project_res'), primary_key = True, nullable=False)
 
     # relationships
-    resumes = db.relationship('Resume', backref = 'rp')
-    projects = db.relationship('Project', backref = 'rp')
-    def __repr__(self):
-        return f"<>"
+    # resumes = db.relationship('Resume', backref = 'rp')
+    # projects = db.relationship('Project', backref = 'rp')
 
 
-class ResTech(db.Model):
+class ResumeTech(db.Model):
     """ Resume-Technologies association table"""
-    __tablename__ = "restech"
+    __tablename__ = "resume_tech"
     tech_pk = db.Column(db.Integer, db.ForeignKey('techs.tech_pk'), primary_key = True, nullable=False)
     tech_res = db.Column(db.Integer, db.ForeignKey('resumes.tech_res'), primary_key = True, nullable=False)
 
     # relationships
-    resumes = db.relationship('Resume', backref = 'rt')
-    techs = db.relationship('Tech', backref = 'rt')
-    def __repr__(self):
-        return f"<>"
+    # resumes = db.relationship('Resume', backref = 'rt')
+    # techs = db.relationship('Tech', backref = 'rt')
 
 
-class ResWork(db.Model):
+
+class ResumeWork(db.Model):
     """ Resume-Work association table"""
-    __tablename__ = "reswork"
+    __tablename__ = "resume_work"
     work_pk = db.Column(db.Integer, db.ForeignKey('works.work_pk'), primary_key = True, nullable=False)
     work_res = db.Column(db.Integer, db.ForeignKey('resumes.work_res'), primary_key = True, nullable=False)
 
     # relationships
-    resumes = db.relationship('Resume', backref = 'rw')
-    works = db.relationship('Work', backref = 'rw')
-    def __repr__(self):
-        return f"<>"
+    # resumes = db.relationship('Resume', backref = 'rw')
+    # works = db.relationship('Work', backref = 'rw')
+
 
 ###########################################################
 
