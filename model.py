@@ -30,8 +30,8 @@ class Contact(db.Model):
     # non-nullables
     first = db.Column(db.String(20), nullable=False) 
     last = db.Column(db.String(20), nullable=False) 
-    email = db.Column(db.String(50), nullable=False)
     # nullables
+    email = db.Column(db.String(50), nullable=False)
     phone = db.Column(db.String(20), nullable=True)
     github = db.Column(db.String(50), nullable=True) 
     linkedin = db.Column(db.String(50), nullable=True)
