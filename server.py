@@ -2,8 +2,8 @@
 
 from flask import (Flask, session, render_template, request,
                     flash, redirect)
-from model import connect_to_db
-import crud
+# from model import connect_to_db
+# import crud
 
 app = Flask(__name__)
 app.secret_key = "dev"

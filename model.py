@@ -1,3 +1,4 @@
+from datetime import date
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
@@ -6,9 +7,9 @@ class User(db.Model):
     """ holds login information """
     __tablename__ = "users"
 
-    user_id     = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    login       = db.Column(db.String(50), unique=True, nullable=False)
-    password    = db.Column(db.String(50), nullable=False)
+    user_id  = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    login    = db.Column(db.String(50), unique=True, nullable=False)
+    password = db.Column(db.String(50), nullable=False)
     
     ### RELATIONSHIPS ###
     contact = db.relationship('Contact', uselist=False) # one-to-one
@@ -16,7 +17,7 @@ class User(db.Model):
     dytems = db.relationship('Dytem', backref='user')
 
     def __repr__(self):
-        return f"<User {user_pk} created: {login}>"
+        return f"<User {self.user_id} created: {self.login}>"
 
 class Contact(db.Model):
     """ data model for user's contact info """
@@ -36,7 +37,7 @@ class Contact(db.Model):
     user = db.relationship('User', uselist=False)
 
     def __repr__(self):
-        return f"<Contact for user {user_pk} created>"
+        return f"<Contact for user {self.user.user_id} created>"
 
 class Stitem(db.Model):
     """ stable items on resume
@@ -46,20 +47,20 @@ class Stitem(db.Model):
                 (3) coursework """ 
     __tablename__ = "stable_items"
 
-    item_id     = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    user_id     = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
-    s_type      = db.Column(db.Integer, nullable=False)
+    item_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+    s_type  = db.Column(db.Integer, nullable=False)
 
-    name        = db.Column(db.String(100), nullable=True)
-    date        = db.Column(db.Date, nullable=True)
-    loc         = db.Column(db.String(50), nullable=True)
-    des         = db.Column(db.Text, nullable=True) 
+    name    = db.Column(db.String(100), nullable=True)
+    date    = db.Column(db.Date, nullable=True)
+    loc     = db.Column(db.String(50), nullable=True)
+    des     = db.Column(db.Text, nullable=True) 
 
     ### RELATIONSHIPS ###
     # user
 
     def __repr__(self):
-        return f"<Resume {resume_pk} generated>"
+        return f"<stitem {self.item_id} created for user {self.user.user_id}>"
 
 class Dytem(db.Model):
     """ dynamic items on resume 
@@ -69,32 +70,32 @@ class Dytem(db.Model):
                 (3) extracurriculars """
     __tablename__ = "dynamic_items"
 
-    dytem_id    = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    user_id     = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
-    d_type      = db.Column(db.Integer, nullable=False)
-    name        = db.Column(db.String(100), nullable=False) # bolded
+    item_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    user_id  = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+    d_type   = db.Column(db.Integer, nullable=False)
+    name     = db.Column(db.String(100), nullable=False) # bolded
 
-    role        = db.Column(db.String(50), nullable=True) # italicized
-    loc         = db.Column(db.String(50), nullable=True)
-    d_from      = db.Column(db.Date, nullable=True)
-    d_to        = db.Column(db.Date, nullable=True)
-    tags        = db.Column(db.Text, nullable=False)
+    role     = db.Column(db.String(50), nullable=True) # italicized
+    loc      = db.Column(db.String(50), nullable=True)
+    d_from   = db.Column(db.Date, nullable=True)
+    d_to     = db.Column(db.Date, nullable=True)
+    tags     = db.Column(db.Text, nullable=False)
     
     ### RELATIONSHIPS ###
     # user
     details = db.relationship('Detail', backref='dytem')
 
     def __repr__(self):
-        return f"<Added workplace at {company} for user {user_pk}>"
+        return f"<dytem {self.item_id} created for user {self.user.user_id}>"
 
 
 class Detail(db.Model):
     """ data model for all details """ 
     __tablename__ = "details"
     
-    detail_id   = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    dytem_id    = db.Column(db.Integer, db.ForeignKey('dynamic_items.dytem_id'), nullable=False)
-    des         = db.Column(db.Text, nullable=False)
+    detail_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    dytem_id  = db.Column(db.Integer, db.ForeignKey('dynamic_items.item_id'), nullable=False)
+    des       = db.Column(db.Text, nullable=False)
 
     ### RELATIONSHIPS ###
     # dytem

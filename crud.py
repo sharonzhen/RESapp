@@ -1,13 +1,12 @@
 """ CRUDs of model.py """
 
 from datetime import date
-from model import (db, User, Contact, Stitem, Dytem, Detail, connect_to_db)
+from model import db, User, Contact, Stitem, Dytem, Detail, connect_to_db
 
 
-
-def create_user(email, password):
+def create_user(login, password):
     """ create and return user """
-    user = User(login=email, password=password)
+    user = User(login=login, password=password)
     db.session.add(user)
     db.session.commit()
     return user
@@ -49,11 +48,14 @@ def create_dytem(user_instance, dynamic_type, name, role=None, location=None,
     
 def create_detail(dytem_instance, description):
     """ create and return detail for dynamic item """
-    detail = Detail(dytem_id=dytem_instance.dytem_id,
+    detail = Detail(dytem_id=dytem_instance.item_id,
                     des=description)
     dytem_isntance.details.append(detail)
     db.session.commit()
     return detail
 
 
+if __name__ == '__main__':
+    from server import app
+    connect_to_db(app)
 
