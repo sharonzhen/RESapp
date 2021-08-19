@@ -3,7 +3,7 @@
 from datetime import date
 from model import db, User, Contact, Stitem, Dytem, Detail, connect_to_db
 
-
+################ CREATE ###################
 def create_user(login, password):
     """ create and return user """
     user = User(login=login, password=password)
@@ -14,8 +14,9 @@ def create_user(login, password):
 def create_contact(user_instance, first, last, loc, email, 
                     phone=None, github=None, linkedin=None):
     """ create and return new contact info """
+
     contact = Contact(user_id=user_instance.user_id, 
-                        first=first, last=last, 
+                        first=first, last=last, loc=loc,
                         email=email, phone=phone, 
                         github=github, linkedin=linkedin, 
                         user=user_instance)
@@ -53,6 +54,38 @@ def create_detail(dytem_instance, description):
     dytem_isntance.details.append(detail)
     db.session.commit()
     return detail
+
+################ GET ###################
+def get_users():
+    """ return: list of Users """
+    return User.query.all()
+
+def get_contact(user):
+    """ @param: user instance 
+        return: Contact associated with user """
+    return user.contact
+
+def get_stable_items(user):
+    """ @param: user instance
+        return: list of Stitems associated w/ user """
+    return user.stitems
+
+def get_dynamic_items(user):
+    """ @param: user instance
+        return: list of Dytems associated w/ user """
+    return user.dytems
+
+def get_details(dytem):
+    """ @param: dynamic item instance 
+        return: list of details associated /w dytem """
+    return dytem.details
+
+################ UPDATE ###################
+def update_contact(user):
+
+################ DELETE ###################
+
+
 
 
 if __name__ == '__main__':
