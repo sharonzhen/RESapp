@@ -3,10 +3,11 @@
 from datetime import date
 from model import db, User, Contact, Stitem, Dytem, Detail, connect_to_db
 
+
 ################ CREATE ###################
 def create_user(login, password):
     """ create and return user """
-    user = User(login=login, password=password)
+    user = User(login=login, pwd=password)
     db.session.add(user)
     db.session.commit()
     return user
@@ -81,11 +82,21 @@ def get_details(dytem):
     return dytem.details
 
 ################ UPDATE ###################
-def update_contact(user):
+#x = get_users()[0]
+#update_user(x, 'login', 'x')
+def update_user(user, field, value):
+    # db.update(User).where(User.user_id==user.user_id).values({field:value})
+    # User.query.update({'login':'newnewnew'}).where(User.user_id==1)
+    db.session.query(User).filter(User.user_id==user.user_id).update({field:value}, synchronize_session=False)
+    db.session.commit()
+    return user
 
 ################ DELETE ###################
 
+def delete_user(user):
+    """ """
 
+    pass
 
 
 if __name__ == '__main__':

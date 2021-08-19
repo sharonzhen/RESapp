@@ -9,7 +9,7 @@ class User(db.Model):
 
     user_id  = db.Column(db.Integer, autoincrement=True, primary_key=True)
     login    = db.Column(db.String(50), unique=True, nullable=False)
-    password = db.Column(db.String(50), nullable=False)
+    pwd = db.Column(db.String(50), nullable=False)
     
     ### RELATIONSHIPS ###
     contact = db.relationship('Contact', uselist=False) # one-to-one
@@ -106,7 +106,7 @@ class Detail(db.Model):
 ###########################################################
 
 def connect_to_db(flask_app, db_uri="postgresql:///resumes", echo=True):
-    # set echo to false to get rid of extra stuff
+    # set echo to false to get rid SQL stuff that runs
     flask_app.config["SQLALCHEMY_DATABASE_URI"] = db_uri
     flask_app.config["SQLALCHEMY_ECHO"] = echo
     flask_app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -114,7 +114,7 @@ def connect_to_db(flask_app, db_uri="postgresql:///resumes", echo=True):
     db.app = flask_app
     db.init_app(flask_app)
 
-    db.create_all()
+    db.create_all() # reminder to include in generate_db.py
 
     print("Connected to the db!")
 
