@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    Welcome
+{% endblock %}
+
+{% block navbar %}
+<a class="homepage" href="/">
+    Home
+</a>
+<a class="profile" href="/profile">
+    Profile
+</a>
+<a class="resume" href="/resume">
+    Resume
+</a>
+<a class="generate" href="/generate">
+    Generate
+</a>
+<a class="logout" href="/logout">
+    Logout
+</a>
+{% endblock %}
+
+{% block body %}
+<h1> Welcome to homepage </h1>
+{% endblock %}
