@@ -68,17 +68,19 @@ def username_exists(username):
 def password_correct(username, password):
     """ returns true if pair exists in database """
     user = User.query.filter_by(login=username).first()
-    if user:
+    if user != None:
         return user.pwd == password
     return False
 
-def get_user_by_id(user_id):
-    """ return user instance by id """
-    return User.query.filter_by(id=user_id).first()
+# get by username since username is what's stored in session
+def get_user(username):
+    """ return user instance by username """
+    return User.query.filter_by(login=username).first()
 
-def get_contact(user):
-    """ @param: user instance 
-        return: Contact associated with user """
+def get_contact(username):
+    """ @param: username 
+        return: Contact associated with username """
+    user = get_user(username)
     return user.contact
 
 def get_stable_items(user):

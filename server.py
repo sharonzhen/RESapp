@@ -29,36 +29,52 @@ def login_handler():
     if "user" not in session:
         username = request.form.get('login')
         password = request.form.get('pwd')
-        
+   
         if crud.password_correct(username, password):
             session["user"]=username
             flash(f'Logged in as {username}')
+        else:
+            flash("Username or password aren't correct")
     
     return redirect('/')
     
 
 @app.route('/create', methods=['POST'])
 def create_account():
-    """ """
+    """ create account and populate database """
     if session.get("user"):
         return redirect('/')
-    username = ''
-    password = ''
+
+    username = request.form.get('login_new')
+    password = request.form.get('pwd_new')
 
     if crud.username_exists(username):
-        pass
+        flash(f'Username already exists')
     else:
-        return redirect('/')
+        user = crud.create_user(username, password)
+
+        first = request.form.get('first_name')
+        last = request.form.get('last_name')
+        loc = request.form.get('location')
+        email = request.form.get('email')
+        phone = request.form.get('phone')
+        github = request.form.get('github')
+        linkedin = request.form.get('linkedin')
+        
+        crud.create_contact(user, first, last, loc, email, phone, github, linkedin)
+        flash(f'User {username} created! Return to login')
+
+    return redirect('/')
     
 
 @app.route('/profile')
 def view_contact():
     if "user" not in session:
         return redirect('/')
+    username = session.get('user')
+    contact = crud.get_contact(username)
 
-
-
-    return render_template('profile.html')
+    return render_template('profile.html', contact=contact)
 
 
 @app.route('/resume')
