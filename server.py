@@ -22,48 +22,70 @@ def show_homepage():
 
 
 @app.route('/login', methods=['POST'])
-def login_session():
-    """ """
-    if session.get("user"):
-        return render_template('homepage.html')
+def login_handler():
+    """ checks database for username and password combo
+        return: True if (username, password) exists in database 
+                False otherweise """
+    if "user" not in session:
+        username = request.form.get('login')
+        password = request.form.get('pwd')
+        
+        if crud.password_correct(username, password):
+            session["user"]=username
+            flash(f'Logged in as {username}')
+    
+    return redirect('/')
     
 
 @app.route('/create', methods=['POST'])
 def create_account():
     """ """
     if session.get("user"):
-        return render_template('homepage.html')
-    
-        
+        return redirect('/')
+    username = ''
+    password = ''
 
+    if crud.username_exists(username):
+        pass
+    else:
+        return redirect('/')
+    
 
 @app.route('/profile')
 def view_contact():
-    if session.get("user"):
-        return render_template('profile.html')
-    else:
-        return render_template('login_create.html')
+    if "user" not in session:
+        return redirect('/')
+
+
+
+    return render_template('profile.html')
 
 
 @app.route('/resume')
 def view_resume():
-    if session.get("user"):
-        return render_template('resume.html')
-    else:
-        return render_template('login_create.html')
+    if "user" not in session:
+        return redirect('/')
+
+    return render_template('resume.html')
+
 
 
 @app.route('/generate')
 def pick_resume():
-    if session.get("user"):
-        return render_template('generate.html')
-    else:
-        return render_template('login_create.html')
+    if "user" not in session:
+        return redirect('/')
+
+
+    return render_template('generate.html')
+
 
 def generate_pdf():
     pass
 
-
+@app.route('/logout')
+def handle_logout():
+    session.clear()
+    return redirect('/')
 
 if __name__ == "__main__":
     app.debug = True

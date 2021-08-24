@@ -61,6 +61,17 @@ def get_users():
     """ return: list of Users """
     return User.query.all()
 
+def username_exists(username):
+    """ return whether username exists or not """
+    return User.query.filter_by(login=username).count()
+
+def password_correct(username, password):
+    """ returns true if pair exists in database """
+    user = User.query.filter_by(login=username).first()
+    if user:
+        return user.pwd == password
+    return False
+
 def get_user_by_id(user_id):
     """ return user instance by id """
     return User.query.filter_by(id=user_id).first()
