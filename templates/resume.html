@@ -23,10 +23,182 @@
 {% endblock %}
 
 {% block body %}
-<h1> Technical Skills </h1>
-
-<h1> Projects </h1>
 <h1> Education </h1>
+{% for item in stable_items %}
+    {% if item.s_type == 1 %}
+        <table>
+            <tr>
+                <td> {{item.name}} </td>
+                <td> {{item.date}} </td>
+                <td> {{item.loc}} </td>
+                <td> {{item.des}} </td>
+            </tr>
+        </table>
+    {% endif %}
+{% endfor %}
+<h1> Technical Skills </h1>
+{% for item in stable_items %}
+    {% if item.s_type == 2 %}
+        <table>
+            <tr>
+                <td> {{item.name}} </td>
+                <td> {{item.des}} </td>
+            </tr>
+        </table>
+    {% endif %}
+{% endfor %}
+<h1> Coursework </h1>
+{% for item in stable_items %}
+    {% if item.s_type == 3 %}
+        <table>
+            <tr>
+                <td> {{item.name}} </td>
+                <td> {{item.des}} </td>
+            </tr>
+        </table>
+    {% endif %}
+{% endfor %}
+<h1> Work Experience</h1>
+{% for item in dynamic_items %}
+    {% if item.d_type == 1 %}
+        <table id={{item.id}}>
+            <tr>
+                <td> {{item.name}} </td>
+                <td> {{item.role}} </td>
+                <td> {{item.d_from}} </td>
+                <td> {{item.d_to}} </td>
+            </tr>
+            {% for detail in item.details %}
+            <tr>
+                {{detail.des}}
+            </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+{% endfor %}
+<h1> Project Experience </h1>
+{% for item in dynamic_items %}
+    {% if item.d_type == 2 %}
+        <table id={{item.id}}>
+            <tr>
+                <td> {{item.name}} </td>
+                <td> {{item.role}} </td>
+                <td> {{item.d_from}} </td>
+                <td> {{item.d_to}} </td>
+            </tr>
+            {% for detail in item.details %}
+            <tr>
+                {{detail.des}}
+            </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+{% endfor %}
+<h1> Extracurriculars </h1>
+{% for item in dynamic_items %}
+    {% if item.d_type == 3 %}
+        <table id={{item.id}}>
+            <tr>
+                <td> {{item.name}} </td>
+                <td> {{item.role}} </td>
+                <td> {{item.d_from}} </td>
+                <td> {{item.d_to}} </td>
+            </tr>
+            {% for detail in item.details %}
+            <tr>
+                {{detail.des}}
+            </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+{% endfor %}
 
+<h1> Add education</h1>
+<form action="/resume/add/edu" method="POST">
+    <div><label for="name">institution name</label>
+        <input type="text" name="name" required /></div>
+    <div><label for="date">date</label>
+        <input type="date" name="date" required /></div>
+    <div><label for="loc">location</label>
+        <input type="text" name="loc" required /></div>
+    <div><label for="des">degree</label>
+        <input type="text" name="des" required /></div>
+    <input type="submit" value="Submit"/>
+</form>
+
+<h1> Add technical</h1>
+<form action="/resume/add/tech" method="POST">
+    <div><label for="name">label</label>
+        <input type="text" name="name" required /></div>
+    <div><label for="des">list</label>
+        <input type="text" name="des" required /></div>
+    <input type="submit" value="Submit"/>
+</form>
+
+<h1> Add coursework</h1>
+<form action="/resume/add/course" method="POST">
+    <div><label for="name">label</label>
+        <input type="text" name="name" required /></div>
+    <div><label for="des">list</label>
+        <input type="text" name="des" required /></div>
+    <input type="submit" value="Submit"/>
+</form>
+
+<h1> Add work experience </h1>
+<form action="/resume/add/work" method="POST">
+    <div><label for="name">company name</label>
+        <input type="text" name="name" required /></div>
+    <div><label for="role">role</label>
+        <input type="text" name="role" required /></div>
+    <div><label for="loc">location</label>
+        <input type="text" name="loc" required /></div>
+    <div><label for="d_from">date started</label>
+        <input type="date" name="d_from" required /></div>
+    <div><label for="d_to">date ended (leave blank if current)</label>
+        <input type="date" name="d_to" required /></div>
+    <div><label for="tags">tags</label>
+        <input id="tags" type="text" name="tags" required /></div>
+    <input type="submit" value="Submit"/>
+</form>
+<h1> Add project </h1>
+<form action="/resume/add/proj" method="POST">
+    <div><label for="name">project name</label>
+        <input type="text" name="name" required /></div>
+    <div><label for="role">short description</label>
+        <input type="text" name="role" required /></div>
+    <div><label for="loc">link</label>
+        <input type="text" name="loc" required /></div>
+    <div><label for="d_from">date</label>
+        <input type="date" name="d_from" required /></div>
+    <div><label for="tags">tags</label>
+        <input type="text" name="tags" required /></div>
+    <input type="submit" value="Submit"/>
+</form>
+
+<h1> Add extracurricular </h1>
+<form action="/resume/add/extra" method="POST">
+    <div><label for="name">organization name</label>
+        <input type="text" name="name" required /></div>
+    <div><label for="role">role</label>
+        <input type="text" name="role" required /></div>
+    <div><label for="loc">location</label>
+        <input type="text" name="loc" required /></div>
+    <div><label for="d_from">date from</label>
+        <input type="date" name="d_from" required /></div>
+    <div><label for="d_to">date to</label>
+        <input type="date" name="d_to" required /></div>
+    <div><label for="tags">tags</label>
+        <input type="text" name="tags" required /></div>
+    <div id="details">
+    <!-- add details in here using jQuery -->
+    </div>
+    <input type="submit" value="Submit"/>
+</form>
+
+
+<form action="/resume/add/detail" method="POST">
+
+    <input type="submit" value="Submit"/>
+</form>
 
 {% endblock %}

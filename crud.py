@@ -15,7 +15,6 @@ def create_user(login, password):
 def create_contact(user_instance, first, last, loc, email, 
                     phone=None, github=None, linkedin=None):
     """ create and return new contact info """
-
     contact = Contact(id=user_instance.id, 
                         first=first, last=last, loc=loc,
                         email=email, phone=phone, 
@@ -25,9 +24,10 @@ def create_contact(user_instance, first, last, loc, email,
     db.session.commit()
     return contact
 
-def create_stitem(user_instance, stable_type, name=None, date=None,
+def create_stitem(username, stable_type, name=None, date=None,
                     location=None, description=None):
     """ create and return new stable item """
+    user_instance = get_user(username)
     stitem = Stitem(user_id=user_instance.id, 
                     s_type=stable_type, name=name, 
                     date=date, loc=location, 
@@ -36,9 +36,10 @@ def create_stitem(user_instance, stable_type, name=None, date=None,
     db.session.commit()
     return stitem
 
-def create_dytem(user_instance, dynamic_type, name, role=None, location=None,
+def create_dytem(username, dynamic_type, name, role=None, location=None,
                     date_from=None, date_to=None, tags=None):
     """ create and return new dynamic item """
+    user_instance = get_user(username)
     dytem = Dytem(user_id=user_instance.id, 
                     d_type=dynamic_type, name=name, 
                     role=role, loc=location, 
