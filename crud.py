@@ -83,21 +83,17 @@ def get_contact(username):
     user = get_user(username)
     return user.contact
 
-def get_stable_items(user):
-    """ @param: user instance
+def get_stable_items(username):
+    """ @param: username 
         return: list of Stitems associated w/ user """
+    user = get_user(username)
     return user.stitems
 
-def get_stitem_by_id(id):
-    pass
-
-def get_dynamic_items(user):
-    """ @param: user instance
+def get_dynamic_items(username):
+    """ @param: username
         return: list of Dytems associated w/ user """
+    user = get_user(username)
     return user.dytems
-
-def get_dytem_by_id(id):
-    pass
 
 def get_details(dytem):
     """ @param: dynamic item instance 

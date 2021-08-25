@@ -76,14 +76,43 @@ def view_contact():
 
     return render_template('profile.html', contact=contact)
 
+@app.route('profile/edit', methods=['GET','POST'])
+def edit_contact():
+    pass
+
+def sort_items(stitems, dytems, edu, tech, course, work, proj, extra):
+    """ s_type: (1) education, 
+                (2) tech skills, 
+                (3) coursework 
+        d_type: (1) work experience
+                (2) projects
+                (3) extracurriculars """
+    for s in stitems:
+        if s.s_type == 1: 
+            
+        elif s.s_type == 2:
+        else:
 
 @app.route('/resume')
 def view_resume():
     if "user" not in session:
         return redirect('/')
+    username = session.get('user')
+    stable_items = crud.get_stable_items(username)
+    dynamic_items = crud.get_dynamic_items(username)
+    edu_li = []
+    tech_li = []
+    course_li = []
+    work_li =[]
+    proj_li = []
+    extra_li = []
+    
 
     return render_template('resume.html')
 
+@app.route('resume/edit', methods=['GET','POST'])
+def edit_resume():
+    pass
 
 
 @app.route('/generate')
