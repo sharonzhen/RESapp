@@ -101,8 +101,6 @@ def get_details(dytem):
         return: list of details associated /w dytem """
     return dytem.details
 
-def get_detail_by_id(id):
-    pass
 
 ################ UPDATE ###################
 

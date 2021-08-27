@@ -18,7 +18,7 @@ def populate_model():
         location = fake.city()+', '+fake.state()
         email = fake.email()
         phone = fake.phone_number()
-        github = f"github_{i}"
+        github = f"github_{i}" 
         linkedin = f"linkedin_{i}"
         create_contact(user, first, last, location, email, phone, github, linkedin)
 

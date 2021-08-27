@@ -17,7 +17,8 @@ RESTYPE = {
     "course":('s',3),
     "work":('d',1),
     "proj":('d',2),
-    "extra":('d',3)
+    "extra":('d',3),
+    "detail":('x', 0) # TODO: fix later 
 }
 
 @app.route('/')
@@ -131,15 +132,17 @@ def add_resume(typ):
             des = request.form.get('des')
             crud.create_stitem(username, model_type[1], 
                     name, d_from, loc, des)
-        elif model_type[0]=='d': 
+        else: 
             role = request.form.get('role')
             d_to = request.form.get('d_to')
             tags = request.form.get('tags')
-
-            crud.create_dytem(username, model_type[1], 
+            textfield = request.form.get('details')
+            details = textfield.rstrip().split('\n')
+            dytem = crud.create_dytem(username, model_type[1], 
                     name, role, loc, d_from, d_to, tags)
-        else: # detail route
-            pass
+            for detail in details:
+                if (detail != '') | (detail != ' '):
+                    crud.create_detail(dytem, detail)
     else:
         flash(f'Error adding {typ} to Resume')
     

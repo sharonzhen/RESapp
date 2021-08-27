@@ -66,7 +66,11 @@
                 <td> {{item.name}} </td>
                 <td> {{item.role}} </td>
                 <td> {{item.d_from}} </td>
-                <td> {{item.d_to}} </td>
+                {% if item.d_to %}
+                    <td> {{item.d_to}} </td>
+                {% else %}
+                    <td> present </td>
+                {% endif %}
             </tr>
             {% for detail in item.details %}
             <tr>
@@ -84,7 +88,11 @@
                 <td> {{item.name}} </td>
                 <td> {{item.role}} </td>
                 <td> {{item.d_from}} </td>
-                <td> {{item.d_to}} </td>
+                {% if item.d_to %}
+                    <td> {{item.d_to}} </td>
+                {% else %}
+                    <td> present </td>
+                {% endif %}
             </tr>
             {% for detail in item.details %}
             <tr>
@@ -102,7 +110,11 @@
                 <td> {{item.name}} </td>
                 <td> {{item.role}} </td>
                 <td> {{item.d_from}} </td>
-                <td> {{item.d_to}} </td>
+                {% if item.d_to %}
+                    <td> {{item.d_to}} </td>
+                {% else %}
+                    <td> present </td>
+                {% endif %}
             </tr>
             {% for detail in item.details %}
             <tr>
@@ -117,8 +129,8 @@
 <form action="/resume/add/edu" method="POST">
     <div><label for="name">institution name</label>
         <input type="text" name="name" required /></div>
-    <div><label for="date">date</label>
-        <input type="date" name="date" required /></div>
+    <div><label for="d_from">date</label>
+        <input type="date" name="d_from" required /></div>
     <div><label for="loc">location</label>
         <input type="text" name="loc" required /></div>
     <div><label for="des">degree</label>
@@ -158,6 +170,11 @@
         <input type="date" name="d_to" required /></div>
     <div><label for="tags">tags</label>
         <input id="tags" type="text" name="tags" required /></div>
+    <textarea name="details" rows="5" cols="50">
+Input details here. Separate each item with a newline, i.e. 
+bulletpoint 1 - this will go on a bulletpoint
+bulletpoint 2 - this will go on another bulletpoint
+    </textarea></div>
     <input type="submit" value="Submit"/>
 </form>
 <h1> Add project </h1>
@@ -172,6 +189,12 @@
         <input type="date" name="d_from" required /></div>
     <div><label for="tags">tags</label>
         <input type="text" name="tags" required /></div>
+    <div><label for="details">details</label>
+        <textarea name="details" rows="5" cols="50">
+Input details here. Separate each item with a newline, i.e. 
+bulletpoint 1 - this will go on a bulletpoint
+bulletpoint 2 - this will go on another bulletpoint
+        </textarea></div>
     <input type="submit" value="Submit"/>
 </form>
 
@@ -189,15 +212,12 @@
         <input type="date" name="d_to" required /></div>
     <div><label for="tags">tags</label>
         <input type="text" name="tags" required /></div>
-    <div id="details">
-    <!-- add details in here using jQuery -->
-    </div>
-    <input type="submit" value="Submit"/>
-</form>
-
-
-<form action="/resume/add/detail" method="POST">
-
+    <div><label for="details">details</label>
+    <textarea name="details" rows="5" cols="50">
+Input details here. Separate each item with a newline, i.e. 
+bulletpoint 1 - this will go on a bulletpoint
+bulletpoint 2 - this will go on another bulletpoint
+    </textarea></div>
     <input type="submit" value="Submit"/>
 </form>
 
