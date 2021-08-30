@@ -1,0 +1,104 @@
+\documentclass{article}
+
+\usepackage[top=0.5in, bottom=0.5in, left=0.5in, right=0.5in]{geometry}
+\usepackage{enumitem}
+
+\begin{document}
+\begin{center}
+\thispagestyle{empty}
+\Large \textbf{\VAR{contact.first} \VAR{contact.last}}
+\normalsize 
+\VAR{contact.loc} $\mid$ 
+\VAR{contact.phone} $\mid$ 
+github.com/\VAR{github} $\mid$ 
+\VAR{linkedin}\\
+\hrulefill
+\end{center}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% SKILLS: s_type == 2
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\noindent \textbf{\underline{LANGUAGES AND TECHNOLOGIES}} \\
+
+\begin{itemize}[noitemsep,nolistsep,leftmargin=*]
+\BLOCK{for item in skills}
+    \item \textbf{\VAR{item.name}} - \VAR{item.des}
+\BLOCK{endfor}
+\end{itemize}
+~\\
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% PROJECT: d_type == 2
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\noindent \textbf{\underline{PROJECTS}} \\
+
+\BLOCK{for item in projects}
+\noindent \textbf{\VAR{item.name}} 
+\hfill \text{\VAR{item.d_from} - \VAR{item.d_to}}\\
+\textit{\VAR{item.role}}
+\begin{itemize}[noitemsep,nolistsep,leftmargin=*]
+    \BLOCK{for detail in item.details}
+    \item \textbf{\VAR{detail.des}} 
+    \BLOCK{endfor}
+\end{itemize}
+\BLOCK{endfor}
+~\\
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% WORK EXPERIENCE: d_type == 1
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\noindent \textbf{\underline{WORK EXPERIENCE}} \\
+
+\BLOCK{for item in workplaces}
+\noindent \textbf{\VAR{item.name}}
+\hfill \text{\VAR{item.d_from} - \VAR{item.d_to}}\\
+\textit{\VAR{item.role}} 
+\hfill \textit{\VAR{item.loc}} 
+\begin{itemize}[noitemsep,nolistsep,leftmargin=*]
+    \BLOCK{for detail in item.details}
+    \item \textbf{\VAR{detail.des}} 
+    \BLOCK{endfor}
+\end{itemize}
+\BLOCK{endfor}
+~\\
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% EDUCATION s_type == 1
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\noindent \textbf{\underline{EDUCATION}} \\
+
+\BLOCK{for item in schools}
+\textbf{\VAR{item.name}} \\
+\VAR{item.loc} \hfill \VAR{item.date} \\
+\textit{\VAR{item.des}}\\
+\BLOCK{endfor}
+~\\
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Coursework s_type == 3
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\noindent \textbf{\underline{RELEVANT COURSEWORK}}\\
+
+\begin{itemize}[noitemsep,nolistsep,leftmargin=*]
+\BLOCK{for item in courses}
+    \item {\textbf{\VAR{item.name}} - \VAR{item.des}}
+\BLOCK{endfor}
+\end{itemize}
+~\\
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Extra Curricular Activities, Leadership, etc d_type == 3
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\noindent \textbf{\underline{EXTRACURRICULARS}} \\
+
+\BLOCK{for item in extracurriculars}
+\noindent \textbf{\VAR{item.name}} \hfill \VAR{item.d_from} - \VAR{item.d_to}
+\begin{itemize}[noitemsep,nolistsep,leftmargin=*]
+    \BLOCK{for detail in item.details}
+    \item \VAR{detail.des}
+    \BLOCK{endfor}
+\end{itemize}
+\BLOCK{endfor}
+
+\end{document}
