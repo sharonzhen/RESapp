@@ -1,13 +1,8 @@
-import os
-import jinja2
-from pdflatex import PDFLaTeX
+import os, subprocess
+import jinja2abspat
 import pathlib
 
 def render_template(user, skills, projects, works, schools, courses, extras):
-    # folder associated with user
-    u_path = f'tex/{user.id}'
-    pathlib.Path(u_path).mkdir(parents=True,exist_ok=True)
-    
     env_for_latex = jinja2.Environment(
         block_start_string = '\BLOCK{', 
         block_end_string = '}', 
@@ -19,33 +14,38 @@ def render_template(user, skills, projects, works, schools, courses, extras):
         line_comment_prefix = '%#',
         trim_blocks = True,
         autoescape = False,
-        loader = jinja2.FileSystemLoader(os.path('u_path'))
+        loader = jinja2.FileSystemLoader(os.path('tex/tex_templates'))
     )
     # load template into jinja environment
-    template = env_for_latex.get_template('tex/tex_templates/template_1.tex')
+    template = env_for_latex.get_template('template_1.tex')
     
     # render template w/ variables
     rendered_temp = template.render(contact=user.contact, skills=skills, projects=projects,
                                 workplaces=works, schools=schools, courses=courses, 
                                 extracurriculars=extras)
-    
-    # create .tex file
-    f_path = 'doc.tex'
-    pathlib.Path(f_path).mkdir(parents=True,exist_ok=True)
 
-    # try to write document into file else handle error
+    # write rendered_temp into a .tex file in folder associated with user
+    dir_path = f'tex/{user.id}'
+    save_path = dir_path+'/resume.tex'
+    pathlib.Path(save_path).mkdir(parents=True,exist_ok=True)
     try:
-        with open(f_path) as output:
-            output.write(tendered_temp)
-    except: 
-        print('problem writing latex file')
+        with open(save_path, 'w') as output:
+            output.write(rendered_temp)
+    except:
+        print('error writing in file')
         return None
 
+    
     # create pdf file
-    pdfl = PDFLaTeX.from_textfile(f_path)
-    pdf, log, completed_process = pdfl.create_pdf(keep_pdf_file=True, keep_log_fie=True, )
+    args_list = ['pdflatex']
+    call_string = 'pdflatex --output-directory='+dir_path+' '+save_path
+    try:
+        
+        lpdf = subprocess.call(call_string)
+    except:
+        print()
 
-    return f_path
+    return save_path
 
     
 
