@@ -24,9 +24,11 @@ def render_template(user, skills, projects, works, schools, courses, extras):
                                 workplaces=works, schools=schools, courses=courses, 
                                 extracurriculars=extras)
 
+
     # write rendered_temp into a .tex file in folder associated with user
-    dir_path = f'tex/{user.id}'
-    save_path = dir_path+'/resume.tex'
+    dir_path = f'tex/{user.id}/'
+    filename = 'resume'
+    save_path = dir_path+filename+'.tex'
     pathlib.Path(save_path).mkdir(parents=True,exist_ok=True)
     try:
         with open(save_path, 'w') as output:
@@ -36,16 +38,16 @@ def render_template(user, skills, projects, works, schools, courses, extras):
         return None
 
     
-    # create pdf file
+    # create pdf file, runs typesetter on file and create file.pdf
     args_list = ['pdflatex']
     call_string = 'pdflatex --output-directory='+dir_path+' '+save_path
     try:
-        
-        lpdf = subprocess.call(call_string)
-    except:
-        print()
+       subprocess.check_output(call_string)
+    except subprocess.CalledProcessError as e:
+        print(e.output)
+        return None
 
-    return save_path
+    return dir_path+filename+'.pdf'
 
     
 
