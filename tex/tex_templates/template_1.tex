@@ -6,19 +6,27 @@
 \begin{document}
 \begin{center}
 \thispagestyle{empty}
-\Large \textbf{\VAR{contact.first} \VAR{contact.last}}
+\Large \textbf{\VAR{contact.first} \VAR{contact.last}} \\
 \normalsize 
-\VAR{contact.loc} $\mid$ 
-\VAR{contact.phone} $\mid$ 
-github.com/\VAR{github} $\mid$ 
-\VAR{linkedin}\\
-\hrulefill
+%- if contact.loc
+    \VAR{contact.loc} $\mid$ 
+%- endif
+%- if contact.phone
+    \VAR{contact.phone} $\mid$ 
+%- endif
+%- if contact.github
+    github.com/\VAR{github} $\mid$ 
+%- endif
+%- if contact.linkedin
+    \VAR{linkedin}
+%- endif
+~\\\hrulefill
 \end{center}
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% SKILLS: s_type == 2
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\#{ SKILLS: s_type == 2 } 
+%- if skills!=[]
 \noindent \textbf{\underline{LANGUAGES AND TECHNOLOGIES}} \\
 
 \begin{itemize}[noitemsep,nolistsep,leftmargin=*]
@@ -27,10 +35,10 @@ github.com/\VAR{github} $\mid$
 \BLOCK{endfor}
 \end{itemize}
 ~\\
+%- endif
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% PROJECT: d_type == 2
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\#{ PROJECT: d_type == 2 }
+%- if projects!=[]
 \noindent \textbf{\underline{PROJECTS}} \\
 
 \BLOCK{for item in projects}
@@ -44,10 +52,10 @@ github.com/\VAR{github} $\mid$
 \end{itemize}
 \BLOCK{endfor}
 ~\\
+%- endif
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% WORK EXPERIENCE: d_type == 1
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\#{ WORK EXPERIENCE: d_type == 1 }
+%- if workplaces!=[]
 \noindent \textbf{\underline{WORK EXPERIENCE}} \\
 
 \BLOCK{for item in workplaces}
@@ -62,10 +70,10 @@ github.com/\VAR{github} $\mid$
 \end{itemize}
 \BLOCK{endfor}
 ~\\
+%- endif
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% EDUCATION s_type == 1
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\#{ EDUCATION s_type == 1 }
+%- if schools!=[]
 \noindent \textbf{\underline{EDUCATION}} \\
 
 \BLOCK{for item in schools}
@@ -74,10 +82,10 @@ github.com/\VAR{github} $\mid$
 \textit{\VAR{item.des}}\\
 \BLOCK{endfor}
 ~\\
+%- endif
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Coursework s_type == 3
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\#{ Coursework s_type == 3 }
+%- if courses!=[]
 \noindent \textbf{\underline{RELEVANT COURSEWORK}}\\
 
 \begin{itemize}[noitemsep,nolistsep,leftmargin=*]
@@ -86,10 +94,10 @@ github.com/\VAR{github} $\mid$
 \BLOCK{endfor}
 \end{itemize}
 ~\\
+%- endif
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Extra Curricular Activities, Leadership, etc d_type == 3
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\#{Extra Curricular Activities, Leadership, etc d_type == 3}
+%- if extracurriculars!=[]
 \noindent \textbf{\underline{EXTRACURRICULARS}} \\
 
 \BLOCK{for item in extracurriculars}
@@ -100,5 +108,6 @@ github.com/\VAR{github} $\mid$
     \BLOCK{endfor}
 \end{itemize}
 \BLOCK{endfor}
+%- endif
 
 \end{document}
