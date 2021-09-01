@@ -5,7 +5,9 @@ from flask import (Flask, session, render_template, request,
 from flask_debugtoolbar import DebugToolbarExtension
 from jinja2 import StrictUndefined
 from model import connect_to_db
-import crud
+import crud, os
+from renderTeX import rpdf
+
 
 app = Flask(__name__)
 app.secret_key = "dev"
@@ -17,8 +19,7 @@ RESTYPE = {
     "course":('s',3),
     "work":('d',1),
     "proj":('d',2),
-    "extra":('d',3),
-    "detail":('x', 0) # TODO: fix later 
+    "extra":('d',3)
 }
 
 @app.route('/')
@@ -91,22 +92,48 @@ def edit_contact():
         return redirect('/')
     pass
 
+def query_and_sort(username, edu, tech, 
+            course, work, proj, extra):
+    stable_items = crud.get_stable_items(username)
+    dynamic_items = crud.get_dynamic_items(username)
+
+    for s in stable_items:
+        if s.s_type == 1:
+            edu.append(s)
+        elif s.s_type == 2:
+            tech.append(s)
+        else:
+            course.append(s)
+    for d in dynamic_items:
+        if d.d_type == 1:
+            work.append(d)
+        elif d.d_type == 2:
+            proj.append(d)
+        else:
+            extra.append(d)
+
+
 
 @app.route('/resume')
 def view_resume():
     if "user" not in session:
         return redirect('/')
     username = session.get('user')
-    stable_items = crud.get_stable_items(username)
-    dynamic_items = crud.get_dynamic_items(username)
-    
+    # stable
+    edu = [] # 1
+    tech = [] # 2
+    course = [] # 3
+    # dynamic
+    work = [] # 1
+    proj = [] # 2
+    extra = [] # 3
 
-    stable_items.sort(key = lambda s: s.s_type)
-    dynamic_items.sort(key = lambda d:d.d_type)
+    query_and_sort(username, edu, tech, course, work, proj, extra)
 
-    return render_template('resume.html', 
-                    stable_items = stable_items, 
-                    dynamic_items = dynamic_items)
+    return render_template('resume.html', education=edu, 
+            technical_skills=tech, courses=course, 
+            work_experiences=work, projects=proj, 
+            extracurriculars=extra)
 
 
 @app.route('/resume/edit', methods=['GET','POST'])
@@ -151,14 +178,31 @@ def add_resume(typ):
     return redirect('/resume')
 
 @app.route('/generate')
-def pick_resume():
+def generate_resume():
     if "user" not in session:
         return redirect('/')
+    username = session.get('user')
+    # stable
+    edu = [] # 1
+    tech = [] # 2
+    course = [] # 3
+    # dynamic
+    work = [] # 1
+    proj = [] # 2
+    extra = [] # 3
+
+    query_and_sort(username, edu, tech, course, work, proj, extra)
     return render_template('generate.html')
 
+@app.route('/generate/download', methods=['POST'])
+def generate_download_pdf():
+    if "user" not in session:
+        return redirect('/')
+    # pull from forms
 
-def generate_pdf():
-    pass
+    # call rpdf, save return value as download path
+    # trigger download
+
 
 @app.route('/logout')
 def handle_logout():

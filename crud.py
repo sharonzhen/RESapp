@@ -96,11 +96,6 @@ def get_dynamic_items(username):
     user = get_user(username)
     return user.dytems
 
-def get_details(dytem):
-    """ @param: dynamic item instance 
-        return: list of details associated /w dytem """
-    return dytem.details
-
 
 ################ UPDATE ###################
 
