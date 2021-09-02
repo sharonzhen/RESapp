@@ -24,7 +24,7 @@
 
 
 {% block body %}
-<form>
+<form action="/generate/download" id="generate_form" method="POST">
     <h3> Technical Skills </h3>
     {% for item in technical_skills %}
     <div>

@@ -200,12 +200,14 @@ def generate_resume():
 def generate_download_pdf():
     if "user" not in session:
         return redirect('/')
-    # pull from forms
+    
+    f = request.form.to_dict()
+    print(f)
 
     # call rpdf, save return value as download path
-    
-    # trigger download
 
+    # trigger download
+    return redirect('/generate')
 
 @app.route('/logout')
 def handle_logout():
