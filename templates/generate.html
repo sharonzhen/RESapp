@@ -46,8 +46,8 @@
         <b>Details: </b>
         {% for detail in item.details %}
         <div>
-            <input type="checkbox" id="t{{item.id}}" name="t{{item.id}}" value="t{{item.id}}">
-            <label for="t{{item.id}}"> {{detail.des}} </label> 
+            <input type="checkbox" id="{{item.id}}" name="{{item.id}}" value="{{item.id}}">
+            <label for="{{item.id}}"> {{detail.des}} </label> 
         </div>
         {% endfor %}
     </div> 
@@ -62,12 +62,12 @@
             <b>Date:</b> {{item.d_from}} to 
             {% if item.d_to %} {{item.d_to}} {% else %} present
             {% endif %} 
-        </label>
+        </label><br>
         <b>Details: </b>
         {% for detail in item.details %}
         <div>
-            <input type="checkbox" id="t{{item.id}}" name="t{{item.id}}" value="t{{item.id}}">
-            <label for="t{{item.id}}"> {{detail.des}} </label>
+            <input type="checkbox" id="{{item.id}}" name="{{item.id}}" value="{{item.id}}">
+            <label for="{{item.id}}"> {{detail.des}} </label>
         </div>
         {% endfor %}
     </div>
@@ -102,12 +102,12 @@
             <b>Date:</b> {{item.d_from}} to 
             {% if item.d_to %} {{item.d_to}} {% else %} present
             {% endif %} 
-        </label> 
+        </label> <br>
         <b>Details: </b>
         {% for detail in item.details %}
         <div>
-            <input type="checkbox" id="t{{item.id}}" name="t{{item.id}}" value="t{{item.id}}">
-            <label for="t{{item.id}}"> {{detail.des}} </label> 
+            <input type="checkbox" id="{{item.id}}" name="{{item.id}}" value="{{item.id}}">
+            <label for="{{item.id}}"> {{detail.des}} </label> 
         </div>
         {% endfor %}
     </div>
@@ -115,5 +115,6 @@
     <br><br>
     <input type="submit" value="Submit">
 </form>
+
 
 {% endblock %}

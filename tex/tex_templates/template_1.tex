@@ -22,9 +22,6 @@
 %- endif
 ~\\\hrulefill
 \end{center}
-
-
-
 \#{ SKILLS: s_type == 2 } 
 %- if skills!=[]
 \noindent \textbf{\underline{LANGUAGES AND TECHNOLOGIES}} \\
@@ -47,7 +44,9 @@
 \textit{\VAR{item.role}}
 \begin{itemize}[noitemsep,nolistsep,leftmargin=*]
     \BLOCK{for detail in item.details}
+    %- if detail.id in kform
     \item \textbf{\VAR{detail.des}} 
+    %- endif
     \BLOCK{endfor}
 \end{itemize}
 \BLOCK{endfor}
@@ -65,7 +64,9 @@
 \hfill \textit{\VAR{item.loc}} 
 \begin{itemize}[noitemsep,nolistsep,leftmargin=*]
     \BLOCK{for detail in item.details}
+    %- if detail.id in kform
     \item \textbf{\VAR{detail.des}} 
+    %- endif
     \BLOCK{endfor}
 \end{itemize}
 \BLOCK{endfor}
@@ -104,7 +105,9 @@
 \noindent \textbf{\VAR{item.name}} \hfill \VAR{item.d_from} - \VAR{item.d_to}
 \begin{itemize}[noitemsep,nolistsep,leftmargin=*]
     \BLOCK{for detail in item.details}
+    %- if detail.id in kform
     \item \VAR{detail.des}
+    %- endif
     \BLOCK{endfor}
 \end{itemize}
 \BLOCK{endfor}

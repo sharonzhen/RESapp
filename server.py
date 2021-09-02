@@ -92,11 +92,8 @@ def edit_contact():
         return redirect('/')
     pass
 
-def query_and_sort(username, edu, tech, 
+def sort_items(stable_items, dynamic_items, edu, tech, 
             course, work, proj, extra):
-    stable_items = crud.get_stable_items(username)
-    dynamic_items = crud.get_dynamic_items(username)
-
     for s in stable_items:
         if s.s_type == 1:
             edu.append(s)
@@ -119,6 +116,8 @@ def view_resume():
     if "user" not in session:
         return redirect('/')
     username = session.get('user')
+    stable_items = crud.get_stable_items(username)
+    dynamic_items = crud.get_dynamic_items(username)
     # stable
     edu = [] # 1
     tech = [] # 2
@@ -128,7 +127,8 @@ def view_resume():
     proj = [] # 2
     extra = [] # 3
 
-    query_and_sort(username, edu, tech, course, work, proj, extra)
+    sort_items(stable_items, dynamic_items, edu, tech, 
+            course, work, proj, extra)
     return render_template('resume.html', education=edu, 
             technical_skills=tech, courses=course, 
             work_experiences=work, projects=proj, 
@@ -181,6 +181,8 @@ def generate_resume():
     if "user" not in session:
         return redirect('/')
     username = session.get('user')
+    stable_items = crud.get_stable_items(username)
+    dynamic_items = crud.get_dynamic_items(username)
     # stable
     edu = [] # 1
     tech = [] # 2
@@ -189,8 +191,8 @@ def generate_resume():
     work = [] # 1
     proj = [] # 2
     extra = [] # 3
-    query_and_sort(username, edu, tech, course, work, proj, extra)
-
+    sort_items(stable_items, dynamic_items, edu, tech, 
+            course, work, proj, extra)
     return render_template('generate.html', education=edu, 
             technical_skills=tech, courses=course, 
             work_experiences=work, projects=proj, 
@@ -200,11 +202,39 @@ def generate_resume():
 def generate_download_pdf():
     if "user" not in session:
         return redirect('/')
+    username = session.get('user')
+    user = crud.get_user(username)
+    s_li = user.stitems
+    d_li = user.dytems
     
-    f = request.form.to_dict()
-    print(f)
+    # stable
+    edu = [] # 1
+    tech = [] # 2
+    course = [] # 3
+    # dynamic
+    work = [] # 1
+    proj = [] # 2
+    extra = [] # 3
+    stable_items = []
+    dynamic_items = []
 
+    form_data = request.form.to_dict()
+    for item in s_li:
+        fstr = f's{item.id}'
+        if fstr in form_data:
+            stable_items.append(item)
+    for item in d_li:
+        fstr = f'd{item.id}'
+        if fstr in form_data:
+            dynamic_items.append(item)
+
+    sort_items(stable_items, dynamic_items, edu, tech, 
+            course, work, proj, extra)
+    
     # call rpdf, save return value as download path
+    dl_path = rpdf(user=user, skills=tech, projects=proj, 
+            works=work, schools=edu, courses=course, 
+            extras=extra, key_form=form_data)
 
     # trigger download
     return redirect('/generate')
