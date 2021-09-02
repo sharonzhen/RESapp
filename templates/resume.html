@@ -24,8 +24,7 @@
 
 {% block body %}
 <h1> Education </h1>
-{% for item in stable_items %}
-    {% if item.s_type == 1 %}
+{% for item in education %}
         <table>
             <tr>
                 <td> {{item.name}} </td>
@@ -34,33 +33,27 @@
                 <td> {{item.des}} </td>
             </tr>
         </table>
-    {% endif %}
 {% endfor %}
 <h1> Technical Skills </h1>
-{% for item in stable_items %}
-    {% if item.s_type == 2 %}
+{% for item in technical_skills %}
         <table>
             <tr>
                 <td> {{item.name}} </td>
                 <td> {{item.des}} </td>
             </tr>
         </table>
-    {% endif %}
 {% endfor %}
 <h1> Coursework </h1>
-{% for item in stable_items %}
-    {% if item.s_type == 3 %}
+{% for item in courses %}
         <table>
             <tr>
                 <td> {{item.name}} </td>
                 <td> {{item.des}} </td>
             </tr>
         </table>
-    {% endif %}
 {% endfor %}
 <h1> Work Experience</h1>
-{% for item in dynamic_items %}
-    {% if item.d_type == 1 %}
+{% for item in work_experiences %}
         <table id={{item.id}}>
             <tr>
                 <td> {{item.name}} </td>
@@ -78,11 +71,9 @@
             </tr>
             {% endfor %}
         </table>
-    {% endif %}
 {% endfor %}
 <h1> Project Experience </h1>
-{% for item in dynamic_items %}
-    {% if item.d_type == 2 %}
+{% for item in projects %}
         <table id={{item.id}}>
             <tr>
                 <td> {{item.name}} </td>
@@ -100,11 +91,9 @@
             </tr>
             {% endfor %}
         </table>
-    {% endif %}
 {% endfor %}
 <h1> Extracurriculars </h1>
-{% for item in dynamic_items %}
-    {% if item.d_type == 3 %}
+{% for item in extracurriculars %}
         <table id={{item.id}}>
             <tr>
                 <td> {{item.name}} </td>
@@ -122,7 +111,6 @@
             </tr>
             {% endfor %}
         </table>
-    {% endif %}
 {% endfor %}
 
 <h1> Add education</h1>

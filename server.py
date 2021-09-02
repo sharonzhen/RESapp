@@ -129,7 +129,6 @@ def view_resume():
     extra = [] # 3
 
     query_and_sort(username, edu, tech, course, work, proj, extra)
-
     return render_template('resume.html', education=edu, 
             technical_skills=tech, courses=course, 
             work_experiences=work, projects=proj, 
@@ -190,9 +189,12 @@ def generate_resume():
     work = [] # 1
     proj = [] # 2
     extra = [] # 3
-
     query_and_sort(username, edu, tech, course, work, proj, extra)
-    return render_template('generate.html')
+
+    return render_template('generate.html', education=edu, 
+            technical_skills=tech, courses=course, 
+            work_experiences=work, projects=proj, 
+            extracurriculars=extra)
 
 @app.route('/generate/download', methods=['POST'])
 def generate_download_pdf():
@@ -201,6 +203,7 @@ def generate_download_pdf():
     # pull from forms
 
     # call rpdf, save return value as download path
+    
     # trigger download
 
 

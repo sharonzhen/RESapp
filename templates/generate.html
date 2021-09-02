@@ -24,96 +24,96 @@
 
 
 {% block body %}
+<form>
+    <h3> Technical Skills </h3>
+    {% for item in technical_skills %}
+    <div>
+        <input type="checkbox" id="s{{item.id}}" name="s{{item.id}}" value="s{{item.id}}">
+        <label for="s{{item.id}}"> {{item.name}} : {{item.des}} </label>
+    </div> 
+    {% endfor %}
+    <h3> Project Experience </h3>
+    {% for item in projects %}
+    <div>
+        <input type="checkbox" id="d{{item.id}}" name="d{{item.id}}" value="d{{item.id}}">
+        <label for="d{{item.id}}"> 
+            <b>Company:</b> {{item.name}} 
+            <b>Role:</b> {{item.role}} 
+            <b>Date:</b> {{item.d_from}} to 
+            {% if item.d_to %} {{item.d_to}} {% else %} present
+            {% endif %} 
+        </label> <br>
+        <b>Details: </b>
+        {% for detail in item.details %}
+        <div>
+            <input type="checkbox" id="t{{item.id}}" name="t{{item.id}}" value="t{{item.id}}">
+            <label for="t{{item.id}}"> {{detail.des}} </label> 
+        </div>
+        {% endfor %}
+    </div> 
+    {% endfor %}
+    <h3>Work Experience</h3>
+    {% for item in work_experiences %}
+    <div>
+        <input type="checkbox" id="d{{item.id}}" name="d{{item.id}}" value="d{{item.id}}">
+        <label for="d{{item.id}}"> 
+            <b>Company:</b> {{item.name}} 
+            <b>Role:</b> {{item.role}} 
+            <b>Date:</b> {{item.d_from}} to 
+            {% if item.d_to %} {{item.d_to}} {% else %} present
+            {% endif %} 
+        </label>
+        <b>Details: </b>
+        {% for detail in item.details %}
+        <div>
+            <input type="checkbox" id="t{{item.id}}" name="t{{item.id}}" value="t{{item.id}}">
+            <label for="t{{item.id}}"> {{detail.des}} </label>
+        </div>
+        {% endfor %}
+    </div>
+    {% endfor %}
+    <h3>Education</h3>
+    {% for item in education %}
+    <div>
+        <input type="checkbox" id="s{{item.id}}" name="s{{item.id}}" value="s{{item.id}}">
+        <label for="s{{item.id}}"> 
+            <b>Institution: </b> {{item.name}}, {{item.loc}}
+            <b>Graduation: </b> {{item.date}} 
+            <b>Program: </b> {{item.des}}
+        </label>
+    </div>
+    {% endfor %}
+    <h3>Coursework</h3>
+    {% for item in courses %}
+    <div>
+        <input type="checkbox" id="s{{item.id}}" name="s{{item.id}}" value="s{{item.id}}">
+        <label for="s{{item.id}}"> 
+            <b>{{item.name}}: </b> {{item.des}} 
+        </label>
+    </div>
+    {% endfor %}
+    <h3>Extracurriculars</h3>
+    {% for item in extracurriculars %}
+    <div>
+        <input type="checkbox" id="s{{item.id}}" name="s{{item.id}}" value="s{{item.id}}">
+        <label for="s{{item.id}}"> 
+            <b>Organization: </b> {{item.name}}, 
+            <b>Role: </b> {{item.role}} 
+            <b>Date:</b> {{item.d_from}} to 
+            {% if item.d_to %} {{item.d_to}} {% else %} present
+            {% endif %} 
+        </label> 
+        <b>Details: </b>
+        {% for detail in item.details %}
+        <div>
+            <input type="checkbox" id="t{{item.id}}" name="t{{item.id}}" value="t{{item.id}}">
+            <label for="t{{item.id}}"> {{detail.des}} </label> 
+        </div>
+        {% endfor %}
+    </div>
+    {% endfor %}
+    <br><br>
+    <input type="submit" value="Submit">
+</form>
 
-<h1> Technical Skills </h1>
-{% for item in technical_skills %}
-        <table>
-            <tr>
-                <td> {{item.name}} </td>
-                <td> {{item.des}} </td>
-            </tr>
-        </table>
-{% endfor %}
-
-<h1> Project Experience </h1>
-{% for item in projects %}
-        <table id={{item.id}}>
-            <tr>
-                <td> {{item.name}} </td>
-                <td> {{item.role}} </td>
-                <td> {{item.d_from}} </td>
-                {% if item.d_to %}
-                    <td> {{item.d_to}} </td>
-                {% else %}
-                    <td> present </td>
-                {% endif %}
-            </tr>
-            {% for detail in item.details %}
-            <tr>
-                {{detail.des}}
-            </tr>
-            {% endfor %}
-        </table>
-{% endfor %}
-<h1> Work Experience</h1>
-{% for item in work_experiences %}
-        <table id={{item.id}}>
-            <tr>
-                <td> {{item.name}} </td>
-                <td> {{item.role}} </td>
-                <td> {{item.d_from}} </td>
-                {% if item.d_to %}
-                    <td> {{item.d_to}} </td>
-                {% else %}
-                    <td> present </td>
-                {% endif %}
-            </tr>
-            {% for detail in item.details %}
-            <tr>
-                {{detail.des}}
-            </tr>
-            {% endfor %}
-        </table>
-{% endfor %}
-
-<h1> Education </h1>
-{% for item in education %}
-        <table>
-            <tr>
-                <td> {{item.name}} </td>
-                <td> {{item.date}} </td>
-                <td> {{item.loc}} </td>
-                <td> {{item.des}} </td>
-            </tr>
-        </table>
-{% endfor %}
-<h1> Coursework </h1>
-{% for item in courses %}
-        <table>
-            <tr>
-                <td> {{item.name}} </td>
-                <td> {{item.des}} </td>
-            </tr>
-        </table>
-{% endfor %}
-<h1> Extracurriculars </h1>
-{% for item in extracurriculars %}
-        <table id={{item.id}}>
-            <tr>
-                <td> {{item.name}} </td>
-                <td> {{item.role}} </td>
-                <td> {{item.d_from}} </td>
-                {% if item.d_to %}
-                    <td> {{item.d_to}} </td>
-                {% else %}
-                    <td> present </td>
-                {% endif %}
-            </tr>
-            {% for detail in item.details %}
-            <tr>
-                {{detail.des}}
-            </tr>
-            {% endfor %}
-        </table>
-{% endfor %}
 {% endblock %}
