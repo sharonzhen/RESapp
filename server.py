@@ -1,7 +1,7 @@
 """ Flask site for resume-rendering and job app tracking """
 
 from flask import (Flask, session, render_template, request,
-                    flash, redirect)
+                    flash, redirect, send_from_directory)
 from flask_debugtoolbar import DebugToolbarExtension
 from jinja2 import StrictUndefined
 from model import connect_to_db
@@ -198,6 +198,8 @@ def generate_resume():
             work_experiences=work, projects=proj, 
             extracurriculars=extra)
 
+
+
 @app.route('/generate/download', methods=['POST'])
 def generate_download_pdf():
     if "user" not in session:
@@ -230,13 +232,26 @@ def generate_download_pdf():
 
     sort_items(stable_items, dynamic_items, edu, tech, 
             course, work, proj, extra)
-    
-    # call rpdf, save return value as download path
-    dl_path = rpdf(user=user, skills=tech, projects=proj, 
+    print(form_data)
+    # call rpdf, save return value (type tuple) as download path
+    path_filename = rpdf(user=user, skills=tech, projects=proj, 
             works=work, schools=edu, courses=course, 
             extras=extra, key_form=form_data)
+    print(path_filename)
+    session['dir']=path_filename
+    # create link
+    return redirect('/generate/show-pdf')
 
-    # trigger download
+@app.route('/generate/show-pdf')
+def show_pdf():
+    if "user" not in session:
+        return redirect('/')
+    dirname = session.get('dir')
+    if (dirname!=None):
+        print(os.path.abspath(dirname))
+        print("here")
+        return send_from_directory(os.path.abspath(dirname), 'resume.pdf', as_attachment=True)
+
     return redirect('/generate')
 
 @app.route('/logout')

@@ -9,108 +9,111 @@
 \Large \textbf{\VAR{contact.first} \VAR{contact.last}} \\
 \normalsize 
 %- if contact.loc
-    \VAR{contact.loc} $\mid$ 
+    \VAR{contact.loc} 
 %- endif
 %- if contact.phone
-    \VAR{contact.phone} $\mid$ 
+    $\mid$ \VAR{contact.phone} 
 %- endif
 %- if contact.github
-    github.com/\VAR{github} $\mid$ 
+    $\mid$ github.com/\VAR{github} 
 %- endif
 %- if contact.linkedin
-    \VAR{linkedin}
+    $\mid$ \VAR{linkedin}
 %- endif
 ~\\\hrulefill
 \end{center}
+%# #########################################################
 \#{ SKILLS: s_type == 2 } 
-%- if skills!=[]
-\noindent \textbf{\underline{LANGUAGES AND TECHNOLOGIES}} \\
-
+%# #########################################################
+%- if skills
+\noindent \textbf{\underline{LANGUAGES AND TECHNOLOGIES}} 
 \begin{itemize}[noitemsep,nolistsep,leftmargin=*]
-\BLOCK{for item in skills}
+    %- for item in skills
     \item \textbf{\VAR{item.name}} - \VAR{item.des}
-\BLOCK{endfor}
+    %- endfor
 \end{itemize}
-~\\
 %- endif
-
-\#{ PROJECT: d_type == 2 }
-%- if projects!=[]
+%# ##########################################################
+\#{ PROJECT: d_type == 2 }              
+%# ##########################################################
+%- if projects
 \noindent \textbf{\underline{PROJECTS}} \\
-
-\BLOCK{for item in projects}
-\noindent \textbf{\VAR{item.name}} 
-\hfill \text{\VAR{item.d_from} - \VAR{item.d_to}}\\
-\textit{\VAR{item.role}}
+    %- for item in projects
+\noindent \textbf{\VAR{item.name}} \hfill \VAR{item.d_from} - \VAR{item.d_to}\\
+\textit{\VAR{item.role}} %# no newline 
+        %- if item.details
+            %- for detail in item.details
+                %- if detail.id|string() in kform
 \begin{itemize}[noitemsep,nolistsep,leftmargin=*]
-    \BLOCK{for detail in item.details}
-    %- if detail.id in kform
     \item \textbf{\VAR{detail.des}} 
-    %- endif
-    \BLOCK{endfor}
 \end{itemize}
-\BLOCK{endfor}
-~\\
+                %- endif
+            %- endfor
+        %- else
+        ~\\
+        %- endif
+    %- endfor
 %- endif
-
+%# ##########################################################
 \#{ WORK EXPERIENCE: d_type == 1 }
-%- if workplaces!=[]
+%# ##########################################################
+%- if workplaces
 \noindent \textbf{\underline{WORK EXPERIENCE}} \\
-
-\BLOCK{for item in workplaces}
-\noindent \textbf{\VAR{item.name}}
-\hfill \text{\VAR{item.d_from} - \VAR{item.d_to}}\\
-\textit{\VAR{item.role}} 
-\hfill \textit{\VAR{item.loc}} 
+    %- for item in workplaces
+\noindent \textbf{\VAR{item.name}} \hfill \VAR{item.d_from} - \VAR{item.d_to}\\
+\textit{\VAR{item.role}} \hfill \textit{\VAR{item.loc}} %# no newline 
+        %- if item.details
+            %- for detail in item.details
+                %- if detail.id|string() in kform
 \begin{itemize}[noitemsep,nolistsep,leftmargin=*]
-    \BLOCK{for detail in item.details}
-    %- if detail.id in kform
     \item \textbf{\VAR{detail.des}} 
-    %- endif
-    \BLOCK{endfor}
 \end{itemize}
-\BLOCK{endfor}
-~\\
+                %- endif
+            %- endfor
+        %- else
+        ~\\
+        %- endif
+    %- endfor
 %- endif
-
+%# ##########################################################
 \#{ EDUCATION s_type == 1 }
-%- if schools!=[]
+%# ##########################################################
+%- if schools
 \noindent \textbf{\underline{EDUCATION}} \\
-
-\BLOCK{for item in schools}
+    %- for item in schools
 \textbf{\VAR{item.name}} \\
 \VAR{item.loc} \hfill \VAR{item.date} \\
 \textit{\VAR{item.des}}\\
-\BLOCK{endfor}
-~\\
+    %- endfor
 %- endif
-
+%# ##########################################################
 \#{ Coursework s_type == 3 }
-%- if courses!=[]
+%# ##########################################################
+%- if courses
 \noindent \textbf{\underline{RELEVANT COURSEWORK}}\\
-
-\begin{itemize}[noitemsep,nolistsep,leftmargin=*]
-\BLOCK{for item in courses}
-    \item {\textbf{\VAR{item.name}} - \VAR{item.des}}
-\BLOCK{endfor}
-\end{itemize}
-~\\
+    %- for item in courses
+\textbf{\VAR{item.name}} - \VAR{item.des}\\
+    %- endfor
 %- endif
-
+%# ##########################################################
 \#{Extra Curricular Activities, Leadership, etc d_type == 3}
-%- if extracurriculars!=[]
+%# ##########################################################
+%- if extracurriculars
 \noindent \textbf{\underline{EXTRACURRICULARS}} \\
-
-\BLOCK{for item in extracurriculars}
-\noindent \textbf{\VAR{item.name}} \hfill \VAR{item.d_from} - \VAR{item.d_to}
+    %- for item in extracurriculars
+\noindent \textbf{\VAR{item.name}} \hfill \VAR{item.d_from} - \VAR{item.d_to} %# no newline 
+        %- if item.details
+            %- for detail in item.details
+                %- if detail.id|string() in kform
 \begin{itemize}[noitemsep,nolistsep,leftmargin=*]
-    \BLOCK{for detail in item.details}
-    %- if detail.id in kform
-    \item \VAR{detail.des}
-    %- endif
-    \BLOCK{endfor}
+    \item \textbf{\VAR{detail.des}} 
 \end{itemize}
-\BLOCK{endfor}
+                %- endif
+            %- endfor
+        %- else
+        ~\\
+        %- endif
+    %- endfor
 %- endif
 
 \end{document}
