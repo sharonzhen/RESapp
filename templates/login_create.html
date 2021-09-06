@@ -6,6 +6,9 @@
 
 
 {% block body %}
+<div id="root">
+</div>
+
 <h1> Login </h1>
 <form action="/login" id="login_form" method="POST">
     <div>
@@ -71,5 +74,5 @@
 
 {% endblock %}
 {% block js %}
-<script type="text/jsx" src="static/js/login_create.jsx"></script>
+<script type="text/jsx" src="src/components/login_create/login_create.jsx"></script>
 {% endblock %}

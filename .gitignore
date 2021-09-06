@@ -1,3 +1,5 @@
 env
 __*__
 .DS*
+tex/*
+!tex/tex_templates
