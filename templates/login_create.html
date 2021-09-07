@@ -6,10 +6,14 @@
 
 
 {% block body %}
-<div id="root">
+<h1>Login</h1>
+<div id="root_login">
+</div>
+<h1>Create an account </h1>
+<div id="root_create">
 </div>
 
-<h1> Login </h1>
+<!-- <h1> Login </h1>
 <form action="/login" id="login_form" method="POST">
     <div>
       <label for="login">Login: </label>
@@ -22,7 +26,7 @@
     <div>
       <input type="submit" value="Submit"/>
     </div>
-</form>
+</form> -->
 
 
 <h1> Create an account </h1>
@@ -74,5 +78,5 @@
 
 {% endblock %}
 {% block js %}
-<script type="text/jsx" src="src/components/login_create/login_create.jsx"></script>
+<script type="text/jsx" src="/static/js/login_create.jsx"></script>
 {% endblock %}
