@@ -4,6 +4,8 @@
     Login
 {% endblock %}
 
+{% block navbar %}
+{% endblock %}
 
 {% block body %}
 <h1>Login</h1>
@@ -12,70 +14,6 @@
 <h1>Create an account </h1>
 <div id="root_create">
 </div>
-
-<!-- <h1> Login </h1>
-<form action="/login" id="login_form" method="POST">
-    <div>
-      <label for="login">Login: </label>
-      <input id="login" type="text" name="login" required />
-    </div>
-    <div>
-        <label for="pwd">Password: </label>
-        <input id="pwd" type="password" name="pwd" required />
-      </div>
-    <div>
-      <input type="submit" value="Submit"/>
-    </div>
-</form> -->
-
-
-<!-- <h1> Create an account </h1>
-<form action="/create" id="create_form" method="POST">
-<div>
-    <div>
-      <label for="login_new">Username: </label>
-      <input id="login_new" type="text" name="login_new" required />
-    </div>
-    <div>
-        <label for="pwd_new">Password: </label>
-        <input id="pwd_new" type="password" name="pwd_new" required />
-    </div>
-</div>
-    Contact information on resume (changeable later)
-<div>    
-    <div>
-        <label for="first_name">First name: </label>
-        <input id="first_name" type="text" name="first_name" required />
-        <label for="last_name">Last name: </label>
-        <input id="last_name" type="text" name="last_name" required />
-    </div>
-    <div>
-        <label for="location">Location: </label>
-        <input id="location" type="text" name="location" required />
-    </div>
-    <div>
-        <label for="email">Email: </label>
-        <input id="email" type="text" name="email" required />
-    </div>
-</div>
-<div>
-    <div>
-        <label for="phone">Phone: </label>
-        <input id="phone" type="tel" name="phone" />
-    </div>
-    <div>
-        <label for="github">Github Username: </label>
-        <input id="github" type="text" name="github" />
-    </div>
-    <div>
-        <label for="linkedin">Linkedin: </label>
-        <input id="linkedin" type="url" name="linkedin" />
-    </div>
-</div>
-    <input type="submit" value="Submit"/>
-</form> -->
-
-
 {% endblock %}
 {% block js %}
 <script type="text/jsx" src="/static/js/login_create.jsx"></script>

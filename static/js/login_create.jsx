@@ -29,7 +29,7 @@ class LoginForm extends React.Component {
             method={this.props.method}
             onSubmit = {this.onSubmit}>
             <div> 
-                <label for="login">Login: </label>
+                <label for="login">New login: </label>
                 <input 
                     name="login" 
                     type="text"
@@ -37,7 +37,7 @@ class LoginForm extends React.Component {
                     required />
             </div>
             <div>
-                <label for="pwd">Password: </label>
+                <label for="pwd">New password: </label>
                 <input 
                     name="pwd"
                     type="password"
