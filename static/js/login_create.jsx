@@ -6,10 +6,10 @@ class LoginForm extends React.Component {
             login: '',
             pwd: ''
         };
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+        this.onChange = this.onChange.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
     }
-    handleChange(event) {
+    onChange(event) {
         const target = event.target;
         const value = target.value;
         const name = target.name;
@@ -17,7 +17,7 @@ class LoginForm extends React.Component {
             [name]:value
         });
     }
-    handleSubmit(event) {
+    onSubmit(event) {
         // handle login information here
         // change post request to here
     }
@@ -33,7 +33,7 @@ class LoginForm extends React.Component {
                 <input 
                     name="login" 
                     type="text"
-                    onChange={this.handleChange}
+                    onChange={this.onChange}
                     required />
             </div>
             <div>
@@ -41,7 +41,7 @@ class LoginForm extends React.Component {
                 <input 
                     name="pwd"
                     type="password"
-                    onChange={this.handleChange}  
+                    onChange={this.onChange}  
                     required />
             </div>
             <div>
@@ -71,8 +71,8 @@ class CreateAccountForm extends React.Component {
             github:'',
             linkedin:''
         };
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+        this.onChange = this.onChange.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
     }
 
     onChange(event) {
@@ -85,9 +85,8 @@ class CreateAccountForm extends React.Component {
     }
 
     onSubmit(event) {
-        alert(this.state);
-        event.preventDefault();
-        // post request
+        alert("in here");
+        // post request handled here
     }
     render() { 
         return(
@@ -102,7 +101,7 @@ class CreateAccountForm extends React.Component {
                         <input 
                             type="text" 
                             name="login_new"
-                            onChange={this.handleChange}
+                            onChange={this.onChange}
                             required />
                     </div>
                     <div>
@@ -110,7 +109,7 @@ class CreateAccountForm extends React.Component {
                         <input 
                             type="password" 
                             name="pwd_new"
-                            onChange={this.handleChange}
+                            onChange={this.onChange}
                             required />
                     </div>
                 </div>
@@ -121,13 +120,13 @@ class CreateAccountForm extends React.Component {
                         <input 
                             type="text" 
                             name="first_name" 
-                            onChange={this.handleChange}
+                            onChange={this.onChange}
                             required />
                         <label for="last_name">Last name: </label>
                         <input
                             type="text" 
                             name="last_name" 
-                            onChange={this.handleChange}
+                            onChange={this.onChange}
                             required />
                     </div>
                     <div>
@@ -135,7 +134,7 @@ class CreateAccountForm extends React.Component {
                         <input 
                             type="text" 
                             name="location" 
-                            onChange={this.handleChange}
+                            onChange={this.onChange}
                             required />
                     </div>
                     <div>
@@ -143,7 +142,7 @@ class CreateAccountForm extends React.Component {
                         <input 
                             type="text" 
                             name="email" 
-                            onChange={this.handleChange}
+                            onChange={this.onChange}
                             required />
                     </div>
                 </div>
@@ -153,21 +152,21 @@ class CreateAccountForm extends React.Component {
                         <input 
                             type="text" 
                             name="phone" 
-                            onChange={this.handleChange} />
+                            onChange={this.onChange} />
                     </div>
                     <div>
                         <label for="github">Github Username: </label>
                         <input 
                             type="text" 
                             name="github"
-                            onChange={this.handleChange} />
+                            onChange={this.onChange} />
                     </div>
                     <div>
                         <label for="linkedin">Linkedin URL: </label>
                         <input 
-                            type="url" 
+                            type="text" 
                             name="linkedin" 
-                            onChange={this.handleChange} />
+                            onChange={this.onChange} />
                     </div>
                 </div>
                 <input type="submit" value="Submit"/>
