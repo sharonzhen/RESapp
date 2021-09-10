@@ -1,7 +1,10 @@
 {% extends 'base.html' %}
 
-{% block head %}
-    Profile
+{% block title %}
+
+{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="/static/css/profile.css">
 {% endblock %}
 
 {% block navbar %}
@@ -9,23 +12,12 @@
 {% endblock %}
 
 {% block body %}
-<h1> Account </h1>
-<div>
-    <div>Login: {{contact.user.login}}</div>
-    <div> Password: {{contact.user.password}}</div>
-</div>
-<h1> Contact info </h1>
-<div>
-    <div>Name: {{contact.first}} {{contact.last}}</div>
-    <div>Location: {{contact.loc}}</div>
-    <div>Email: {{contact.email}}</div>
-    <div>Phone: {{contact.phone}}</div>
-    <div>Github: {{contact.github}}</div>
-    <div>Linkedin: {{contact.linkedin}}</div>
-</div>
+<div id="root"></div>
+
+
 
 {% endblock %}
 
 {% block js %}
-<script type="text/jsx" src="/static/js/profile.jsx"></script>
+<script data-plugins="transform-es2015-modules-umd" type="text/babel" src="/static/js/profile.jsx"></script>
 {% endblock %}

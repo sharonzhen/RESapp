@@ -1,7 +1,7 @@
 """ Flask site for resume-rendering and job app tracking """
 
 from flask import (Flask, session, render_template, request,
-                    flash, redirect, send_from_directory)
+                    flash, redirect, send_from_directory, jsonify)
 from flask_debugtoolbar import DebugToolbarExtension
 from jinja2 import StrictUndefined
 from model import connect_to_db
@@ -76,21 +76,49 @@ def create_account():
 
     return redirect('/')
     
-
 @app.route('/profile')
 def view_contact():
     if "user" not in session:
         return redirect('/')
+    return render_template('profile.html')
+
+@app.route('/profile/api')
+def get_contact():
+    if "user" not in session:
+        return redirect('/')
     username = session.get('user')
     contact = crud.get_contact(username)
+    contact_json = {
+        'login': contact.user.login,
+        'password': "******",
+        'fname':contact.first,
+        'lname':contact.last,
+        'location':contact.loc,
+        'email':contact.email,
+        'phone':contact.phone,
+        'github':contact.github,
+        'linkedin':contact.linkedin
+    }
+    return jsonify(contact_json)
 
-    return render_template('profile.html', contact=contact)
-
-@app.route('/profile/edit', methods=['GET','POST'])
+@app.route('/profile/edit', methods=['POST'])
 def edit_contact():
     if "user" not in session:
         return redirect('/')
-    pass
+    username = session.get('user')
+    contact = crud.get_contact(username)
+    form_values = request.get_json()
+
+    if form_values:
+        if form_values['field']=='name':
+            crud.update_table(contact, 'first', form_values['first'])
+            crud.update_table(contact, 'last', form_values['last'])
+        else:
+            crud.update_table(contact, form_values['field'], form_values['value'])
+        return "success"
+    return "something went wrong"
+
+
 
 def sort_items(stable_items, dynamic_items, edu, tech, 
             course, work, proj, extra):

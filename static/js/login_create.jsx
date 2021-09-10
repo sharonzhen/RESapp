@@ -1,4 +1,6 @@
 'use strict';
+
+
 class LoginForm extends React.Component {
     constructor(props) {
         super(props);
@@ -18,10 +20,10 @@ class LoginForm extends React.Component {
         });
     }
     onSubmit(event) {
-        // handle login information here
-        // change post request to here
+        
     }
     render() {
+
         return (
         <form 
             id="login_form"
@@ -29,7 +31,7 @@ class LoginForm extends React.Component {
             method={this.props.method}
             onSubmit = {this.onSubmit}>
             <div> 
-                <label for="login">New login: </label>
+                <label htmlFor="login">New login: </label>
                 <input 
                     name="login" 
                     type="text"
@@ -37,7 +39,7 @@ class LoginForm extends React.Component {
                     required />
             </div>
             <div>
-                <label for="pwd">New password: </label>
+                <label htmlFor="pwd">New password: </label>
                 <input 
                     name="pwd"
                     type="password"
@@ -48,7 +50,7 @@ class LoginForm extends React.Component {
                 <input type="submit" value="Submit"/>
             </div>
         </form>
-        );
+        ); 
     }
 
 }
@@ -97,7 +99,7 @@ class CreateAccountForm extends React.Component {
                 onSubmit = {this.onSubmit}>
                 <div>
                     <div>
-                        <label for="login_new">Username: </label>
+                        <label htmlFor="login_new">Username: </label>
                         <input 
                             type="text" 
                             name="login_new"
@@ -105,7 +107,7 @@ class CreateAccountForm extends React.Component {
                             required />
                     </div>
                     <div>
-                        <label for="pwd_new">Password: </label>
+                        <label htmlFor="pwd_new">Password: </label>
                         <input 
                             type="password" 
                             name="pwd_new"
@@ -116,13 +118,13 @@ class CreateAccountForm extends React.Component {
                 Contact information on resume (changeable later)
                 <div>    
                     <div>
-                        <label for="first_name">First name: </label>
+                        <label htmlFor="first_name">First name: </label>
                         <input 
                             type="text" 
                             name="first_name" 
                             onChange={this.onChange}
                             required />
-                        <label for="last_name">Last name: </label>
+                        <label htmlFor="last_name">Last name: </label>
                         <input
                             type="text" 
                             name="last_name" 
@@ -130,7 +132,7 @@ class CreateAccountForm extends React.Component {
                             required />
                     </div>
                     <div>
-                        <label for="location">Location: </label>
+                        <label htmlFor="location">Location: </label>
                         <input 
                             type="text" 
                             name="location" 
@@ -138,7 +140,7 @@ class CreateAccountForm extends React.Component {
                             required />
                     </div>
                     <div>
-                        <label for="email">Email: </label>
+                        <label htmlFor="email">Email: </label>
                         <input 
                             type="text" 
                             name="email" 
@@ -148,21 +150,21 @@ class CreateAccountForm extends React.Component {
                 </div>
                 <div>
                     <div>
-                        <label for="phone">Phone: </label>
+                        <label htmlFor="phone">Phone: </label>
                         <input 
                             type="text" 
                             name="phone" 
                             onChange={this.onChange} />
                     </div>
                     <div>
-                        <label for="github">Github Username: </label>
+                        <label htmlFor="github">Github Username: </label>
                         <input 
                             type="text" 
                             name="github"
                             onChange={this.onChange} />
                     </div>
                     <div>
-                        <label for="linkedin">Linkedin URL: </label>
+                        <label htmlFor="linkedin">Linkedin URL: </label>
                         <input 
                             type="text" 
                             name="linkedin" 
