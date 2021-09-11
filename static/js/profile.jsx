@@ -21,22 +21,6 @@ const labelDict = {
     'Phone: ':'phone',
     'Github handle: ':'github',
     'Linkedin URL: ':'linkedin'
-}
-
-/*  props: close, show, children
-    hideModal is callback function from ContactField
-*/
-
-let Modal = (props) => {
-    const isShown = props.show ? "modal display-block":"modal display-none";
-    return (
-        <div className = {isShown}>
-            <section className="modal-main">
-                <button type="button" onClick={props.close}>Close</button>
-                {props.children}
-            </section>
-        </div>
-    );
 };
 
 
@@ -46,13 +30,14 @@ let Modal = (props) => {
     setFname and setLname are callbacks
 */
 let NameField = (props) => {
-    let [modalState, setModalState] = React.useState(false)
-    let showModal = () => {
-        setModalState(true);
-    };
-    let hideModal = () => {
-        setModalState(false);
-    };
+    const [showName, setShowName] = React.useState(false);
+    const handleCloseName=() => {
+        console.log("inside handle close");
+        setShowName(!showName);
+        console.log(showName);
+    }
+    const handleShowName=() => setShowName(true);
+
 
     let onSubmit = (event) => {
         event.preventDefault();
@@ -66,8 +51,7 @@ let NameField = (props) => {
         postResponse.then((data)=> {
             console.log(data);
         });
-
-        
+        setShowName(false);
     };
 
     let onChange = (event, field) => { // handle both form inputs
@@ -81,28 +65,35 @@ let NameField = (props) => {
     }
 
     return (
-        <div className="clickableDiv" onClick={showModal}>
-            <Modal show={modalState} close={hideModal}>
-            <form onSubmit = {onSubmit}>
-                <div> 
-                    Edit {props.label}
-                    <label htmlFor="fnameEdit">First name: </label>
-                    <input 
-                        name="fnameEdit" 
-                        type="text"
-                        onChange={(event)=>{onChange(event, "fname")}}
-                        required />
-                    <label htmlFor="lnameEdit">Last name: </label>
-                    <input 
-                        name="lnameEdit" 
-                        type="text"
-                        onChange={onChange}
-                        required />
-                </div>
-                <div>
-                    <input type="submit" value="Update"/>
-                </div>
-            </form>
+        <div className="clickableDiv" onClick={handleShowName}>
+            <Modal 
+                show={showName}
+                onHide={handleCloseName}
+                keyboard={false}>
+            <Modal.Header closeButton/>
+            <Modal.Body>
+                    <Form>
+                        <Form.Group className="mb-3" controlId="fname">
+                            <Form.Label>First Name: </Form.Label>
+                            <Form.Control 
+                                type="text" 
+                                placeholder="new first name" 
+                                onChange={(event)=>{onChange(event, "fname")}}/>
+                        </Form.Group>
+                        <Form.Group className="mb-3" controlId="lname">
+                            <Form.Label>Last Name: </Form.Label>
+                            <Form.Control 
+                                type="text" 
+                                placeholder="new last name" 
+                                onChange={(event)=>{onChange(event)}}/>
+                        </Form.Group>
+                        <Button 
+                            variant="primary"
+                            type="submit"
+                            onClick={onSubmit}>Update
+                        </Button>
+                    </Form>
+            </Modal.Body>
             </Modal>
             {props.label} {props.fname} {props.lname}
         </div>
@@ -116,14 +107,9 @@ let NameField = (props) => {
     callback is setState function in parent
 */
 let ContactField = (props) => {
-    let [modalState, setModalState] = React.useState(false);
-
-    let showModal = () => {
-        setModalState(true);
-    };
-    let hideModal = () => {
-        setModalState(false);
-    };
+    const [show, setShow] = React.useState(false)
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
 
     let onSubmit = (event) => {
         event.preventDefault(); // goes in here
@@ -136,13 +122,8 @@ let ContactField = (props) => {
         postResponse.then((data)=> {
             console.log(data);
         });
+        handleClose;
     };
-
-    let onChange = (event) => {
-        const target = event.target;
-        const value = target.value;
-        props.callback(value);
-    }
 
     if (!props.callback) {
         return (
@@ -151,29 +132,38 @@ let ContactField = (props) => {
     }
 
     return (
-        <div className="clickableDiv" onClick={showModal}>
-            <Modal show={modalState} close={hideModal}>
-            <form onSubmit = {onSubmit}>
-                <div> 
-                    <label htmlFor="formname">Edit {props.label} </label>
-                    <input 
-                        name="formname"
-                        type="text"
-                        onChange={(e)=>{props.callback(e.target.value)}}
-                        required />
-                </div>
-                <div>
-                    <input type="submit" value="Update"/>
-                </div>
-            </form>
-            </Modal>
-            {props.label} {props.field}
+        <div>
+        <div className="clickableDiv" onClick={handleShow}>
+        {props.label} {props.field}
         </div>
+            <Modal
+                show={show}
+                onHide={handleClose}
+                keyboard={false}>
+                    <Modal.Header closeButton/>
+                    <Modal.Body>
+                        <Form>
+                        <Form.Group className="mb-3" controlId="formname">
+                            <Form.Label>{props.label} </Form.Label>
+                            <Form.Control 
+                                type="text" 
+                                onChange={(e)=>{props.callback(e.target.value)}}/>
+                        </Form.Group>
+                        <Button 
+                            variant="primary"
+                            type="submit"
+                            onClick={onSubmit}>Update
+                        </Button>
+                        </Form>
+                    </Modal.Body>
+            </Modal>
+        </div>  
     );
 };
 
 
 let GeneratePage = () => {
+
     const [login, setLogin] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [fname, setFname] = React.useState('');
@@ -184,7 +174,10 @@ let GeneratePage = () => {
     const [github, setGithub] = React.useState('');
     const [linkedin, setLinkedin] = React.useState('');
 
-    
+    const [m, setM] = React.useState(false);
+    const closeM = () =>setM(false);
+    const openM = () => setM(true);
+
     React.useEffect(() => {
         let contactPromise = safeGet('/profile/api');
         contactPromise.then(data => {
@@ -200,10 +193,18 @@ let GeneratePage = () => {
         });
         
     }, []);
+    
 
     
     return (
         <div>
+            <Button variant="primary" onClick={openM}>
+                Test modal
+            </Button>
+            <Modal show={m} onHide={closeM}>
+                <Modal.Header closeButton></Modal.Header>
+                something something
+            </Modal>
             <div>
                 <h2>Account Information</h2>    
                 <ul>
@@ -222,7 +223,7 @@ let GeneratePage = () => {
                         fname={fname}
                         lname={lname}
                         setFname={setFname}
-                        setLname={setLname}/>
+                        setLname={setLname}/>          
                     <ContactField 
                         label="Location: " 
                         field={location}

@@ -1,26 +1,16 @@
 'use strict';
-const NavLink = (props) => {
-    return (
-        <li>
-            <a href={props.href}>{props.name}</a>
-        </li>
-    );
-};
-
-
-const NavBar = () => {
-    return (
-        <ul>
-            <NavLink name="Home" href="/"/>
-            <NavLink name="Profile" href="/profile"/>
-            <NavLink name="Resume" href="/resume"/>
-            <NavLink name="Generate" href="/generate"/>
-            <NavLink name="Logout" href="/logout"/>
-        </ul>
-    );
-};
 
 ReactDOM.render(
-    <NavBar/>,
+    <Navbar bg="dark" variant="dark">
+    <Container>
+    <Navbar.Brand href="/">Home</Navbar.Brand>
+    <Nav className="me-auto">
+      <Nav.Link href="/profile">Profile</Nav.Link>
+      <Nav.Link href="/resume">Resume</Nav.Link>
+      <Nav.Link href="/generate">Generate</Nav.Link>
+      <Nav.Link href="/logout">Logout</Nav.Link>
+    </Nav>
+    </Container>
+  </Navbar>, 
     document.getElementById('navbar')
 );
