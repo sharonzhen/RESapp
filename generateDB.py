@@ -28,7 +28,7 @@ def populate_model():
             s_date = fake.date()
             s_loc = fake.city()+', '+fake.state()
             des = fake.sentence()
-            create_stitem(user, s_type, s_name, s_date, s_loc, des)
+            create_stitem(login, s_type, s_name, s_date, s_loc, des)
 
             d_type = randint(1,3)
             d_role = fake.job()
@@ -37,7 +37,7 @@ def populate_model():
             d_from = fake.date()
             d_to = fake.date()
             tags = fake.sentence()
-            dyt = create_dytem(user, d_type, d_name, d_role, d_loc, d_from, d_to, tags)
+            dyt = create_dytem(login, d_type, d_name, d_role, d_loc, d_from, d_to, tags)
 
             for k in range(3):
                 bullet = fake.sentence()
