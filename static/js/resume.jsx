@@ -177,7 +177,7 @@ let DynamicForm = ({itemType, nameLabel, roleLabel,
                     label="Currently working here" 
                     checked={endDateChecked}
                     onChange={()=>{
-                        setEndDateChecked(!checked);
+                        setEndDateChecked(!endDateChecked);
                         if (endDateChecked) {
                             setEndDateField(null);
                         }
@@ -187,11 +187,23 @@ let DynamicForm = ({itemType, nameLabel, roleLabel,
                     value={endDateField}
                     disabled={endDateChecked}
                     onChange={(e)=>{
-                        if (!checked) {
+                        if (!endDateChecked) {
                             setEndDateField(e.target.value)};
                         }}/>
             </Form.Group> 
         );
+    }
+
+    let placeHolderStr =  {
+        "work":{ 
+
+                },
+        "proj":{
+                
+                },
+        "extra":{
+
+                }
     }
 
     let onSubmit = (e) => {};
@@ -458,14 +470,14 @@ let WorkField = ({work, setWork}) => {
             <Card.Body>
                 <Card.Title>
                     <h2>Work Experience</h2>
-                    <OCSkeleton name="Project">
+                    <OCSkeleton name="Work Experience">
                         <DynamicForm
-                            itemType={}
-                            nameLabel={}
-                            roleLabel={}
-                            locationLabel={}
-                            startDateLabel={}
-                            endDateLabel={}/>
+                            itemType="work"
+                            nameLabel="Workplace"
+                            roleLabel="Role"
+                            locationLabel="City, State"
+                            startDateLabel="Start Date"
+                            endDateLabel="End Date"/>
                     </OCSkeleton>
                 </Card.Title>
             </Card.Body>
@@ -519,14 +531,14 @@ let ExtraField = ({extras, setExtras}) => {
             <Card.Body>
                 <Card.Title>
                     <h2>Extracurriculars</h2>
-                    <OCSkeleton name="Project">
+                    <OCSkeleton name="Extracurricular Activity">
                         <DynamicForm
-                            itemType={}
-                            nameLabel={}
-                            roleLabel={}
-                            locationLabel={}
-                            startDateLabel={}
-                            endDateLabel={}/>
+                            itemType="extra"
+                            nameLabel="Organization"
+                            roleLabel="Role"
+                            locationLabel="City, State"
+                            startDateLabel="Start Date"
+                            endDateLabel="End Date"/>
                     </OCSkeleton>
                 </Card.Title>
             </Card.Body>
