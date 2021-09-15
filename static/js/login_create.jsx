@@ -87,7 +87,6 @@ class CreateAccountForm extends React.Component {
     }
 
     onSubmit(event) {
-        alert("in here");
         // post request handled here
     }
     render() { 

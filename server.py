@@ -7,6 +7,7 @@ from jinja2 import StrictUndefined
 from model import connect_to_db
 import crud, os
 from renderTeX import rpdf
+from datetime import date
 
 
 app = Flask(__name__)
@@ -124,46 +125,106 @@ def sort_items(stable_items, dynamic_items, edu, tech,
             course, work, proj, extra):
     for s in stable_items:
         if s.s_type == 1:
-            edu.append(s)
+            if s.date:
+                dates = s.date.strftime('%B %Y')
+            else:
+                dates=None
+            edu[s.id]= {
+                'name': s.name,
+                'date': dates,
+                'location': s.loc,
+                'description': s.des
+            }
         elif s.s_type == 2:
-            tech.append(s)
+            tech[s.id]= {
+                'label': s.name,
+                'description': s.des
+            }
         else:
-            course.append(s)
+            course[s.id]={
+                'category': s.name,
+                'list': s.des
+            }
     for d in dynamic_items:
+        details_dict = {}
+        for detail in d.details:
+            details_dict[detail.id] = detail.des
+        dates = d.d_from.strftime('%B %Y')
+
         if d.d_type == 1:
-            work.append(d)
+            dates += ' to '
+            if d.d_to:
+                dates+= d.d_to.strftime('%B %Y')
+            else:
+                dates+= "present"
+            
+            work[d.id] = {
+                'name': d.name,
+                'role': d.role,
+                'location': d.loc,
+                'dates': dates,
+                'details': details_dict
+            }
+           
         elif d.d_type == 2:
-            proj.append(d)
+            proj[d.id] = {
+                'name': d.name,
+                'technologies': d.role,
+                'link': d.loc,
+                'date': dates,
+                'details':details_dict
+            }
         else:
-            extra.append(d)
-
-
+            dates += ' to '
+            if d.d_to:
+                dates+= d.d_to.strftime('%B %Y')
+            else:
+                dates+= "present"
+            extra[d.id] = {
+                'name': d.name,
+                'role': d.role,
+                'location': d.loc,
+                'dates':dates,
+                'details':details_dict
+            }
 
 @app.route('/resume')
 def view_resume():
+    if "user" not in session:
+        return redirect('/')
+    return render_template('resume.html')
+
+@app.route('/resume/api')
+def resume_api():
     if "user" not in session:
         return redirect('/')
     username = session.get('user')
     stable_items = crud.get_stable_items(username)
     dynamic_items = crud.get_dynamic_items(username)
     # stable
-    edu = [] # 1
-    tech = [] # 2
-    course = [] # 3
+    edu = {} # 1
+    tech = {} # 2
+    course = {} # 3
     # dynamic
-    work = [] # 1
-    proj = [] # 2
-    extra = [] # 3
+    work = {} # 1
+    proj = {} # 2
+    extra = {} # 3
 
     sort_items(stable_items, dynamic_items, edu, tech, 
             course, work, proj, extra)
-    return render_template('resume.html', education=edu, 
-            technical_skills=tech, courses=course, 
-            work_experiences=work, projects=proj, 
-            extracurriculars=extra)
+
+    return jsonify({
+        'edu': edu,
+        'tech': tech,
+        'course': course,
+        'work': work,
+        'proj': proj,
+        'extra': extra
+    })
 
 
-@app.route('/resume/edit', methods=['GET','POST'])
+
+@app.route('/resume/edit', methods=['POST'])
 def edit_resume():
     if "user" not in session:
         return redirect('/')
@@ -219,12 +280,12 @@ def generate_resume():
     work = [] # 1
     proj = [] # 2
     extra = [] # 3
-    sort_items(stable_items, dynamic_items, edu, tech, 
-            course, work, proj, extra)
-    return render_template('generate.html', education=edu, 
-            technical_skills=tech, courses=course, 
-            work_experiences=work, projects=proj, 
-            extracurriculars=extra)
+    # sort_items(stable_items, dynamic_items, edu, tech, 
+    #         course, work, proj, extra)
+    # return render_template('generate.html', education=edu, 
+    #         technical_skills=tech, courses=course, 
+    #         work_experiences=work, projects=proj, 
+    #         extracurriculars=extra)
 
 
 

@@ -31,11 +31,7 @@ const labelDict = {
 */
 let NameField = (props) => {
     const [showName, setShowName] = React.useState(false);
-    const handleCloseName=() => {
-        console.log("inside handle close");
-        setShowName(!showName);
-        console.log(showName);
-    }
+    const handleCloseName=() => setShowName(false);
     const handleShowName=() => setShowName(true);
 
 
@@ -51,7 +47,7 @@ let NameField = (props) => {
         postResponse.then((data)=> {
             console.log(data);
         });
-        setShowName(false);
+        handleCloseName();
     };
 
     let onChange = (event, field) => { // handle both form inputs
@@ -65,37 +61,40 @@ let NameField = (props) => {
     }
 
     return (
-        <div className="clickableDiv" onClick={handleShowName}>
-            <Modal 
-                show={showName}
-                onHide={handleCloseName}
-                keyboard={false}>
-            <Modal.Header closeButton/>
-            <Modal.Body>
-                    <Form>
-                        <Form.Group className="mb-3" controlId="fname">
-                            <Form.Label>First Name: </Form.Label>
-                            <Form.Control 
-                                type="text" 
-                                placeholder="new first name" 
-                                onChange={(event)=>{onChange(event, "fname")}}/>
-                        </Form.Group>
-                        <Form.Group className="mb-3" controlId="lname">
-                            <Form.Label>Last Name: </Form.Label>
-                            <Form.Control 
-                                type="text" 
-                                placeholder="new last name" 
-                                onChange={(event)=>{onChange(event)}}/>
-                        </Form.Group>
-                        <Button 
-                            variant="primary"
-                            type="submit"
-                            onClick={onSubmit}>Update
-                        </Button>
-                    </Form>
-            </Modal.Body>
-            </Modal>
-            {props.label} {props.fname} {props.lname}
+        <div>
+            <ListGroup.Item action onClick={handleShowName}>
+                {props.label} {props.fname} {props.lname}
+            </ListGroup.Item>
+        <Modal 
+            show={showName}
+            onHide={handleCloseName}
+            keyboard={false}>
+        <Modal.Header closeButton/>
+        <Modal.Body>
+                <Form>
+                    <Form.Group className="mb-3" controlId="fname">
+                        <Form.Label>First Name: </Form.Label>
+                        <Form.Control 
+                            type="text" 
+                            placeholder="new first name" 
+                            onChange={(event)=>{onChange(event, "fname")}}/>
+                    </Form.Group>
+                    <Form.Group className="mb-3" controlId="lname">
+                        <Form.Label>Last Name: </Form.Label>
+                        <Form.Control 
+                            type="text" 
+                            placeholder="new last name" 
+                            onChange={(event)=>{onChange(event)}}/>
+                    </Form.Group>
+                    <Button 
+                        variant="primary"
+                        type="submit"
+                        onClick={onSubmit}>Update
+                    </Button>
+                </Form>
+        </Modal.Body>
+        </Modal>
+        
         </div>
     );
 
@@ -122,41 +121,44 @@ let ContactField = (props) => {
         postResponse.then((data)=> {
             console.log(data);
         });
-        handleClose;
+        handleClose();
     };
 
     if (!props.callback) {
         return (
-            <div>{props.label} {props.field}</div>
+            <ListGroup.Item>
+                {props.label} {props.field}
+            </ListGroup.Item>
+
         );
     }
 
     return (
         <div>
-        <div className="clickableDiv" onClick={handleShow}>
-        {props.label} {props.field}
-        </div>
-            <Modal
-                show={show}
-                onHide={handleClose}
-                keyboard={false}>
-                    <Modal.Header closeButton/>
-                    <Modal.Body>
-                        <Form>
-                        <Form.Group className="mb-3" controlId="formname">
-                            <Form.Label>{props.label} </Form.Label>
-                            <Form.Control 
-                                type="text" 
-                                onChange={(e)=>{props.callback(e.target.value)}}/>
-                        </Form.Group>
-                        <Button 
-                            variant="primary"
-                            type="submit"
-                            onClick={onSubmit}>Update
-                        </Button>
-                        </Form>
-                    </Modal.Body>
-            </Modal>
+            <ListGroup.Item action onClick={handleShow}>
+            {props.label} {props.field}
+            </ListGroup.Item>
+        <Modal
+            show={show}
+            onHide={handleClose}
+            keyboard={false}>
+                <Modal.Header closeButton/>
+                <Modal.Body>
+                    <Form>
+                    <Form.Group className="mb-3" controlId="formname">
+                        <Form.Label>{props.label} </Form.Label>
+                        <Form.Control 
+                            type="text" 
+                            onChange={(e)=>{props.callback(e.target.value)}}/>
+                    </Form.Group>
+                    <Button 
+                        variant="primary"
+                        type="submit"
+                        onClick={onSubmit}>Update
+                    </Button>
+                    </Form>
+                </Modal.Body>
+        </Modal>
         </div>  
     );
 };
@@ -173,10 +175,6 @@ let GeneratePage = () => {
     const [phone, setPhone] = React.useState('');
     const [github, setGithub] = React.useState('');
     const [linkedin, setLinkedin] = React.useState('');
-
-    const [m, setM] = React.useState(false);
-    const closeM = () =>setM(false);
-    const openM = () => setM(true);
 
     React.useEffect(() => {
         let contactPromise = safeGet('/profile/api');
@@ -197,27 +195,32 @@ let GeneratePage = () => {
 
     
     return (
-        <div>
-            <Button variant="primary" onClick={openM}>
-                Test modal
-            </Button>
-            <Modal show={m} onHide={closeM}>
-                <Modal.Header closeButton></Modal.Header>
-                something something
-            </Modal>
-            <div>
-                <h2>Account Information</h2>    
-                <ul>
+        <div class="content">
+            <Card style={{ width: '36rem' }}>
+                <Card.Body>
+                    <Card.Title>
+                        Account Information
+                    </Card.Title>
+                    <ListGroup>
                     <ContactField 
                         label="Login: " 
                         field={login}/>
                     <ContactField 
                         label="Password: " 
                         field={password}/>
-                </ul>
-            </div>
-            <div>
-                <h2>Contact Information</h2>
+                    </ListGroup>
+                </Card.Body>
+            </Card>
+            <Card style={{ width: '36rem' }}>
+                <Card.Body>
+                    <Card.Title>
+                        Contact Information
+                    </Card.Title>
+                    <Card.Text>
+                        Click to edit
+                    </Card.Text>
+                </Card.Body>
+                <ListGroup>
                     <NameField
                         label="Name: "
                         fname={fname}
@@ -244,7 +247,8 @@ let GeneratePage = () => {
                         label="Linkedin URL: " 
                         field={linkedin}
                         callback={setLinkedin}/>
-            </div>
+                </ListGroup>
+            </Card>  
         </div>
     );
 };

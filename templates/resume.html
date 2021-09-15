@@ -9,95 +9,9 @@
 {% endblock %}
 
 {% block body %}
-<h1> Education </h1>
-{% for item in education %}
-        <table>
-            <tr>
-                <td> {{item.name}} </td>
-                <td> {{item.date}} </td>
-                <td> {{item.loc}} </td>
-                <td> {{item.des}} </td>
-            </tr>
-        </table>
-{% endfor %}
-<h1> Technical Skills </h1>
-{% for item in technical_skills %}
-        <table>
-            <tr>
-                <td> {{item.name}} </td>
-                <td> {{item.des}} </td>
-            </tr>
-        </table>
-{% endfor %}
-<h1> Coursework </h1>
-{% for item in courses %}
-        <table>
-            <tr>
-                <td> {{item.name}} </td>
-                <td> {{item.des}} </td>
-            </tr>
-        </table>
-{% endfor %}
-<h1> Work Experience</h1>
-{% for item in work_experiences %}
-        <table id={{item.id}}>
-            <tr>
-                <td> {{item.name}} </td>
-                <td> {{item.role}} </td>
-                <td> {{item.d_from}} </td>
-                {% if item.d_to %}
-                    <td> {{item.d_to}} </td>
-                {% else %}
-                    <td> present </td>
-                {% endif %}
-            </tr>
-            {% for detail in item.details %}
-            <tr>
-                {{detail.des}}
-            </tr>
-            {% endfor %}
-        </table>
-{% endfor %}
-<h1> Project Experience </h1>
-{% for item in projects %}
-        <table id={{item.id}}>
-            <tr>
-                <td> {{item.name}} </td>
-                <td> {{item.role}} </td>
-                <td> {{item.d_from}} </td>
-                {% if item.d_to %}
-                    <td> {{item.d_to}} </td>
-                {% else %}
-                    <td> present </td>
-                {% endif %}
-            </tr>
-            {% for detail in item.details %}
-            <tr>
-                {{detail.des}}
-            </tr>
-            {% endfor %}
-        </table>
-{% endfor %}
-<h1> Extracurriculars </h1>
-{% for item in extracurriculars %}
-        <table id={{item.id}}>
-            <tr>
-                <td> {{item.name}} </td>
-                <td> {{item.role}} </td>
-                <td> {{item.d_from}} </td>
-                {% if item.d_to %}
-                    <td> {{item.d_to}} </td>
-                {% else %}
-                    <td> present </td>
-                {% endif %}
-            </tr>
-            {% for detail in item.details %}
-            <tr>
-                {{detail.des}}
-            </tr>
-            {% endfor %}
-        </table>
-{% endfor %}
+<div id="root"></div>
+
+
 
 <h1> Add education</h1>
 <form action="/resume/add/edu" method="POST">
@@ -195,4 +109,8 @@ bulletpoint 2 - this will go on another bulletpoint
     <input type="submit" value="Submit"/>
 </form>
 
+{% endblock %}
+
+{% block js %}
+<script data-plugins="transform-es2015-modules-umd" type="text/babel" src="/static/js/resume.jsx"></script>
 {% endblock %}
