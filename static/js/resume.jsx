@@ -30,6 +30,7 @@ let EduForm = () => {
                     onChange={(e)=>{setDegree(e.target.value)}}/>
             </Form.Group>
             <Form.Group className="mb-3" controlId="edu-loc">
+                <Form.Label>City, State: </Form.Label>
                 <Form.Control
                     type="text"
                     onChange={(e)=>{setEduLocation(e.target.value)}}/>
@@ -42,10 +43,6 @@ let EduForm = () => {
             </Button>
         </Form>
     );
-
-};
-
-let EduButton = () => {
 
 };
 
@@ -111,181 +108,163 @@ let CoursesForm = () => {
     );
 };
 
-let AddDetail = ({id1, id2, parent, setParent}) => {
-    const [oc, setOC] = useState(false);
-    const ocClose = () => setOC(false);
-    const ocShow = () => setOC(true);
+let AddDetail = ({id1, parent, setParent}) => {
+    const [detailInput, showDetailInput] = React.useState(false);
+    const hideInput = () => showDetailInput(false);
+    const showInput = () => showDetailInput(true);
     const [d, setD] = React.useState('');
+
 
     return (
         <Form.Group className="mb-3" controlID={id1}>
-                <Form.Label>Details: </Form.Label>
-                    <Button 
-                        variant="outline-secondary"
-                        onClick={ocShow}
-                        className="me-2">
-                            Add Detail
-                    </Button>
-                    <Form
-                        show={oc}
-                        onHide={ocClose}>
-                                        <Form>
-                                            <Form.Group className="mb-3" controlId={id2}>
-
-                                                <Form.Control 
-                                                    as="textarea" 
-                                                    rows={4}
-                                                    value={d}
-                                                    onChange={(e)=>{setD(e.target.value)}}/>
-                                            </Form.Group>
-                                        </Form>
-                                    <Button
-                                        variant="outline-primary"
-                                        onClick={()=> {
-                                            setParent(prev => {
-                                                prev = prev.push(d);
-                                                return prev;
-                                            });
-                                            setD('');
-                                            ocClose;
-                                        }}>
-                                        Add
-                                    </Button>
-                    </Form>
-                <ListGroup>
-                {
-                        parent.map((item) => (
-                            <ListGroup.Item>{item}</ListGroup.Item>
-                        ))
-                }
-                </ListGroup>
-            </Form.Group>
+            <ListGroup>
+            {
+                parent.map((item) => (
+                    <ListGroup.Item>{item}</ListGroup.Item>
+                ))
+            }
+            </ListGroup>
+            <Form.Control 
+                as="textarea" 
+                rows={4}
+                value={d}
+                onChange={(e)=>{setD(e.target.value)}}/>                            
+            <Button 
+                variant="outline-secondary"
+                className="me-2"
+                onClick={()=> {
+                    setParent(prev => {
+                        prev = prev.push(d);
+                        return prev;
+                    });
+                    setD('');
+                    hideInput;
+                }}>
+                Add Detail
+            </Button>
+        </Form.Group>
     );
 
 };
 
-let WorkForm = () => {
-    let [workplace, setWorkplace] = React.useState('');
-    let [workRole, setWorkRole] = React.useState('');
-    let [workLoc, setWorkLoc] = React.useState('');
-    let [wStartDate, setWStartDate] = React.useState(Date.now());
-    let [wEndDate, setWEndDate] = React.useState(null);
+/* props:
+    itemType            from ["work", "proj", "extra"]
+    nameLabel           string
+    roleLabel           string
+    locationLabel       string
+    startDateLabel      Date()
+    endDateLabel        Date() or null */
+let DynamicForm = ({itemType, nameLabel, roleLabel, 
+                    locationLabel, startDateLabel, endDateLabel=null}) => {
+    const [placeInput, setPlaceInput] = React.useState('');
+    const [roleInput, setRoleInput] = React.useState('');
+    const [locationInput, setLocationInput] = React.useState('');
+    const [startDateField, setStartDateField] = React.useState(Date.now());
+    const [endDateField, setEndDateField] = React.useState(null);
 
-    let [checked, setChecked] = React.useState(true);
+
+    const [endDateChecked, setEndDateChecked] = React.useState(true);
     let [tags, setTags] = React.useState('test tag');
     let [details, setDetails] = React.useState(Immutable.List());
     
-    let onSubmit = (e) => {};
-    return (
-        <Form>
-            <Form.Group className="mb-3" controlId="work-place">
-                <Form.Label>Workplace: </Form.Label>
-                <Form.Control
-                    type="text"
-                    value={workplace}
-                    placeholder="Mann Co."
-                    onChange={(e)=>{setWorkplace(e.target.value)}}/>                
-            </Form.Group>
-            <Form.Group className="mb-3" controlID="work-role">
-            <Form.Label>Role: </Form.Label>
-                <Form.Control
-                    type="text"
-                    value={workRole}
-                    placeholder="Demoman"
-                    onChange={(e)=>{setWorkRole(e.target.value)}}/>
-            </Form.Group>
-            <Form.Group className="mb-3" controlID="work-loc">
-            <Form.Label>Location: </Form.Label>
-                <Form.Control
-                    type="text"
-                    value={workLoc}
-                    placeholder="Mannhattan"
-                    onChange={(e)=>{setWorkLoc(e.target.value)}}/>
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="wstart-date">
-                <Form.Label>Start Date: </Form.Label>
-                <Form.Control
-                    type="date"
-                    value={wStartDate}
-                    onChange={(e)=>{setWStartDate(e.target.value)}}/>
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="wend-date">
-                <Form.Label>End Date: </Form.Label>
+    let optionalEndDateField = [];
+    if (endDateLabel) {
+        optionalEndDateField.push(
+            <Form.Group className="mb-3" controlId="input-end-date">
+                <Form.Label>{endDateLabel}: </Form.Label>
                 <Form.Check 
                     type="checkbox" 
                     label="Currently working here" 
-                    checked={checked}
+                    checked={endDateChecked}
                     onChange={()=>{
-                        setChecked(!checked);
-                        if (checked) {
-                            setWEndDate(null);
+                        setEndDateChecked(!checked);
+                        if (endDateChecked) {
+                            setEndDateField(null);
                         }
                         }}/>
                 <Form.Control
                     type="date"
-                    value={wEndDate}
-                    disabled={checked}
+                    value={endDateField}
+                    disabled={endDateChecked}
                     onChange={(e)=>{
                         if (!checked) {
-                            setWEndDate(e.target.value)};
+                            setEndDateField(e.target.value)};
                         }}/>
             </Form.Group> 
-            <AddDetail id1="wd1" id2="wd2" parent={details} setParent={setDetails}/>
-            <Button
-                variant="primary"
-                type="submit"
-                onClick={onSubmit}>
-                Add
-            </Button>    
-        </Form>        
-    );
-};
-
-let ProjectForm = () => {
-    let [pName, setPName] = React.useState('');
-    let [pDescription, setPDescription] = React.useState('');
-    let [pLink, setPLink] = React.useState('');
-    let [pDate, setPDate] = React.useState(Date.now());
-    let [tags, setTags] = React.useState('test tag');
-    let [details, setDetails] = React.useState(Immutable.List());
-
+        );
+    }
 
     let onSubmit = (e) => {};
     return (
         <Form>
-
+            <Form.Group className="mb-3" controlId="input-name">
+                <Form.Label>{nameLabel}: </Form.Label>
+                <Form.Control
+                    type="text"
+                    value={placeInput}
+                    placeholder="Mann Co."
+                    onChange={(e)=>{setPlaceInput(e.target.value)}}/>                
+            </Form.Group>
+            <Form.Group className="mb-3" controlID="input-role">
+            <Form.Label>{roleLabel}: </Form.Label>
+                <Form.Control
+                    type="text"
+                    value={roleInput}
+                    placeholder="Demoman"
+                    onChange={(e)=>{setRoleInput(e.target.value)}}/>
+            </Form.Group>
+            <Form.Group className="mb-3" controlID="input-loc">
+            <Form.Label>{locationLabel}: </Form.Label>
+                <Form.Control
+                    type="text"
+                    value={locationInput}
+                    placeholder="Mannhattan"
+                    onChange={(e)=>{setLocationInput(e.target.value)}}/>
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="input-start-date">
+                <Form.Label>{startDateLabel}: </Form.Label>
+                <Form.Control
+                    type="date"
+                    value={startDateField}
+                    onChange={(e)=>{setStartDateField(e.target.value)}}/>
+            </Form.Group>
+            {optionalEndDateField}
+            <AddDetail id1="wd1" parent={details} setParent={setDetails}/>
             <Button
                 variant="primary"
                 type="submit"
                 onClick={onSubmit}>
-                Add
+                Save
             </Button>    
         </Form>        
     );
 };
 
-let ExtraForm = () => {
-    let [org, setOrg] = React.useState('');
-    let [orgRole, setOrgRole] = React.useState('');
-    let [orgLoc, setOrgLoc] = React.useState('');
-    let [oStartDate, setOStartDate] = React.useState(Date.now());
-    let [oEndDate, setOEndDate] = React.useState(null);
-    let [tags, setTags] = React.useState('test tag');
-    let [details, setDetails] = React.useState(Immutable.List());
+
+/* props: name */
+let OCSkeleton = (props) => {
+    const [showOC, setShowOC] = React.useState(false);
+    const ocClose = () => setShowOC(false);
+    const ocShow = () => setShowOC(true);
+
     
-    let onSubmit = (e) => {};
-    return (
-        <Form>
-            <Button
-                variant="primary"
-                type="submit"
-                onClick={onSubmit}>
-                Add
-            </Button>
-        </Form>        
+  return (
+    <div>
+        <Button variant="outline-primary" size="sm" onClick={ocShow} className="me-2">
+            Add
+        </Button>
+        <Offcanvas show={showOC} onHide={ocClose} placement="end" scroll="true" backdrop="false">
+            <Offcanvas.Header closeButton>
+            <Offcanvas.Title>Add {props.name}</Offcanvas.Title>
+            </Offcanvas.Header>
+            <Offcanvas.Body>
+                {props.children}
+            </Offcanvas.Body>
+        </Offcanvas>
+    </div>
     );
-};
 
+}
 
 /* props: techSkills, setTechSkills */
 let TechField = ({techSkills, setTechSkills}) => {
@@ -304,6 +283,9 @@ let TechField = ({techSkills, setTechSkills}) => {
             <Card.Body>
                 <Card.Title>
                     <h2>Technical Skills</h2>
+                    <OCSkeleton name="Technical Skill">
+                        <SkillsForm/>
+                    </OCSkeleton>
                 </Card.Title>
             </Card.Body>
             <ListGroup variant="flush">
@@ -330,6 +312,9 @@ let EduField = ({education, setEducation}) => {
             <Card.Body>
                 <Card.Title>
                     <h2>Education</h2>
+                    <OCSkeleton name="Education">
+                        <EduForm/>
+                    </OCSkeleton>
                 </Card.Title>
             </Card.Body>
             <ListGroup variant="flush">
@@ -339,6 +324,36 @@ let EduField = ({education, setEducation}) => {
     );
 
 };
+
+/* props: coursework, setCoursework*/
+let CourseField = ({coursework, setCoursework}) => {
+    let pushList = [];
+    for (let [key] of coursework) {
+        pushList.push(
+                <ListGroup.Item action variant="light" eventKey={key}> 
+                <div><b>{coursework.getIn([key, 'category'])}</b>:</div> 
+                <div>{coursework.getIn([key, 'list'])}</div> 
+                </ListGroup.Item>
+        );
+    }
+    
+    return (
+        <Card style={{ width: '36rem' }}>
+            <Card.Body>
+                <Card.Title>
+                    <h2>Relevant Coursework</h2>
+                    <OCSkeleton name="Coursework">
+                        <CoursesForm/>
+                    </OCSkeleton>
+                </Card.Title>
+            </Card.Body>
+            <ListGroup variant="flush">
+        {pushList}
+        </ListGroup>
+        </Card>
+    );
+};
+
 
 /* props: projects, setProjects*/
 let ProjField = ({projects, setProjects}) => {
@@ -383,32 +398,14 @@ let ProjField = ({projects, setProjects}) => {
             <Card.Body>
                 <Card.Title>
                     <h2>Technical Projects</h2>
-                </Card.Title>
-            </Card.Body>
-            <ListGroup variant="flush">
-        {pushList}
-        </ListGroup>
-        </Card>
-    );
-};
-
-/* props: coursework, setCoursework*/
-let CourseField = ({coursework, setCoursework}) => {
-    let pushList = [];
-    for (let [key] of coursework) {
-        pushList.push(
-                <ListGroup.Item action variant="light" eventKey={key}> 
-                <div><b>{coursework.getIn([key, 'category'])}</b>:</div> 
-                <div>{coursework.getIn([key, 'list'])}</div> 
-                </ListGroup.Item>
-        );
-    }
-    
-    return (
-        <Card style={{ width: '36rem' }}>
-            <Card.Body>
-                <Card.Title>
-                    <h2>Relevant Coursework</h2>
+                    <OCSkeleton name="Project">
+                        <DynamicForm
+                            itemType="proj"
+                            nameLabel="Project Name"
+                            roleLabel="Technologies Used"
+                            locationLabel="Link"
+                            startDateLabel="Approximate Date"/>
+                    </OCSkeleton>
                 </Card.Title>
             </Card.Body>
             <ListGroup variant="flush">
@@ -461,6 +458,15 @@ let WorkField = ({work, setWork}) => {
             <Card.Body>
                 <Card.Title>
                     <h2>Work Experience</h2>
+                    <OCSkeleton name="Project">
+                        <DynamicForm
+                            itemType={}
+                            nameLabel={}
+                            roleLabel={}
+                            locationLabel={}
+                            startDateLabel={}
+                            endDateLabel={}/>
+                    </OCSkeleton>
                 </Card.Title>
             </Card.Body>
             <ListGroup variant="flush">
@@ -513,6 +519,15 @@ let ExtraField = ({extras, setExtras}) => {
             <Card.Body>
                 <Card.Title>
                     <h2>Extracurriculars</h2>
+                    <OCSkeleton name="Project">
+                        <DynamicForm
+                            itemType={}
+                            nameLabel={}
+                            roleLabel={}
+                            locationLabel={}
+                            startDateLabel={}
+                            endDateLabel={}/>
+                    </OCSkeleton>
                 </Card.Title>
             </Card.Body>
             <ListGroup variant="flush">
@@ -522,7 +537,6 @@ let ExtraField = ({extras, setExtras}) => {
     );
 
 };
-
 
 
 
