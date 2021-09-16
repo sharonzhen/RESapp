@@ -21,7 +21,7 @@ let EduForm = ({ancestor, setAncestor}) => {
             name:schoolName,
             datefrom:gradDate,
             location:eduLocation,
-            description:degree,
+            description:degree
         };
         let postResponse = safePost("/resume/add", formBody);
         postResponse.then((data)=> {
@@ -256,7 +256,30 @@ let DynamicForm = ({itemType, nameLabel, roleLabel,
                 "location": "e.g. Resident Services Building"},
     };
 
-    let onSubmit = (e) => {};
+    let onSubmit = (e) => {
+        e.preventDefault();
+        let deets = details.toJSON();
+        console.log(deets);
+        let formBody = {
+            formType:itemType,
+            name:placeInput,
+            role:roleInput,
+            location:locationInput,
+            datefrom:startDateField,
+            dateto:endDateField,
+            details:deets
+        };
+        console.log(formBody);
+        let postResponse = safePost("/resume/add", formBody);
+        postResponse.then((data)=> {
+            console.log(data);
+            
+
+            // set ancestor to update values
+            // return success message, keep the form i guess
+        });
+    };
+
 
     return (
         <Form>
@@ -445,11 +468,11 @@ let ProjField = ({projects, setProjects}) => {
                     </tr>
                     <tr>
                         <td>Technologies </td>
-                        <td>{projects.getIn([key, 'technologies'])}</td>
+                        <td>{projects.getIn([key, 'role'])}</td>
                     </tr>
                     <tr>
                         <td>Link </td>
-                        <td>{projects.getIn([key, 'link'])}</td>
+                        <td>{projects.getIn([key, 'location'])}</td>
                     </tr>
                 </Table>
                 <div>Details:

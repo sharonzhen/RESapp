@@ -23,7 +23,7 @@ export async function safePost(url, data) {
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-        return await response.text();
+        return await response.json();
     } catch(e) {
         console.log(e);
     }

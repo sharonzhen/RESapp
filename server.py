@@ -8,6 +8,7 @@ from model import connect_to_db
 import crud, os
 from renderTeX import rpdf
 from datetime import date
+import json
 
 
 app = Flask(__name__)
@@ -116,8 +117,8 @@ def edit_contact():
             crud.update_table(contact, 'last', form_values['last'])
         else:
             crud.update_table(contact, form_values['field'], form_values['value'])
-        return "success"
-    return "something went wrong"
+        return jsonify({'res':'success'})
+    return jsonify({'res':'something went wrong'})
 
 
 
@@ -149,6 +150,7 @@ def sort_items(stable_items, dynamic_items, edu, tech,
         details_dict = {}
         for detail in d.details:
             details_dict[detail.id] = detail.des
+        
         dates = d.d_from.strftime('%B %Y')
 
         if d.d_type == 1:
@@ -169,8 +171,8 @@ def sort_items(stable_items, dynamic_items, edu, tech,
         elif d.d_type == 2:
             proj[d.id] = {
                 'name': d.name,
-                'technologies': d.role,
-                'link': d.loc,
+                'role': d.role,             #technologies
+                'location': d.loc,          #link
                 'date': dates,
                 'details':details_dict
             }
@@ -231,43 +233,72 @@ def edit_resume():
     pass
     # TODO after getting started on frontend
 
+
+def jsonify_dytem(dytem):
+    details_dict = {}
+    for detail in dytem.details:
+        details_dict[detail.id] = detail.des
+
+    dates = dytem.d_from.strftime('%B %Y')
+
+    if dytem.d_type != 2:
+        dates += ' to '
+        if dytem.d_to:
+            dates+= dytem.d_to.strftime('%B %Y')
+        else:
+            dates+= "present"
+
+    ret = {}
+    ret[dytem.id] = {
+                'name': dytem.name,
+                'role': dytem.role,
+                'location': dytem.loc,
+                'dates': dates,
+                'details': details_dict
+            }
+    return jsonify(ret)
+
+
+
+
 @app.route('/resume/add', methods=['POST'])
 def add_resume():
     if "user" not in session:
         return redirect('/')
     username = session.get('user')
     form_values = request.get_json()
-    if form_values:
 
+    if form_values is None:
+        return jsonify({'res':'failure to get form values'})
 
-    model_type = RESTYPE.get(typ) # (char, int)
+    model_type = RESTYPE.get(form_values['formType']) # (char, int)
+
     if model_type:
+        item_type = model_type[0]
         type_id = model_type[1]
-        name = request.form.get('name')
-        loc = request.form.get('loc')
-        d_from = request.form.get('d_from')
 
-        if model_type[0]=='s': # stable item
-            des = request.form.get('des')
-            crud.create_stitem(username, model_type[1], 
-                    name, d_from, loc, des)
+        name = form_values.get('name')
+        datefrom = form_values.get('datefrom')
+        location = form_values.get('location')        
+
+        if item_type == 's':                        # stable item
+            description = form_values.get('description')
+            crud.create_stitem(username, type_id, 
+                    name, datefrom, location, description)
         else: 
-            role = request.form.get('role')
-            d_to = request.form.get('d_to')
-            tags = request.form.get('tags')
-            textfield = request.form.get('details')
-            details = textfield.rstrip().split('\n')
-            dytem = crud.create_dytem(username, model_type[1], 
-                    name, role, loc, d_from, d_to, tags)
+            role = form_values.get('role')
+            dateto = form_values.get('dateto')
+            tags = "test"
+            details = form_values.get('details')
+            dytem = crud.create_dytem(username, type_id, 
+                    name, role, location, datefrom, dateto, tags)
             for detail in details:
-                if (detail != '') | (detail != ' '):
-                    crud.create_detail(dytem, detail)
+                crud.create_detail(dytem, detail)
+            return jsonify_dytem(dytem)
     else:
-        flash(f'Error adding {typ} to Resume')
+        return jsonify({'err':f'Error adding {model_type} to Resume'})
     
-    flash(f'success')
-
-    return redirect('/resume')
+    return jsonify({'err':'something went wrong'})
 
 @app.route('/generate')
 def generate_resume():
