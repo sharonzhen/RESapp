@@ -138,13 +138,13 @@ def sort_items(stable_items, dynamic_items, edu, tech,
             }
         elif s.s_type == 2:
             tech[s.id]= {
-                'label': s.name,
+                'name': s.name,
                 'description': s.des
             }
         else:
             course[s.id]={
-                'category': s.name,
-                'list': s.des
+                'name': s.name,
+                'description': s.des
             }
     for d in dynamic_items:
         details_dict = {}
@@ -162,18 +162,18 @@ def sort_items(stable_items, dynamic_items, edu, tech,
             
             work[d.id] = {
                 'name': d.name,
+                'dates': dates,
                 'role': d.role,
                 'location': d.loc,
-                'dates': dates,
                 'details': details_dict
             }
            
         elif d.d_type == 2:
             proj[d.id] = {
                 'name': d.name,
+                'dates': dates,
                 'role': d.role,             #technologies
                 'location': d.loc,          #link
-                'date': dates,
                 'details':details_dict
             }
         else:
@@ -189,6 +189,7 @@ def sort_items(stable_items, dynamic_items, edu, tech,
                 'dates':dates,
                 'details':details_dict
             }
+
 
 @app.route('/resume')
 def view_resume():
@@ -251,14 +252,31 @@ def jsonify_dytem(dytem):
     ret = {}
     ret[dytem.id] = {
                 'name': dytem.name,
+                'dates': dates,
                 'role': dytem.role,
                 'location': dytem.loc,
-                'dates': dates,
                 'details': details_dict
             }
     return jsonify(ret)
 
-
+def jsonify_stitem(stitem):
+    ret = {}
+    if stitem.s_type == 1: # education
+        date = ''
+        if stitem.date:
+            date = stitem.date.strftime('%B %Y')
+        ret[stitem.id] = {
+            'name': stitem.name,
+            'date': date,
+            'location': stitem.loc,
+            'description': stitem.des
+        }
+    else: # course and tech
+        ret[stitem.id] = {
+            'name':stitem.name,
+            'description':stitem.des
+        }
+    return jsonify(ret)
 
 
 @app.route('/resume/add', methods=['POST'])
@@ -283,8 +301,9 @@ def add_resume():
 
         if item_type == 's':                        # stable item
             description = form_values.get('description')
-            crud.create_stitem(username, type_id, 
+            stitem = crud.create_stitem(username, type_id, 
                     name, datefrom, location, description)
+            return jsonify_stitem(stitem)
         else: 
             role = form_values.get('role')
             dateto = form_values.get('dateto')

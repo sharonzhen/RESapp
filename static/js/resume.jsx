@@ -9,10 +9,10 @@ import { safePost } from "./modules";
 /* *************************************************** */
 
 let EduForm = ({ancestor, setAncestor}) => {
-    let [schoolName, setSchoolName] = React.useState('');
-    let [gradDate, setGradDate] = React.useState(Date.now());
-    let [degree, setDegree] = React.useState('');
-    let [eduLocation, setEduLocation] = React.useState('');
+    const [schoolName, setSchoolName] = React.useState('');
+    const [gradDate, setGradDate] = React.useState(Date.now());
+    const [degree, setDegree] = React.useState('');
+    const [eduLocation, setEduLocation] = React.useState('');
 
     let onSubmit = (e) => {
         e.preventDefault();
@@ -25,9 +25,24 @@ let EduForm = ({ancestor, setAncestor}) => {
         };
         let postResponse = safePost("/resume/add", formBody);
         postResponse.then((data)=> {
+            /* 
+            data = {id: { name: name,
+                          date: date,
+                          location: location,
+                          description: description}}
+            */
             // set ancestor to update values
-            // return success message, keep the form i guess
+            let immutableUpdate = Immutable.fromJS(data);
+            // set ancestor to update values
+            setAncestor(prev => {
+                return prev.merge(immutableUpdate);
+            });
         });
+        // clear form
+        setSchoolName('');
+        setGradDate(Date.now());
+        setDegree('');
+        setEduLocation('');
     };
 
     return (
@@ -36,6 +51,7 @@ let EduForm = ({ancestor, setAncestor}) => {
                 <Form.Label>School Name </Form.Label>
                 <Form.Control 
                     type="text"
+                    value={schoolName}
                     placeholder="e.g. Greendale Community College"
                     onChange={(e)=>{setSchoolName(e.target.value)}}/>
             </Form.Group>
@@ -43,12 +59,14 @@ let EduForm = ({ancestor, setAncestor}) => {
                 <Form.Label>Graduation Date </Form.Label>
                 <Form.Control
                     type="date"
+                    value={gradDate}
                     onChange={(e)=>{setGradDate(e.target.value)}}/>
             </Form.Group>
             <Form.Group className="mb-3" controlId="degree">
                 <Form.Label>Degree </Form.Label>
                 <Form.Control
                     type="text"
+                    value={degree}
                     placeholder="e.g. Film Studies"
                     onChange={(e)=>{setDegree(e.target.value)}}/>
             </Form.Group>
@@ -56,6 +74,7 @@ let EduForm = ({ancestor, setAncestor}) => {
                 <Form.Label>Location </Form.Label>
                 <Form.Control
                     type="text"
+                    value={eduLocation}
                     placeholder="e.g. Greendale County, CO"
                     onChange={(e)=>{setEduLocation(e.target.value)}}/>
             </Form.Group>
@@ -71,8 +90,8 @@ let EduForm = ({ancestor, setAncestor}) => {
 };
 
 let SkillsForm = ({ancestor, setAncestor}) => {
-    let [skill, setSkill] = React.useState('');
-    let [skillList, setSkillList] = React.useState('');
+    const [skill, setSkill] = React.useState('');
+    const [skillList, setSkillList] = React.useState('');
 
     let onSubmit = (e) => {
         e.preventDefault();
@@ -83,9 +102,20 @@ let SkillsForm = ({ancestor, setAncestor}) => {
         };
         let postResponse = safePost("/resume/add", formBody);
         postResponse.then((data)=> {
+            /* 
+            data = {id: { name: name,
+                          description: description}}
+            */
             // set ancestor to update values
-            // return success message, keep the form i guess
+            let immutableUpdate = Immutable.fromJS(data);
+            // set ancestor to update values
+            setAncestor(prev => {
+                return prev.merge(immutableUpdate);
+            });
         });
+        // clear form
+        setSkill('');
+        setSkillList('');
     };
     
     return (
@@ -94,6 +124,7 @@ let SkillsForm = ({ancestor, setAncestor}) => {
                 <Form.Label>Category: </Form.Label>
                 <Form.Control
                     type="text"
+                    value={skill}
                     placeholder="e.g. Proficient"
                     onChange={(e)=>{setSkill(e.target.value)}} />
             </Form.Group>
@@ -101,6 +132,7 @@ let SkillsForm = ({ancestor, setAncestor}) => {
                 <Form.Label>Items: </Form.Label>
                 <Form.Control
                     type="text"
+                    value={skillList}
                     placeholder="e.g. C++, Python, Java, etc." 
                     onChange={(e)=>{setSkillList(e.target.value)}} />
             </Form.Group>
@@ -115,8 +147,8 @@ let SkillsForm = ({ancestor, setAncestor}) => {
 };
 
 let CoursesForm = ({ancestor, setAncestor}) => {
-    let [course, setCourse] = React.useState('');
-    let [courseList, setCourseList] = React.useState('');
+    const [course, setCourse] = React.useState('');
+    const [courseList, setCourseList] = React.useState('');
 
     let onSubmit = (e) => {
         e.preventDefault();
@@ -127,9 +159,20 @@ let CoursesForm = ({ancestor, setAncestor}) => {
         };
         let postResponse = safePost("/resume/add", formBody);
         postResponse.then((data)=> {
+            /* 
+            data = {id: { name: name,
+                          description: description}}
+            */
             // set ancestor to update values
-            // return success message, keep the form i guess
+            let immutableUpdate = Immutable.fromJS(data);
+            // set ancestor to update values
+            setAncestor(prev => {
+                return prev.merge(immutableUpdate);
+            });
         });
+        // clear form
+        setCourse('');
+        setCourseList('');
     };
     
     return (
@@ -138,6 +181,7 @@ let CoursesForm = ({ancestor, setAncestor}) => {
                 <Form.Label>Category: </Form.Label>
                 <Form.Control
                     type="text"
+                    value={course}
                     placeholder="e.g. undergraduate" 
                     onChange={(e)=>{setCourse(e.target.value)}} />
             </Form.Group>
@@ -145,6 +189,7 @@ let CoursesForm = ({ancestor, setAncestor}) => {
                 <Form.Label>Items: </Form.Label>
                 <Form.Control
                     type="text"
+                    value={courseList}
                     placeholder="e.g. Data Structures, Algorithms, etc." 
                     onChange={(e)=>{setCourseList(e.target.value)}} />
             </Form.Group>
@@ -157,6 +202,7 @@ let CoursesForm = ({ancestor, setAncestor}) => {
         </Form>        
     );
 };
+
 
 /* props:   parent      details    type 
             setParent   setDetails type */
@@ -200,8 +246,6 @@ let AddDetail = ({id1, parent, setParent}) => {
     locationLabel       string
     startDateLabel      Date()
     endDateLabel        Date() or null 
-    
-    has onSubmit()
     */
 let DynamicForm = ({itemType, nameLabel, roleLabel, 
                     locationLabel, startDateLabel, endDateLabel=null,
@@ -272,12 +316,29 @@ let DynamicForm = ({itemType, nameLabel, roleLabel,
         console.log(formBody);
         let postResponse = safePost("/resume/add", formBody);
         postResponse.then((data)=> {
-            console.log(data);
-            
-
+            /* 
+            data = {id: { name: name,
+                          role: role,
+                          location: location,
+                          dates: dates,
+                          details: {
+                              id_1: detail_1,
+                              id_2: detail_2 }}}
+            */
+            let immutableUpdate = Immutable.fromJS(data);
             // set ancestor to update values
-            // return success message, keep the form i guess
+            setAncestor(prev => {
+                return prev.merge(immutableUpdate);
+            });
         });
+        // clear form
+        setPlaceInput('');
+        setRoleInput('');
+        setLocationInput('');
+        setStartDateField(Date.now());
+        setEndDateField(null);
+        setEndDateChecked(true);
+        setDetails(Immutable.List());
     };
 
 
@@ -364,7 +425,7 @@ let TechField = ({techSkills, setTechSkills}) => {
     for (let [key] of techSkills) {
         pushList.push(
                 <ListGroup.Item action variant="light" eventKey={key}> 
-                <div><b>{techSkills.getIn([key, 'label'])}</b>:</div> 
+                <div><b>{techSkills.getIn([key, 'name'])}</b>:</div> 
                 <div>{techSkills.getIn([key, 'description'])}</div> 
                 </ListGroup.Item>
         );
@@ -423,8 +484,8 @@ let CourseField = ({coursework, setCoursework}) => {
     for (let [key] of coursework) {
         pushList.push(
                 <ListGroup.Item action variant="light" eventKey={key}> 
-                <div><b>{coursework.getIn([key, 'category'])}</b>:</div> 
-                <div>{coursework.getIn([key, 'list'])}</div> 
+                <div><b>{coursework.getIn([key, 'name'])}</b>:</div> 
+                <div>{coursework.getIn([key, 'description'])}</div> 
                 </ListGroup.Item>
         );
     }
@@ -464,7 +525,7 @@ let ProjField = ({projects, setProjects}) => {
                 <Table responsive="sm">
                     <tr>
                         <td>Date </td>
-                        <td>{projects.getIn([key, 'date'])}</td>
+                        <td>{projects.getIn([key, 'dates'])}</td>
                     </tr>
                     <tr>
                         <td>Technologies </td>
@@ -649,6 +710,8 @@ let GeneratePage = () => {
     React.useEffect(()=> {
         let resumePromise = safeGet('/resume/api');
         resumePromise.then(data => {
+            console.log("inside useEffect");
+            console.log(data.work);
             let edu = Immutable.fromJS(data.edu);
             let techSkill = Immutable.fromJS(data.tech);
             let course = Immutable.fromJS(data.course);
