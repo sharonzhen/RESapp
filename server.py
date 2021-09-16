@@ -231,11 +231,15 @@ def edit_resume():
     pass
     # TODO after getting started on frontend
 
-@app.route('/resume/add/<typ>', methods=['POST'])
-def add_resume(typ):
+@app.route('/resume/add', methods=['POST'])
+def add_resume():
     if "user" not in session:
         return redirect('/')
     username = session.get('user')
+    form_values = request.get_json()
+    if form_values:
+
+
     model_type = RESTYPE.get(typ) # (char, int)
     if model_type:
         type_id = model_type[1]

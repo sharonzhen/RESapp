@@ -2,37 +2,61 @@
 import { safeGet } from "./modules";
 import { safePost } from "./modules";
 
-let EduForm = () => {
+
+
+/* *************************************************** */
+/* *************** contain onSubmit ****************** */
+/* *************************************************** */
+
+let EduForm = ({ancestor, setAncestor}) => {
     let [schoolName, setSchoolName] = React.useState('');
     let [gradDate, setGradDate] = React.useState(Date.now());
     let [degree, setDegree] = React.useState('');
     let [eduLocation, setEduLocation] = React.useState('');
 
-    let onSubmit = (e) => {};
+    let onSubmit = (e) => {
+        e.preventDefault();
+        let formBody = {
+            formType:"edu",
+            name:schoolName,
+            datefrom:gradDate,
+            location:eduLocation,
+            description:degree,
+        };
+        let postResponse = safePost("/resume/add", formBody);
+        postResponse.then((data)=> {
+            // set ancestor to update values
+            // return success message, keep the form i guess
+        });
+    };
+
     return (
         <Form>
             <Form.Group className="mb-3" controlId="school-name">
-                <Form.Label>School Name: </Form.Label>
+                <Form.Label>School Name </Form.Label>
                 <Form.Control 
                     type="text"
+                    placeholder="e.g. Greendale Community College"
                     onChange={(e)=>{setSchoolName(e.target.value)}}/>
             </Form.Group>
             <Form.Group className="mb-3" controlId="grad-date">
-                <Form.Label>Graduation Date: </Form.Label>
+                <Form.Label>Graduation Date </Form.Label>
                 <Form.Control
                     type="date"
                     onChange={(e)=>{setGradDate(e.target.value)}}/>
             </Form.Group>
             <Form.Group className="mb-3" controlId="degree">
-                <Form.Label>Degree: </Form.Label>
+                <Form.Label>Degree </Form.Label>
                 <Form.Control
                     type="text"
+                    placeholder="e.g. Film Studies"
                     onChange={(e)=>{setDegree(e.target.value)}}/>
             </Form.Group>
             <Form.Group className="mb-3" controlId="edu-loc">
-                <Form.Label>City, State: </Form.Label>
+                <Form.Label>Location </Form.Label>
                 <Form.Control
                     type="text"
+                    placeholder="e.g. Greendale County, CO"
                     onChange={(e)=>{setEduLocation(e.target.value)}}/>
             </Form.Group>
             <Button
@@ -46,25 +70,38 @@ let EduForm = () => {
 
 };
 
-let SkillsForm = () => {
+let SkillsForm = ({ancestor, setAncestor}) => {
     let [skill, setSkill] = React.useState('');
     let [skillList, setSkillList] = React.useState('');
 
-    let onSubmit = (e) => {};
+    let onSubmit = (e) => {
+        e.preventDefault();
+        let formBody = {
+            formType:"tech",
+            name:skill,            // label
+            description:skillList      
+        };
+        let postResponse = safePost("/resume/add", formBody);
+        postResponse.then((data)=> {
+            // set ancestor to update values
+            // return success message, keep the form i guess
+        });
+    };
+    
     return (
         <Form>
             <Form.Group className="mb-3" controlId="skill-label">
                 <Form.Label>Category: </Form.Label>
                 <Form.Control
                     type="text"
-                    placeholder="i.e. Proficient"
+                    placeholder="e.g. Proficient"
                     onChange={(e)=>{setSkill(e.target.value)}} />
             </Form.Group>
             <Form.Group className="mb-3" controlId="skill-list">
                 <Form.Label>Items: </Form.Label>
                 <Form.Control
                     type="text"
-                    placeholder="i.e. C++, Python, Java, etc." 
+                    placeholder="e.g. C++, Python, Java, etc." 
                     onChange={(e)=>{setSkillList(e.target.value)}} />
             </Form.Group>
             <Button
@@ -77,25 +114,38 @@ let SkillsForm = () => {
     );
 };
 
-let CoursesForm = () => {
+let CoursesForm = ({ancestor, setAncestor}) => {
     let [course, setCourse] = React.useState('');
     let [courseList, setCourseList] = React.useState('');
 
-    let onSubmit = (e) => {};
+    let onSubmit = (e) => {
+        e.preventDefault();
+        let formBody = {
+            formType:"course",
+            name:course,            // category
+            description:courseList,     // list 
+        };
+        let postResponse = safePost("/resume/add", formBody);
+        postResponse.then((data)=> {
+            // set ancestor to update values
+            // return success message, keep the form i guess
+        });
+    };
+    
     return (
         <Form>
             <Form.Group className="mb-3" controlId="course-label">
                 <Form.Label>Category: </Form.Label>
                 <Form.Control
                     type="text"
-                    placeholder="i.e. undergraduate" 
+                    placeholder="e.g. undergraduate" 
                     onChange={(e)=>{setCourse(e.target.value)}} />
             </Form.Group>
             <Form.Group className="mb-3" controlId="course-list">
                 <Form.Label>Items: </Form.Label>
                 <Form.Control
                     type="text"
-                    placeholder="i.e. Data Structures, Algorithms, etc." 
+                    placeholder="e.g. Data Structures, Algorithms, etc." 
                     onChange={(e)=>{setCourseList(e.target.value)}} />
             </Form.Group>
             <Button
@@ -108,13 +158,10 @@ let CoursesForm = () => {
     );
 };
 
+/* props:   parent      details    type 
+            setParent   setDetails type */
 let AddDetail = ({id1, parent, setParent}) => {
-    const [detailInput, showDetailInput] = React.useState(false);
-    const hideInput = () => showDetailInput(false);
-    const showInput = () => showDetailInput(true);
     const [d, setD] = React.useState('');
-
-
     return (
         <Form.Group className="mb-3" controlID={id1}>
             <ListGroup>
@@ -138,7 +185,6 @@ let AddDetail = ({id1, parent, setParent}) => {
                         return prev;
                     });
                     setD('');
-                    hideInput;
                 }}>
                 Add Detail
             </Button>
@@ -153,9 +199,13 @@ let AddDetail = ({id1, parent, setParent}) => {
     roleLabel           string
     locationLabel       string
     startDateLabel      Date()
-    endDateLabel        Date() or null */
+    endDateLabel        Date() or null 
+    
+    has onSubmit()
+    */
 let DynamicForm = ({itemType, nameLabel, roleLabel, 
-                    locationLabel, startDateLabel, endDateLabel=null}) => {
+                    locationLabel, startDateLabel, endDateLabel=null,
+                    ancestor, setAncestor}) => {
     const [placeInput, setPlaceInput] = React.useState('');
     const [roleInput, setRoleInput] = React.useState('');
     const [locationInput, setLocationInput] = React.useState('');
@@ -195,18 +245,19 @@ let DynamicForm = ({itemType, nameLabel, roleLabel,
     }
 
     let placeHolderStr =  {
-        "work":{ 
-
-                },
-        "proj":{
-                
-                },
-        "extra":{
-
-                }
-    }
+        "work":{"name": "e.g. Mann Co.",
+                "role": "e.g. Demoman",
+                "location": "e.g. Mannhattan"},
+        "proj":{"name": "e.g. Resume Customizer",
+                "role": "e.g. Python, SQLAlchemy, React, Flask, etc.",
+                "location": "e.g. github.com/sharonzhen/RESapp"},
+        "extra":{"name": "e.g. Nook Inc.",
+                "role": "e.g. volunteer",
+                "location": "e.g. Resident Services Building"},
+    };
 
     let onSubmit = (e) => {};
+
     return (
         <Form>
             <Form.Group className="mb-3" controlId="input-name">
@@ -214,7 +265,7 @@ let DynamicForm = ({itemType, nameLabel, roleLabel,
                 <Form.Control
                     type="text"
                     value={placeInput}
-                    placeholder="Mann Co."
+                    placeholder={placeHolderStr[itemType]["name"]}
                     onChange={(e)=>{setPlaceInput(e.target.value)}}/>                
             </Form.Group>
             <Form.Group className="mb-3" controlID="input-role">
@@ -222,7 +273,7 @@ let DynamicForm = ({itemType, nameLabel, roleLabel,
                 <Form.Control
                     type="text"
                     value={roleInput}
-                    placeholder="Demoman"
+                    placeholder={placeHolderStr[itemType]["role"]}
                     onChange={(e)=>{setRoleInput(e.target.value)}}/>
             </Form.Group>
             <Form.Group className="mb-3" controlID="input-loc">
@@ -230,7 +281,7 @@ let DynamicForm = ({itemType, nameLabel, roleLabel,
                 <Form.Control
                     type="text"
                     value={locationInput}
-                    placeholder="Mannhattan"
+                    placeholder={placeHolderStr[itemType]["location"]}
                     onChange={(e)=>{setLocationInput(e.target.value)}}/>
             </Form.Group>
             <Form.Group className="mb-3" controlId="input-start-date">
@@ -252,6 +303,10 @@ let DynamicForm = ({itemType, nameLabel, roleLabel,
     );
 };
 
+
+/* *************************************************** */
+/* *************** no submit ************************* */
+/* *************************************************** */
 
 /* props: name */
 let OCSkeleton = (props) => {
@@ -278,7 +333,9 @@ let OCSkeleton = (props) => {
 
 }
 
-/* props: techSkills, setTechSkills */
+/* props:   techSkills      => ancestor={techSkills} 
+            setTechSkills   => setAncestor={setTechSkills}
+            in <SkillsForm/> */
 let TechField = ({techSkills, setTechSkills}) => {
     let pushList = [];
     for (let [key] of techSkills) {
@@ -296,7 +353,7 @@ let TechField = ({techSkills, setTechSkills}) => {
                 <Card.Title>
                     <h2>Technical Skills</h2>
                     <OCSkeleton name="Technical Skill">
-                        <SkillsForm/>
+                        <SkillsForm ancestor={techSkills} setAncestor={setTechSkills}/>
                     </OCSkeleton>
                 </Card.Title>
             </Card.Body>
@@ -325,7 +382,7 @@ let EduField = ({education, setEducation}) => {
                 <Card.Title>
                     <h2>Education</h2>
                     <OCSkeleton name="Education">
-                        <EduForm/>
+                        <EduForm ancestor={education} setAncestor={setEducation}/>
                     </OCSkeleton>
                 </Card.Title>
             </Card.Body>
@@ -355,7 +412,7 @@ let CourseField = ({coursework, setCoursework}) => {
                 <Card.Title>
                     <h2>Relevant Coursework</h2>
                     <OCSkeleton name="Coursework">
-                        <CoursesForm/>
+                        <CoursesForm ancestor={coursework} setAncestor={setCoursework}/>
                     </OCSkeleton>
                 </Card.Title>
             </Card.Body>
@@ -365,7 +422,6 @@ let CourseField = ({coursework, setCoursework}) => {
         </Card>
     );
 };
-
 
 /* props: projects, setProjects*/
 let ProjField = ({projects, setProjects}) => {
@@ -416,7 +472,9 @@ let ProjField = ({projects, setProjects}) => {
                             nameLabel="Project Name"
                             roleLabel="Technologies Used"
                             locationLabel="Link"
-                            startDateLabel="Approximate Date"/>
+                            startDateLabel="Approximate Date"
+                            ancestor={projects}
+                            setAncestor={setProjects}/>
                     </OCSkeleton>
                 </Card.Title>
             </Card.Body>
@@ -475,9 +533,11 @@ let WorkField = ({work, setWork}) => {
                             itemType="work"
                             nameLabel="Workplace"
                             roleLabel="Role"
-                            locationLabel="City, State"
+                            locationLabel="Location"
                             startDateLabel="Start Date"
-                            endDateLabel="End Date"/>
+                            endDateLabel="End Date"
+                            ancestor={work}
+                            setAncestor={setWork}/>
                     </OCSkeleton>
                 </Card.Title>
             </Card.Body>
@@ -488,7 +548,7 @@ let WorkField = ({work, setWork}) => {
     );
 };
 
-/* props: extras, setExtras*/
+/* props: extras, setExtras */
 let ExtraField = ({extras, setExtras}) => {
     let pushList = [];
     for (let [key] of extras) {
@@ -536,9 +596,11 @@ let ExtraField = ({extras, setExtras}) => {
                             itemType="extra"
                             nameLabel="Organization"
                             roleLabel="Role"
-                            locationLabel="City, State"
+                            locationLabel="Location"
                             startDateLabel="Start Date"
-                            endDateLabel="End Date"/>
+                            endDateLabel="End Date"
+                            ancestor={extras}
+                            setAncestor={setExtras}/>
                     </OCSkeleton>
                 </Card.Title>
             </Card.Body>
