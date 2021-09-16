@@ -392,13 +392,12 @@ let DynamicForm = ({itemType, nameLabel, roleLabel,
 /* *************** no submit ************************* */
 /* *************************************************** */
 
-/* props: name */
+/* props: name 
+          functionality */
 let OCSkeleton = (props) => {
     const [showOC, setShowOC] = React.useState(false);
     const ocClose = () => setShowOC(false);
     const ocShow = () => setShowOC(true);
-
-    
   return (
     <div>
         <Button variant="outline-primary" size="sm" onClick={ocShow} className="me-2">
@@ -417,6 +416,8 @@ let OCSkeleton = (props) => {
 
 }
 
+
+
 /* props:   techSkills      => ancestor={techSkills} 
             setTechSkills   => setAncestor={setTechSkills}
             in <SkillsForm/> */
@@ -432,10 +433,12 @@ let TechField = ({techSkills, setTechSkills}) => {
     }
     
     return (
-        <Card style={{ width: '36rem' }}>
+        <Card>
+            <Card.Header>
+                <h2>Technical Skills</h2>
+            </Card.Header>
             <Card.Body>
                 <Card.Title>
-                    <h2>Technical Skills</h2>
                     <OCSkeleton name="Technical Skill">
                         <SkillsForm ancestor={techSkills} setAncestor={setTechSkills}/>
                     </OCSkeleton>
@@ -447,6 +450,7 @@ let TechField = ({techSkills, setTechSkills}) => {
         </Card>
     );
 };
+
 /* props: education, setEducation*/
 let EduField = ({education, setEducation}) => {
     let pushList = [];
@@ -461,10 +465,12 @@ let EduField = ({education, setEducation}) => {
     }
     
     return (
-        <Card style={{ width: '36rem' }}>
+        <Card>
+            <Card.Header>
+                <h2>Education</h2>
+            </Card.Header>
             <Card.Body>
                 <Card.Title>
-                    <h2>Education</h2>
                     <OCSkeleton name="Education">
                         <EduForm ancestor={education} setAncestor={setEducation}/>
                     </OCSkeleton>
@@ -491,10 +497,12 @@ let CourseField = ({coursework, setCoursework}) => {
     }
     
     return (
-        <Card style={{ width: '36rem' }}>
+        <Card>
+            <Card.Header>
+                <h2>Relevant Coursework</h2>
+            </Card.Header>
             <Card.Body>
                 <Card.Title>
-                    <h2>Relevant Coursework</h2>
                     <OCSkeleton name="Coursework">
                         <CoursesForm ancestor={coursework} setAncestor={setCoursework}/>
                     </OCSkeleton>
@@ -546,10 +554,12 @@ let ProjField = ({projects, setProjects}) => {
     }
     
     return (
-        <Card style={{ width: '36rem' }}>
+        <Card>
+            <Card.Header>
+                <h2>Technical Projects</h2>
+            </Card.Header>
             <Card.Body>
                 <Card.Title>
-                    <h2>Technical Projects</h2>
                     <OCSkeleton name="Project">
                         <DynamicForm
                             itemType="proj"
@@ -608,10 +618,12 @@ let WorkField = ({work, setWork}) => {
     }
     
     return (
-        <Card style={{ width: '36rem' }}>
+        <Card>
+            <Card.Header>
+            <h2>Work Experience</h2>
+            </Card.Header>
             <Card.Body>
                 <Card.Title>
-                    <h2>Work Experience</h2>
                     <OCSkeleton name="Work Experience">
                         <DynamicForm
                             itemType="work"
@@ -671,10 +683,12 @@ let ExtraField = ({extras, setExtras}) => {
     }
     
     return (
-        <Card style={{ width: '36rem' }}>
+        <Card>
+            <Card.Header>
+            <h2>Extracurriculars</h2>
+            </Card.Header>
             <Card.Body>
                 <Card.Title>
-                    <h2>Extracurriculars</h2>
                     <OCSkeleton name="Extracurricular Activity">
                         <DynamicForm
                             itemType="extra"
@@ -695,9 +709,6 @@ let ExtraField = ({extras, setExtras}) => {
     );
 
 };
-
-
-
 
 let GeneratePage = () => {
     const [techSkills, setTechSkills] = React.useState(Immutable.Map()); 
