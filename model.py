@@ -83,7 +83,7 @@ class Dytem(db.Model):
     
     ### RELATIONSHIPS ###
     # user
-    details = db.relationship('Detail', backref='dytem')
+    details = db.relationship('Detail', cascade="all,delete", backref='dytem')
 
     def __repr__(self):
         return f"<dytem {self.id} created for user {self.user.id}>"

@@ -111,6 +111,40 @@ def update_table(obj, field, value):
     return obj
 
 ################ DELETE ###################
+def delete_items(items):
+    """ delete list of resume items. 
+    Items in the list are the same type 
+    for stable items call one delete
+    for dynamic items delete dependencies first.
+    
+    @param items:           list of stitems or dytems or details
+    return deleted_items:   list of deleted items to return 
+                            from POST request in JSON, fit for 
+    
+    Immutable.deleteIn(keyPath: Iterable) function for Details
+    Immutable.deleteAll([item.id, item.id,...]) function for Dytem/Stitems
+    keyPath: [key, subkey, subsubkey, ... ]
+
+
+    """
+    
+    deleted_items = {}
+    for item in items:
+        if type(item)==Detail:
+            # key: detail category
+            # subkey: id to delete, subvalue: keyPath to find value of item.id
+            deleted_items['detail']={item.id: [item.dytem.id, item.id]}
+        else:
+            # key: Dytem/Stitem category
+            # value: list of item.id to delete
+            if deleted_items.get('item')==None:
+                deleted_items=[item.id]
+            else:
+                deleted_items['item'].append(item.id)
+        db.session.delete(item)
+    db.session.commit()
+    return deleted_items
+
 
 
 if __name__ == '__main__':

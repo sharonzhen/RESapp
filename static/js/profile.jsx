@@ -59,43 +59,44 @@ let NameField = (props) => {
             props.setLname(value);
         }
     }
-
+    
+    
     return (
         <div>
-            <ListGroup.Item action onClick={handleShowName}>
-                {props.label} {props.fname} {props.lname}
-            </ListGroup.Item>
+        <ListGroup.Item action onClick={handleShowName}>
+            {props.label} {props.fname} {props.lname}
+        </ListGroup.Item>
         <Modal 
             show={showName}
             onHide={handleCloseName}
             keyboard={false}>
-        <Modal.Header closeButton/>
-        <Modal.Body>
-                <Form>
-                    <Form.Group className="mb-3" controlId="fname">
-                        <Form.Label>First Name: </Form.Label>
-                        <Form.Control 
-                            type="text" 
-                            placeholder="new first name" 
-                            onChange={(event)=>{onChange(event, "fname")}}/>
-                    </Form.Group>
-                    <Form.Group className="mb-3" controlId="lname">
-                        <Form.Label>Last Name: </Form.Label>
-                        <Form.Control 
-                            type="text" 
-                            placeholder="new last name" 
-                            onChange={(event)=>{onChange(event)}}/>
-                    </Form.Group>
-                    <Button 
-                        variant="primary"
-                        type="submit"
-                        onClick={onSubmit}>Update
-                    </Button>
-                </Form>
-        </Modal.Body>
+            <Modal.Header closeButton/>
+            <Modal.Body>
+            <Form>
+                <Form.Group className="mb-3" controlId="fname">
+                    <Form.Label>First Name: </Form.Label>
+                    <Form.Control 
+                        type="text" 
+                        placeholder="new first name" 
+                        onChange={(event)=>{onChange(event, "fname")}}/>
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="lname">
+                    <Form.Label>Last Name: </Form.Label>
+                    <Form.Control 
+                        type="text" 
+                        placeholder="new last name" 
+                        onChange={(event)=>{onChange(event)}}/>
+                </Form.Group>
+                <Button 
+                    variant="primary"
+                    type="submit"
+                    onClick={onSubmit}>Update
+                </Button>
+            </Form>
+            </Modal.Body>
         </Modal>
-        
-        </div>
+    
+    </div>
     );
 
 };
@@ -197,10 +198,11 @@ let GeneratePage = () => {
     return (
         <div class="content">
             <Card style={{ width: '36rem' }}>
+                <Card.Header><h2>Account Information</h2></Card.Header>
                 <Card.Body>
-                    <Card.Title>
-                        Account Information
-                    </Card.Title>
+                    <Card.Text>
+                    Edit feature coming soon...
+                    </Card.Text>
                     <ListGroup>
                     <ContactField 
                         label="Login: " 
@@ -212,10 +214,8 @@ let GeneratePage = () => {
                 </Card.Body>
             </Card>
             <Card style={{ width: '36rem' }}>
+            <Card.Header><h2>Contact Information</h2></Card.Header>
                 <Card.Body>
-                    <Card.Title>
-                        Contact Information
-                    </Card.Title>
                     <Card.Text>
                         Click to edit
                     </Card.Text>

@@ -225,7 +225,11 @@ def resume_api():
         'extra': extra
     })
 
-
+@app.route('/resume/delete', methods=['POST'])
+def delete_item():
+    if "user" not in session:
+        return redirect('/')
+    pass
 
 @app.route('/resume/edit', methods=['POST'])
 def edit_resume():

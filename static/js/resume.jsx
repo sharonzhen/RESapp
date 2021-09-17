@@ -5,7 +5,7 @@ import { safePost } from "./modules";
 
 
 /* *************************************************** */
-/* *************** contain onSubmit ****************** */
+/* ************add, contain onSubmit ***************** */
 /* *************************************************** */
 
 let EduForm = ({ancestor, setAncestor}) => {
@@ -389,17 +389,45 @@ let DynamicForm = ({itemType, nameLabel, roleLabel,
 
 
 /* *************************************************** */
+/* *********delete, contain onSubmit ***************** */
+/* *************************************************** */
+
+let DeleteForm = ({itemType, ancestor, setAncestor}) => {
+    let pushList = [];
+    for (let [key] of ancestor) {
+        let formLabel = `${ancestor.getIn([key, 'name'])} -- ${ancestor.getIn([key, 'description'])}`;
+        pushList.push(
+                <ListGroup.Item variant="flush"> 
+                <Form.Check 
+                    type="checkbox"
+                    id={key}
+                    label={formLabel}/>
+                </ListGroup.Item>
+        );
+    }
+
+    return (
+        <Form>
+            <ListGroup>
+                {pushList}
+            </ListGroup>
+        </Form>
+    );
+
+};
+
+
+/* *************************************************** */
 /* *************** no submit ************************* */
 /* *************************************************** */
 
-/* props: name 
-          functionality */
+/* props: name, children */
 let OCSkeleton = (props) => {
     const [showOC, setShowOC] = React.useState(false);
     const ocClose = () => setShowOC(false);
     const ocShow = () => setShowOC(true);
   return (
-    <div>
+    <div id="contains-add-button" className="col-1">
         <Button variant="outline-primary" size="sm" onClick={ocShow} className="me-2">
             Add
         </Button>
@@ -413,10 +441,34 @@ let OCSkeleton = (props) => {
         </Offcanvas>
     </div>
     );
+};
 
-}
 
-
+/* props: name, children */
+let OCDelete = (props) => {
+    const [showOCDel, setShowOCDel] = React.useState(false);
+    const ocDelClose = () => setShowOCDel(false);
+    const ocDelShow = () => setShowOCDel(true);
+  return (
+    <div id="contains-delete-button" className="col-1">
+        <Button variant="outline-danger" size="sm" onClick={ocDelShow} className="me-2">
+            Delete
+        </Button>
+        <Offcanvas show={showOCDel} onHide={ocDelClose} 
+        style={{width:"40%"}}
+            placement="end" 
+            scroll="true" 
+            backdrop="true">
+            <Offcanvas.Header closeButton>
+            <Offcanvas.Title>Choose {props.name} to delete</Offcanvas.Title>
+            </Offcanvas.Header>
+            <Offcanvas.Body>
+                {props.children}
+            </Offcanvas.Body>
+        </Offcanvas>
+    </div>
+    );
+};
 
 /* props:   techSkills      => ancestor={techSkills} 
             setTechSkills   => setAncestor={setTechSkills}
@@ -439,9 +491,16 @@ let TechField = ({techSkills, setTechSkills}) => {
             </Card.Header>
             <Card.Body>
                 <Card.Title>
+                    <div className = "container">
+                        <div className="row">
                     <OCSkeleton name="Technical Skill">
                         <SkillsForm ancestor={techSkills} setAncestor={setTechSkills}/>
                     </OCSkeleton>
+                    <OCDelete name="technical skills">
+                        <DeleteForm itemType="tech" ancestor={techSkills} setAncestor={setTechSkills}/>
+                    </OCDelete>
+                        </div>
+                    </div>
                 </Card.Title>
             </Card.Body>
             <ListGroup variant="flush">
@@ -471,9 +530,15 @@ let EduField = ({education, setEducation}) => {
             </Card.Header>
             <Card.Body>
                 <Card.Title>
+                <div className = "container">
+                        <div className="row">
                     <OCSkeleton name="Education">
                         <EduForm ancestor={education} setAncestor={setEducation}/>
                     </OCSkeleton>
+                    <OCDelete name="from education history">
+                        <DeleteForm itemType="edu" ancestor={education} setAncestor={setEducation}/>
+                    </OCDelete>
+                    </div></div>
                 </Card.Title>
             </Card.Body>
             <ListGroup variant="flush">
@@ -503,9 +568,15 @@ let CourseField = ({coursework, setCoursework}) => {
             </Card.Header>
             <Card.Body>
                 <Card.Title>
+                <div className = "container">
+                        <div className="row">
                     <OCSkeleton name="Coursework">
                         <CoursesForm ancestor={coursework} setAncestor={setCoursework}/>
                     </OCSkeleton>
+                    <OCDelete name="courses">
+                        <DeleteForm itemType="course" ancestor={coursework} setAncestor={setCoursework}/>
+                    </OCDelete>
+                    </div></div>
                 </Card.Title>
             </Card.Body>
             <ListGroup variant="flush">
@@ -560,6 +631,8 @@ let ProjField = ({projects, setProjects}) => {
             </Card.Header>
             <Card.Body>
                 <Card.Title>
+                <div className = "container">
+                <div className="row">
                     <OCSkeleton name="Project">
                         <DynamicForm
                             itemType="proj"
@@ -570,6 +643,10 @@ let ProjField = ({projects, setProjects}) => {
                             ancestor={projects}
                             setAncestor={setProjects}/>
                     </OCSkeleton>
+                    <OCDelete name="projects">
+                        <DeleteForm itemType="proj" ancestor={projects} setAncestor={setProjects}/>
+                    </OCDelete>
+                    </div></div>
                 </Card.Title>
             </Card.Body>
             <ListGroup variant="flush">
@@ -624,6 +701,8 @@ let WorkField = ({work, setWork}) => {
             </Card.Header>
             <Card.Body>
                 <Card.Title>
+                <div className = "container">
+                        <div className="row">
                     <OCSkeleton name="Work Experience">
                         <DynamicForm
                             itemType="work"
@@ -635,6 +714,10 @@ let WorkField = ({work, setWork}) => {
                             ancestor={work}
                             setAncestor={setWork}/>
                     </OCSkeleton>
+                    <OCDelete name="work experiences">
+                        <DeleteForm itemType="work" ancestor={work} setAncestor={setWork}/>
+                    </OCDelete>
+                    </div></div>
                 </Card.Title>
             </Card.Body>
             <ListGroup variant="flush">
@@ -689,6 +772,8 @@ let ExtraField = ({extras, setExtras}) => {
             </Card.Header>
             <Card.Body>
                 <Card.Title>
+                <div className = "container">
+                        <div className="row">
                     <OCSkeleton name="Extracurricular Activity">
                         <DynamicForm
                             itemType="extra"
@@ -700,6 +785,10 @@ let ExtraField = ({extras, setExtras}) => {
                             ancestor={extras}
                             setAncestor={setExtras}/>
                     </OCSkeleton>
+                    <OCDelete name="extracurriculars">
+                        <DeleteForm itemType="extra" ancestor={extras} setAncestor={setExtras}/>
+                    </OCDelete>
+                    </div></div>
                 </Card.Title>
             </Card.Body>
             <ListGroup variant="flush">
