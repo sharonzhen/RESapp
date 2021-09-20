@@ -40,7 +40,7 @@ let RenderChecked = ({itemType, parent, checkedList, setChecked, checkedDetails,
                         }}
                     />
                     </ListGroup.Item>
-                    <ListGroup.Item as="li" eventKey={dkey}>
+                    <ListGroup.Item className="detail-overwrites" eventKey={dkey}>
                         {parent.getIn([ID, 'details', dkey])}
                     </ListGroup.Item>
                 </ListGroup>
@@ -54,7 +54,7 @@ let RenderChecked = ({itemType, parent, checkedList, setChecked, checkedDetails,
 
         if (itemType == "tech" || itemType == "course") {
             return (
-                <ListGroup.Item eventKey={ID}> 
+                <ListGroup.Item className="item-overwrites" eventKey={ID}> 
                 <div><b>{parent.getIn([ID, 'name'])}</b>:</div> 
                 <div>{parent.getIn([ID, 'description'])}</div> 
                 </ListGroup.Item>
@@ -62,7 +62,7 @@ let RenderChecked = ({itemType, parent, checkedList, setChecked, checkedDetails,
         }
         else if (itemType == "edu") {
             return (
-                <ListGroup.Item eventKey={ID}> 
+                <ListGroup.Item className="item-overwrites" eventKey={ID}> 
                 <div><h4>{parent.getIn([ID, 'name'])}</h4></div> 
                 <div><i>{parent.getIn([ID, 'description'])}</i></div>
                 <div>{parent.getIn([ID, 'location'])}</div><div>Graduated {parent.getIn([ID, 'dates'])}</div> 
@@ -70,15 +70,17 @@ let RenderChecked = ({itemType, parent, checkedList, setChecked, checkedDetails,
             );
         } else if (itemType == "proj") {            
             return (
-                    <ListGroup.Item eventKey={ID}> 
+                    <ListGroup.Item className="item-overwrites" eventKey={ID}> 
                     <div><h4>{parent.getIn([ID, 'name'])}</h4></div>
                     <Table responsive="sm">
                         <tr>
-                            <td>Date: {parent.getIn([ID, 'dates'])}</td>
-                            <td>Technologies: {parent.getIn([ID, 'role'])}</td>
+                            <td>Date: </td><td> {parent.getIn([ID, 'dates'])}</td>
                         </tr>
                         <tr>
-                            <td>Link: {parent.getIn([ID, 'location'])}</td>
+                            <td>Technologies:</td><td> {parent.getIn([ID, 'role'])}</td>
+                        </tr>
+                        <tr>
+                            <td>Link: </td><td>{parent.getIn([ID, 'location'])}</td>
                         </tr>
                     </Table>
                     <div>Details:
@@ -90,13 +92,17 @@ let RenderChecked = ({itemType, parent, checkedList, setChecked, checkedDetails,
             );
         } else if (itemType == "work") {
             return (
-                    <ListGroup.Item eventKey={ID}> 
+                    <ListGroup.Item className="item-overwrites" eventKey={ID}> 
                     <div><h4>{parent.getIn([ID, 'name'])}</h4></div>
                     <Table responsive="sm">
                         <tr>
-                            <td>Date: {parent.getIn([ID, 'dates'])}</td>
-                            <td>Role: {parent.getIn([ID, 'role'])}</td>
-                            <td>Location: {parent.getIn([ID, 'location'])}</td>
+                            <td>Date: </td><td> {parent.getIn([ID, 'dates'])}</td>
+                        </tr>
+                        <tr>
+                            <td>Role: </td><td> {parent.getIn([ID, 'role'])}</td>
+                        </tr>
+                        <tr>
+                            <td>Location: </td><td> {parent.getIn([ID, 'location'])}</td>
                         </tr>
                     </Table>
                     <div>Details:
@@ -108,15 +114,17 @@ let RenderChecked = ({itemType, parent, checkedList, setChecked, checkedDetails,
             );
         } else {
             return (
-                    <ListGroup.Item eventKey={ID}> 
+                    <ListGroup.Item className="item-overwrites" eventKey={ID}> 
                     <div><h4>{parent.getIn([ID, 'name'])}</h4></div>
                     <Table responsive="sm">
                         <tr>
-                            <td>Date: {parent.getIn([ID, 'dates'])}</td>
-                            <td>Role: {parent.getIn([ID, 'role'])}</td>
+                            <td>Date: </td><td>{parent.getIn([ID, 'dates'])}</td>
                         </tr>
                         <tr>
-                            <td>Location: {parent.getIn([ID, 'location'])}</td>
+                            <td>Role: </td><td>{parent.getIn([ID, 'role'])}</td>
+                        </tr>
+                        <tr>
+                            <td>Location: </td><td>{parent.getIn([ID, 'location'])}</td>
                         </tr>
                     </Table>
                     <div>Details:
@@ -211,7 +219,6 @@ let GeneratePage = () => {
             
         });
 
-
     }, []);
 
 
@@ -263,7 +270,6 @@ let GeneratePage = () => {
       
     return (
         <div id="form-container">
-            <Form>
             <RenderChecked 
                 itemType="tech"
                 parent={tech} 
@@ -304,7 +310,6 @@ let GeneratePage = () => {
                 variant="outline-success"
                 onClick={onSubmit}> Generate 
             </Button>
-            </Form>
         </div>
     )
 
