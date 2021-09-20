@@ -132,7 +132,7 @@ def sort_items(stable_items, dynamic_items, edu, tech,
                 dates=None
             edu[s.id]= {
                 'name': s.name,
-                'date': dates,
+                'dates': dates,
                 'location': s.loc,
                 'description': s.des
             }
@@ -229,7 +229,41 @@ def resume_api():
 def delete_item():
     if "user" not in session:
         return redirect('/')
-    pass
+    username = session.get('user')
+    form_values = request.get_json()
+
+    if form_values is None:
+        return jsonify({'res':'failure to get form values'})
+
+    model_type = RESTYPE.get(form_values['formType']) # (char, int)
+    ids_to_delete = set(form_values['to_delete'])
+    # print(type(ids_to_delete))
+    # print(ids_to_delete)
+    items_to_delete = []
+    users_items = []
+    if model_type:
+        item_type = model_type[0]
+        if item_type == 's':
+            users_items = crud.get_stable_items(username)
+        elif item_type =='d':
+            users_items = crud.get_dynamic_items(username)
+        else: # deleting details
+            details_items = crud.get_details_by_id(ids_to_delete)
+            deleted = crud.delete_items(details_items)
+
+        if users_items:
+            for item in users_items:
+                if str(item.id) in ids_to_delete:
+                    items_to_delete.append(item)
+            deleted = crud.delete_items(items_to_delete)
+
+        return jsonify(deleted)
+
+
+        
+
+
+
 
 @app.route('/resume/edit', methods=['POST'])
 def edit_resume():

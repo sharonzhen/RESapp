@@ -96,6 +96,16 @@ def get_dynamic_items(username):
     user = get_user(username)
     return user.dytems
 
+def get_details_by_id(detail_list):
+    """ @param: list of detail ids
+        return: list of detail items"""
+    return_list = []
+    for detail_id in detail_list:
+        det = Detail.query.filter_by(id=detail_id).first()
+        if det:
+            return_list.append(det)
+    return return_list
+
 
 ################ UPDATE ###################
 
@@ -128,7 +138,9 @@ def delete_items(items):
 
     """
     
-    deleted_items = {}
+    deleted_items = {
+        'item':[]
+    }
     for item in items:
         if type(item)==Detail:
             # key: detail category
@@ -137,10 +149,7 @@ def delete_items(items):
         else:
             # key: Dytem/Stitem category
             # value: list of item.id to delete
-            if deleted_items.get('item')==None:
-                deleted_items=[item.id]
-            else:
-                deleted_items['item'].append(item.id)
+            deleted_items['item'].append(item.id)
         db.session.delete(item)
     db.session.commit()
     return deleted_items

@@ -393,27 +393,110 @@ let DynamicForm = ({itemType, nameLabel, roleLabel,
 /* *************************************************** */
 
 let DeleteForm = ({itemType, ancestor, setAncestor}) => {
+    /*  typeof(ancestor)==Immutable.Map with keys being item ids
+        ancestor = {key1: {...}, key2: {...}, ..., keyN: {...}}
+        for keys in ancestor: 
+        toDelete = {key1:false, key2:false, ..., keyN:false} 
+        toDelete probably doesn't need to be immutable */
+    const [toDelete, setToDelete] =  React.useState(ancestor.map(x=>false));
+    const [submitWasPressed, setSubmitWasPressed] = React.useState(false);
     let pushList = [];
+    let formLabel = '';
     for (let [key] of ancestor) {
-        let formLabel = `${ancestor.getIn([key, 'name'])} -- ${ancestor.getIn([key, 'description'])}`;
+        if ((itemType === "course") || (itemType === "tech")) {
+            formLabel = `${ancestor.getIn([key, 'name'])} -- ${ancestor.getIn([key, 'description'])}`;
+        }
+        else if (itemType === "edu") {
+            formLabel = `${ancestor.getIn([key, 'name'])}, ${ancestor.getIn([key, 'location'])} -- ${ancestor.getIn([key, 'dates'])}`;
+        }
+        else {
+            formLabel = `${ancestor.getIn([key, 'name'])}, ${ancestor.getIn([key, 'location'])} -- ${ancestor.getIn([key, 'role'])}`;
+        }
+        
         pushList.push(
                 <ListGroup.Item variant="flush"> 
                 <Form.Check 
                     type="checkbox"
                     id={key}
+                    onChange={()=>{setToDelete(prev => {
+                        return prev.set(key, !prev.get(key));
+                    })}}
                     label={formLabel}/>
                 </ListGroup.Item>
         );
-    }
+    }    
+    
+
+    let responseFromSubmit = <div> success </div>;
+    let onSubmit = (e) => {
+        //e.preventDefault();
+        setSubmitWasPressed(true);
+        let delete_list = [];
+        for (let [key] of toDelete) {
+            if (toDelete.get(key)) {
+                delete_list.push(key);
+            }
+        }
+        let formBody = {
+            formType:itemType,
+            to_delete:delete_list
+        };
+        let postResponse = safePost("/resume/delete", formBody);
+        postResponse.then((data)=> {
+            /* 
+            if itemType is detail:
+            data = {
+                detail: {
+                    id1: [dytem_id, id1],
+                    id2: [dytem_id, id2],
+                    ...
+                }
+            }
+            */
+           if (data.detail) {
+               for (let [key] of data.detail) {
+                    setAncestor(prev => {return prev.deleteIn(data.detail[key])});
+               }
+           }
+            /*
+            else:
+            data = {
+                item: [item1_id, item2_id, ...]
+            }
+            */
+            else if (data.item) {
+                for (let item_id of data.item) {
+                    setAncestor(prev=> {return prev.delete(data.item[item_id])});
+                }
+
+            }
+            else {
+                console.log("failure somewhere");  
+                responseFromSubmit = (
+                    <div> error </div>
+                );
+            }
+            setToDelete(prev => prev.clear());
+        });
+    };
 
     return (
-        <Form>
+        <div>
+            {submitWasPressed
+            ? responseFromSubmit
+            : <Form>
             <ListGroup>
                 {pushList}
             </ListGroup>
+            <div id="delete-in-oc">
+            <Button 
+                variant="danger"
+                onClick={onSubmit}> Delete </Button>
+            </div>
         </Form>
+        }
+        </div>   
     );
-
 };
 
 
@@ -504,7 +587,7 @@ let TechField = ({techSkills, setTechSkills}) => {
                 </Card.Title>
             </Card.Body>
             <ListGroup variant="flush">
-        {pushList}
+            {pushlist}
         </ListGroup>
         </Card>
     );
@@ -518,7 +601,7 @@ let EduField = ({education, setEducation}) => {
                 <ListGroup.Item action variant="light" eventKey={key}> 
                 <div><h4>{education.getIn([key, 'name'])}</h4></div> 
                 <div><i>{education.getIn([key, 'description'])}</i></div>
-                <div>{education.getIn([key, 'location'])}</div><div>Graduated {education.getIn([key, 'date'])}</div> 
+                <div>{education.getIn([key, 'location'])}</div><div>Graduated {education.getIn([key, 'dates'])}</div> 
                 </ListGroup.Item>
         );
     }
@@ -810,8 +893,6 @@ let GeneratePage = () => {
     React.useEffect(()=> {
         let resumePromise = safeGet('/resume/api');
         resumePromise.then(data => {
-            console.log("inside useEffect");
-            console.log(data.work);
             let edu = Immutable.fromJS(data.edu);
             let techSkill = Immutable.fromJS(data.tech);
             let course = Immutable.fromJS(data.course);
