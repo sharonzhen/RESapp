@@ -429,7 +429,7 @@ let DeleteForm = ({itemType, ancestor, setAncestor}) => {
 
     let responseFromSubmit = <div> success </div>;
     let onSubmit = (e) => {
-        //e.preventDefault();
+        e.preventDefault();
         setSubmitWasPressed(true);
         let delete_list = [];
         for (let [key] of toDelete) {

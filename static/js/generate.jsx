@@ -3,7 +3,166 @@ import { safeGet } from "./modules";
 import { safePost } from "./modules";
 
 
-let RenderChecked = ({parent, checked, setChecked}) => {
+let RenderChecked = ({itemType, parent, checkedList, setChecked, checkedDetails, setCheckedDetails}) => {
+    let TYPEDICT = {
+        course:"Relevant Coursework",
+        edu:"Education",
+        work:"Work Experience",
+        proj:"Technical Projects",
+        tech:"Technical Skills",
+        extra:"Extracurriculars"
+    }
+
+
+    let ItemLabel = ({ID}) => {
+        let detailList = [];
+        if (itemType == "work" || itemType == "proj" || itemType == "extra") {
+            for (let [dkey] of parent.getIn([ID, 'details'])) {
+                let detailID = `det${dkey}`;
+                detailList.push(
+                <ListGroup horizontal>
+                    <ListGroup.Item>
+                    <Form.Check
+                        type="switch"
+                        id={detailID}
+                        checked={checkedDetails.has(dkey)}
+                        onChange={()=> {
+                            if (checkedDetails.has(dkey)) {
+                                setCheckedDetails(prev => {
+                                    return prev.delete(dkey);
+                                })
+                            } else {
+                                setCheckedDetails(prev => {
+                                    return prev.add(dkey);
+                                })
+                            }
+                        }}
+                    />
+                    </ListGroup.Item>
+                    <ListGroup.Item as="li" eventKey={dkey}>
+                        {parent.getIn([ID, 'details', dkey])}
+                    </ListGroup.Item>
+                </ListGroup>
+
+                );
+            }
+    
+        }
+
+
+
+        if (itemType == "tech" || itemType == "course") {
+            return (
+                <ListGroup.Item eventKey={ID}> 
+                <div><b>{parent.getIn([ID, 'name'])}</b>:</div> 
+                <div>{parent.getIn([ID, 'description'])}</div> 
+                </ListGroup.Item>
+            );
+        }
+        else if (itemType == "edu") {
+            return (
+                <ListGroup.Item eventKey={ID}> 
+                <div><h4>{parent.getIn([ID, 'name'])}</h4></div> 
+                <div><i>{parent.getIn([ID, 'description'])}</i></div>
+                <div>{parent.getIn([ID, 'location'])}</div><div>Graduated {parent.getIn([ID, 'dates'])}</div> 
+                </ListGroup.Item>
+            );
+        } else if (itemType == "proj") {            
+            return (
+                    <ListGroup.Item eventKey={ID}> 
+                    <div><h4>{parent.getIn([ID, 'name'])}</h4></div>
+                    <Table responsive="sm">
+                        <tr>
+                            <td>Date: {parent.getIn([ID, 'dates'])}</td>
+                            <td>Technologies: {parent.getIn([ID, 'role'])}</td>
+                        </tr>
+                        <tr>
+                            <td>Link: {parent.getIn([ID, 'location'])}</td>
+                        </tr>
+                    </Table>
+                    <div>Details:
+                        <ListGroup as="ul">
+                            {detailList} 
+                        </ListGroup>
+                    </div>
+                    </ListGroup.Item>
+            );
+        } else if (itemType == "work") {
+            return (
+                    <ListGroup.Item eventKey={ID}> 
+                    <div><h4>{parent.getIn([ID, 'name'])}</h4></div>
+                    <Table responsive="sm">
+                        <tr>
+                            <td>Date: {parent.getIn([ID, 'dates'])}</td>
+                            <td>Role: {parent.getIn([ID, 'role'])}</td>
+                            <td>Location: {parent.getIn([ID, 'location'])}</td>
+                        </tr>
+                    </Table>
+                    <div>Details:
+                        <ListGroup as="ul">
+                            {detailList} 
+                        </ListGroup>
+                    </div>
+                    </ListGroup.Item>
+            );
+        } else {
+            return (
+                    <ListGroup.Item eventKey={ID}> 
+                    <div><h4>{parent.getIn([ID, 'name'])}</h4></div>
+                    <Table responsive="sm">
+                        <tr>
+                            <td>Date: {parent.getIn([ID, 'dates'])}</td>
+                            <td>Role: {parent.getIn([ID, 'role'])}</td>
+                        </tr>
+                        <tr>
+                            <td>Location: {parent.getIn([ID, 'location'])}</td>
+                        </tr>
+                    </Table>
+                    <div>Details:
+                        <ListGroup as="ul">
+                            {detailList} 
+                        </ListGroup>
+                    </div>
+                    </ListGroup.Item>
+            );
+        }
+    };
+
+    let SelectButton = ({ID}) => {
+        return (
+            <ListGroup.Item>
+                <Form.Check
+                    type="switch"
+                    id={ID}
+                    checked={checkedList.get(ID)}
+                    onChange={()=> {
+                        setChecked(prev=> {
+                            //console.log(checkedList);
+                            return prev.set(ID, !prev.get(ID));
+                        })
+                    }}
+                />
+            </ListGroup.Item>
+        );
+    };
+
+    
+    let pushList = [];
+    for (let [key] of parent) {
+        pushList.push(
+            <ListGroup horizontal>
+                <SelectButton ID={key}/>
+                <ItemLabel ID={key}/>
+            </ListGroup>
+        )
+    } 
+
+    return (
+        <Form.Group>
+            <h2>{TYPEDICT[itemType]}</h2>
+            {pushList}
+        </Form.Group>
+    );
 
 };
 
@@ -17,12 +176,13 @@ let GeneratePage = () => {
     const [work, setWork] = React.useState(Immutable.Map());
     const [extra, setExtra] = React.useState(Immutable.Map());
 
-    const [techChecked, setTechChecked] = React.useState(null);
-    const [projChecked, setProjChecked] = React.useState(null);
-    const [eduChecked, setEduChecked] = React.useState(null);
-    const [courseChecked, setCourseChecked] = React.useState(null);
-    const [workChecked, setWorkChecked] = React.useState(null);
-    const [extraChecked, setExtraChecked] = React.useState(null);
+    const [techChecked, setTechChecked] = React.useState(tech.map(x=>false));
+    const [projChecked, setProjChecked] = React.useState(proj.map(x=>false));
+    const [eduChecked, setEduChecked] = React.useState(edu.map(x=>false));
+    const [courseChecked, setCourseChecked] = React.useState(course.map(x=>false));
+    const [workChecked, setWorkChecked] = React.useState(work.map(x=>false));
+    const [extraChecked, setExtraChecked] = React.useState(extra.map(x=>false));
+    const [detailChecked, setDetailChecked] = React.useState(Immutable.Set());
 
     React.useEffect(()=> {
         let resumePromise = safeGet('/resume/api');
@@ -47,25 +207,87 @@ let GeneratePage = () => {
             setCourseChecked(courseData.map(x=>false));
             setWorkChecked(workData.map(x=>false));
             setExtraChecked(extraData.map(x=>false));
-
-
         });
+
+
     }, []);
 
+
+
     let onSubmit = (e) => {
+        e.preventDefault();
+        let techJS = techChecked.toJS();
+        let projJS = projChecked.toJS();
+        let workJS = workChecked.toJS();
+        let eduJS = eduChecked.toJS();
+        let courseJS = courseChecked.toJS();
+        let extraJS = extraChecked.toJS();
+        let detailJS = detailChecked.toJS();
+        let formBody = {
+            tech: techJS,
+            proj: projJS,
+            work: workJS,
+            edu: eduJS,
+            course: courseJS,
+            extra: extraJS,
+            detail: detailJS
+        }
+
+        let postResponse = safePost("/generation/files", formBody);
+        postResponse.then(data => {
+            const downloadPath = data.path;
+            const fileName = "resume.pdf";
+            const getURL = `/generation/files/${data.path}:${fileName}`
+            let getResponse = safeGet(getURL);
+            
+        });
 
     };
       
     return (
-        <div>
+        <div id="form-container">
+            <Form>
             <RenderChecked 
+                itemType="tech"
                 parent={tech} 
-                checked={techChecked} 
+                checkedList={techChecked} 
                 setChecked={setTechChecked}/>
+            <RenderChecked 
+                itemType="proj"
+                parent={proj} 
+                checkedList={projChecked} 
+                setChecked={setProjChecked}
+                checkedDetails={detailChecked}
+                setCheckedDetails={setDetailChecked}/>
+            <RenderChecked 
+                itemType="work"
+                parent={work} 
+                checkedList={workChecked} 
+                setChecked={setWorkChecked}
+                checkedDetails={detailChecked}
+                setCheckedDetails={setDetailChecked}/>
+            <RenderChecked 
+                itemType="edu"
+                parent={edu} 
+                checkedList={eduChecked} 
+                setChecked={setEduChecked}/>
+            <RenderChecked 
+                itemType="course"
+                parent={course} 
+                checkedList={courseChecked} 
+                setChecked={setCourseChecked}/>
+            <RenderChecked 
+                itemType="extra"
+                parent={extra} 
+                checkedList={extraChecked} 
+                setChecked={setExtraChecked}
+                checkedDetails={detailChecked}
+                setCheckedDetails={setDetailChecked}/>
             <Button 
                 variant="outline-success"
                 onClick={onSubmit}> Generate 
             </Button>
+            </Form>
         </div>
     )
 

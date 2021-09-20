@@ -11,13 +11,11 @@ export async function safeGet(get_route) {
 }
 
 
-export async function safePost(url, data) {
+export async function safePost(url, data, header={'Content-Type':'application/json'}) {
     try {
         let response = await fetch(url, {
             method: 'POST',
-            headers: {
-                'Content-Type':'application/json'
-            },
+            headers: header,
             body: JSON.stringify(data)
         });
         if (!response.ok) {

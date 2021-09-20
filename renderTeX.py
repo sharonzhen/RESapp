@@ -8,7 +8,7 @@ def make_clean_path(directory_path):
         else: create path
     """
     if os.path.isdir(directory_path):
-        str_to_del = directory_path+f"*"
+        str_to_del = directory_path+f"/*"
         files_to_del = glob.glob(str_to_del)
         for f in files_to_del:
             try:
@@ -49,10 +49,10 @@ def rpdf(user, skills, projects, works, schools, courses, extras, key_form):
 
 
     # write rendered_temp into a .tex file in folder associated with user
-    dir_path = f'tex/{user.id}/'
+    dir_path = f'tex/{user.id}'
     if make_clean_path(dir_path):
 
-        filename = 'resume.tex'
+        filename = '/resume.tex'
         save_path = dir_path+filename
         try:
             with open(save_path, 'w') as output:

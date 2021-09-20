@@ -2,6 +2,7 @@
 
 \usepackage[top=0.5in, bottom=0.5in, left=0.5in, right=0.5in]{geometry}
 \usepackage{enumitem}
+\usepackage{url} 
 
 \begin{document}
 \begin{center}
@@ -12,14 +13,14 @@
     \VAR{contact.loc} 
 %- endif
 %- if contact.phone
-    $\mid$ \VAR{contact.phone} 
+    - \VAR{contact.phone} \\
 %- endif
 %- if contact.github
-    $\mid$ github.com/\VAR{contact.github} 
+    \url{github.com/\VAR{contact.github}}
 %- endif
-%# %- if contact.linkedin
-%#    $\mid$ \VAR{contact.linkedin}
-%# %- endif
+%- if contact.linkedin
+    - \url{\VAR{contact.linkedin}}
+%- endif
 ~\\\hrulefill
 \end{center}
 %# #########################################################

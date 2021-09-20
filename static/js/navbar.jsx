@@ -7,7 +7,9 @@ ReactDOM.render(
     <Nav className="me-auto">
       <Nav.Link href="/profile">Profile</Nav.Link>
       <Nav.Link href="/resume">Resume</Nav.Link>
-      <Nav.Link href="/generate">Generate</Nav.Link>
+      <Nav.Link href="/generation">Generate</Nav.Link>
+    </Nav>
+    <Nav>
       <Nav.Link href="/logout">Logout</Nav.Link>
     </Nav>
     </Container>

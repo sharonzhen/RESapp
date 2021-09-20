@@ -52,7 +52,7 @@ def login_handler():
     return redirect('/')
     
 
-@app.route('/create', methods=['POST'])
+@app.route('/new-user', methods=['POST'])
 def create_account():
     """ create account and populate database """
     if session.get("user"):
@@ -357,40 +357,43 @@ def add_resume():
     
     return jsonify({'err':'something went wrong'})
 
-@app.route('/generate')
+@app.route('/generation')
 def generate_resume():
     if "user" not in session:
         return redirect('/')
     username = session.get('user')
-    stable_items = crud.get_stable_items(username)
-    dynamic_items = crud.get_dynamic_items(username)
-    # stable
-    edu = [] # 1
-    tech = [] # 2
-    course = [] # 3
-    # dynamic
-    work = [] # 1
-    proj = [] # 2
-    extra = [] # 3
-    # sort_items(stable_items, dynamic_items, edu, tech, 
-    #         course, work, proj, extra)
-    # return render_template('generate.html', education=edu, 
-    #         technical_skills=tech, courses=course, 
-    #         work_experiences=work, projects=proj, 
-    #         extracurriculars=extra)
     return render_template('generate.html')
 
 
 
-@app.route('/generate/download', methods=['POST'])
+@app.route('/generation/files', methods=['POST'])
 def generate_download_pdf():
     if "user" not in session:
         return redirect('/')
+    
     username = session.get('user')
     user = crud.get_user(username)
-    s_li = user.stitems
-    d_li = user.dytems
-    
+    form_values = request.get_json()
+
+    if form_values is None:
+        return jsonify({'res':'failure to get form values'})
+
+    # print(f"form_values: {form_values}")
+    tech_id_set = {key for key in form_values['tech'] if form_values['tech'][key] is True}
+    proj_id_set = {key for key in form_values['proj'] if form_values['proj'][key] is True}
+    work_id_set = {key for key in form_values['work'] if form_values['work'][key] is True}
+    edu_id_set = {key for key in form_values['edu'] if form_values['edu'][key] is True}
+    course_id_set = {key for key in form_values['course'] if form_values['course'][key] is True}
+    extra_id_set = {key for key in form_values['extra'] if form_values['extra'][key] is True}
+    detail_id_set = form_values.get('detail')
+
+    # print(f"tech_id_set: {tech_id_set}")
+    # print(f"proj_id_set: {proj_id_set}")
+    # print(f"work_id_set: {work_id_set}")
+    # print(f"edu_id_set: {edu_id_set}")
+    # print(f"course_id_set: {course_id_set}")
+    # print(f"extra_id_set: {extra_id_set}")
+    # print(f"detail_id_set: {detail_id_set}")
     # stable
     edu = [] # 1
     tech = [] # 2
@@ -399,42 +402,50 @@ def generate_download_pdf():
     work = [] # 1
     proj = [] # 2
     extra = [] # 3
-    stable_items = []
-    dynamic_items = []
 
-    form_data = request.form.to_dict()
-    for item in s_li:
-        fstr = f's{item.id}'
-        if fstr in form_data:
-            stable_items.append(item)
-    for item in d_li:
-        fstr = f'd{item.id}'
-        if fstr in form_data:
-            dynamic_items.append(item)
 
-    sort_items(stable_items, dynamic_items, edu, tech, 
-            course, work, proj, extra)
-    print(form_data)
+    all_stitems = user.stitems
+    all_dytems = user.dytems
+    
+    for item in all_stitems:
+        if item.id in tech_id_set:
+            tech.append(item)
+        elif item.id in edu_id_set:
+            edu.append(item)
+        elif item.id in course_id_set:
+            course.append(item)
+    
+    for item in all_dytems:
+        if item.id in proj_id_set:
+            proj.append(item)
+        elif item.id in work_id_set:
+            work.append(item)
+        elif item.id in extra_id_set:
+            extra.append(item)
+
+        
     # call rpdf, save return value (type tuple) as download path
     path_filename = rpdf(user=user, skills=tech, projects=proj, 
             works=work, schools=edu, courses=course, 
-            extras=extra, key_form=form_data)
+            extras=extra, key_form=detail_id_set)
+    print(send_from_directory(os.path.abspath(path_filename), 'resume.pdf', as_attachment=True))
     print(path_filename)
-    session['dir']=path_filename
-    # create link
-    return redirect('/generate/show-pdf')
+    return jsonify({'path':path_filename})
 
-@app.route('/generate/show-pdf')
-def show_pdf():
+@app.route('/generation/files/<path:path>')
+def get_file(path):
     if "user" not in session:
         return redirect('/')
-    dirname = session.get('dir')
-    if (dirname!=None):
-        print(os.path.abspath(dirname))
-        print("here")
-        return send_from_directory(os.path.abspath(dirname), 'resume.pdf', as_attachment=True)
+    
+    username = session.get('user')
+    user = crud.get_user(username)
 
-    return redirect('/generate')
+    print(f"path: {path}")
+    dir_path = f'tex/{user.id}'
+    print(f"os abs path: {os.path.abspath(path)}")
+    return send_from_directory(os.path.abspath(path), "resume.pdf", as_attachment=True)
+
+ 
 
 @app.route('/logout')
 def handle_logout():

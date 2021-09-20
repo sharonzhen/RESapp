@@ -183,6 +183,6 @@ ReactDOM.render(
 );
 
 ReactDOM.render(
-    <CreateAccountForm action="/create" method="POST"/>,
+    <CreateAccountForm action="/new-user" method="POST"/>,
     document.getElementById('root_create')
 );
