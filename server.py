@@ -428,22 +428,23 @@ def generate_download_pdf():
     path_filename = rpdf(user=user, skills=tech, projects=proj, 
             works=work, schools=edu, courses=course, 
             extras=extra, key_form=detail_id_set)
-    print(send_from_directory(os.path.abspath(path_filename), 'resume.pdf', as_attachment=True))
-    print(path_filename)
+
+    #return send_from_directory(os.path.abspath(path_filename), 'resume.pdf', as_attachment=True)
+    
     return jsonify({'path':path_filename})
 
-@app.route('/generation/files/<path:path>')
-def get_file(path):
+@app.route('/generation/files/<filename>')
+def get_file(filename):
     if "user" not in session:
         return redirect('/')
     
     username = session.get('user')
     user = crud.get_user(username)
 
-    print(f"path: {path}")
     dir_path = f'tex/{user.id}'
-    print(f"os abs path: {os.path.abspath(path)}")
-    return send_from_directory(os.path.abspath(path), "resume.pdf", as_attachment=True)
+    print(f"filename: {filename}")
+    print(f"os abs path: {os.path.abspath(dir_path)}")
+    return send_from_directory(os.path.abspath(dir_path), filename, as_attachment=True)
 
  
 

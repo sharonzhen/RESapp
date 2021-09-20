@@ -1,6 +1,7 @@
 'use strict';
 import { safeGet } from "./modules";
 import { safePost } from "./modules";
+import { safeDownload } from "./modules";
 
 
 let RenderChecked = ({itemType, parent, checkedList, setChecked, checkedDetails, setCheckedDetails}) => {
@@ -207,6 +208,7 @@ let GeneratePage = () => {
             setCourseChecked(courseData.map(x=>false));
             setWorkChecked(workData.map(x=>false));
             setExtraChecked(extraData.map(x=>false));
+            
         });
 
 
@@ -235,12 +237,27 @@ let GeneratePage = () => {
 
         let postResponse = safePost("/generation/files", formBody);
         postResponse.then(data => {
-            const downloadPath = data.path;
-            const fileName = "resume.pdf";
-            const getURL = `/generation/files/${data.path}:${fileName}`
-            let getResponse = safeGet(getURL);
-            
+            if (data.path) {
+                let getResponse = safeDownload("/generation/files/resume.pdf");
+                getResponse.then(blob=>{
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = "resume.pdf";
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    window.URL.revokeObjectURL(url);
+                });
+            }
         });
+        setTechChecked(tech.map(x=>false));
+        setProjChecked(proj.map(x=>false));
+        setEduChecked(edu.map(x=>false));
+        setCourseChecked(course.map(x=>false));
+        setWorkChecked(work.map(x=>false));
+        setExtraChecked(extra.map(x=>false));
+        setDetailChecked(Immutable.Set());
 
     };
       
