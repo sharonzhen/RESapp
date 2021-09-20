@@ -378,6 +378,7 @@ def generate_resume():
     #         technical_skills=tech, courses=course, 
     #         work_experiences=work, projects=proj, 
     #         extracurriculars=extra)
+    return render_template('generate.html')
 
 
 

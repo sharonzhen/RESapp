@@ -445,29 +445,28 @@ let DeleteForm = ({itemType, ancestor, setAncestor}) => {
         postResponse.then((data)=> {
             /* 
             if itemType is detail:
-            data = {
-                detail: {
+            data = {detail: {
                     id1: [dytem_id, id1],
                     id2: [dytem_id, id2],
-                    ...
-                }
-            }
+                    ...}}
+            else:
+            data = {item: [item1_id, item2_id, ...]}
             */
            if (data.detail) {
-               for (let [key] of data.detail) {
-                    setAncestor(prev => {return prev.deleteIn(data.detail[key])});
-               }
+               setAncestor(prev => {
+                   for (let [key] of data.detail) {
+                       prev = prev.deleteIn(data.detail[key]);
+                   }
+                   return prev;
+               });
            }
-            /*
-            else:
-            data = {
-                item: [item1_id, item2_id, ...]
-            }
-            */
             else if (data.item) {
-                for (let item_id of data.item) {
-                    setAncestor(prev=> {return prev.delete(data.item[item_id])});
-                }
+                setAncestor(prev => {
+                    for (let item_id of data.item) {
+                        prev = prev.delete(String(item_id));
+                    }
+                    return prev;
+                });
 
             }
             else {
@@ -587,7 +586,7 @@ let TechField = ({techSkills, setTechSkills}) => {
                 </Card.Title>
             </Card.Body>
             <ListGroup variant="flush">
-            {pushlist}
+            {pushList}
         </ListGroup>
         </Card>
     );
@@ -740,32 +739,32 @@ let ProjField = ({projects, setProjects}) => {
 };
 
 /* props: work, setWork*/
-let WorkField = ({work, setWork}) => {
+let WorkField = ({works, setWorks}) => {
     let pushList = [];
-    for (let [key] of work) {
+    for (let [key] of works) {
         let detailList = [];
-        for (let [dkey] of work.getIn([key, 'details'])) {
+        for (let [dkey] of works.getIn([key, 'details'])) {
             detailList.push(
                 <ListGroup.Item as="li" eventKey={dkey}>
-                    {work.getIn([key, 'details', dkey])}
+                    {works.getIn([key, 'details', dkey])}
                 </ListGroup.Item>
             );
         }
         pushList.push(
                 <ListGroup.Item action variant="light" eventKey={key}> 
-                <div><h4>{work.getIn([key, 'name'])}</h4></div>
+                <div><h4>{works.getIn([key, 'name'])}</h4></div>
                 <Table responsive="sm">
                     <tr>
                         <td>Date </td>
-                        <td>{work.getIn([key, 'dates'])}</td>
+                        <td>{works.getIn([key, 'dates'])}</td>
                     </tr>
                     <tr>
                         <td>Role </td>
-                        <td>{work.getIn([key, 'role'])}</td>
+                        <td>{works.getIn([key, 'role'])}</td>
                     </tr>
                     <tr>
                         <td>Location </td>
-                        <td>{work.getIn([key, 'location'])}</td>
+                        <td>{works.getIn([key, 'location'])}</td>
                     </tr>
                 </Table>
                 <div>Details:
@@ -794,11 +793,11 @@ let WorkField = ({work, setWork}) => {
                             locationLabel="Location"
                             startDateLabel="Start Date"
                             endDateLabel="End Date"
-                            ancestor={work}
-                            setAncestor={setWork}/>
+                            ancestor={works}
+                            setAncestor={setWorks}/>
                     </OCSkeleton>
                     <OCDelete name="work experiences">
-                        <DeleteForm itemType="work" ancestor={work} setAncestor={setWork}/>
+                        <DeleteForm itemType="work" ancestor={works} setAncestor={setWorks}/>
                     </OCDelete>
                     </div></div>
                 </Card.Title>
@@ -887,7 +886,7 @@ let GeneratePage = () => {
     const [projects, setProjects] = React.useState(Immutable.Map());
     const [education, setEducation] = React.useState(Immutable.Map());
     const [coursework, setCoursework] = React.useState(Immutable.Map());
-    const [work, setWork] = React.useState(Immutable.Map());
+    const [works, setWorks] = React.useState(Immutable.Map());
     const [extras, setExtras] = React.useState(Immutable.Map());
 
     React.useEffect(()=> {
@@ -896,7 +895,7 @@ let GeneratePage = () => {
             let edu = Immutable.fromJS(data.edu);
             let techSkill = Immutable.fromJS(data.tech);
             let course = Immutable.fromJS(data.course);
-            let work = Immutable.fromJS(data.work);
+            let works = Immutable.fromJS(data.work);
             let proj = Immutable.fromJS(data.proj);
             let extra = Immutable.fromJS(data.extra);
 
@@ -904,7 +903,7 @@ let GeneratePage = () => {
             setEducation(edu);
             setCoursework(course);
             setProjects(proj);
-            setWork(work);
+            setWorks(works);
             setExtras(extra);
         });
     }, []);
@@ -919,8 +918,8 @@ let GeneratePage = () => {
             projects={projects}
             setProjects={setProjects}/>
         <WorkField 
-            work={work}
-            setWork={setWork}/>
+            works={works}
+            setWorks={setWorks}/>
         <EduField 
             education={education}
             setEducation={setEducation}/>
