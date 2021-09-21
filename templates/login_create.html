@@ -1,20 +1,35 @@
 {% extends 'base.html' %}
-
-{% block title %}
-    Login
+{% block css %}
+<style>
+.new-acc {
+    background-color: #f0f0f5;
+    margin: 0 auto;
+    float:none;
+    margin-bottom:10px;
+    margin-top:10px;
+    padding: 40px;
+}
+.existing-acc {
+    background-color: #f0f0f5;
+    margin: 0 auto;
+    float:none;
+    margin-bottom:10px;
+    margin-top:10px;
+}
+#contact-info {
+    font-style: italic;
+}
+</style>
 {% endblock %}
 
-{% block navbar %}
-{% endblock %}
 
 {% block body %}
-<h1>Login</h1>
-<div id="root_login">
+
+<div id="login-root">
 </div>
-<h1>Create an account </h1>
-<div id="root_create">
-</div>
+
 {% endblock %}
+
 {% block js %}
 <script data-plugins="transform-es2015-modules-umd" type="text/babel" src="/static/js/login_create.jsx"></script>
 {% endblock %}

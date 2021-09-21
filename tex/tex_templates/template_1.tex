@@ -10,16 +10,16 @@
 \Large \textbf{\VAR{contact.first} \VAR{contact.last}} \\
 \normalsize 
 %- if contact.loc
-    \VAR{contact.loc} 
+    \VAR{contact.loc}
 %- endif
 %- if contact.phone
-    - \VAR{contact.phone} \\
+    $\mid$ ~\VAR{contact.phone}
 %- endif
 %- if contact.github
-    \url{github.com/\VAR{contact.github}}
+    $\mid$ ~Github:~ \url{\VAR{contact.github}}
 %- endif
 %- if contact.linkedin
-    - \url{\VAR{contact.linkedin}}
+    $\mid$ ~Linkedin:~\url{linkedin.com/in/\VAR{contact.linkedin}}
 %- endif
 ~\\\hrulefill
 \end{center}
@@ -46,7 +46,7 @@
             %- for detail in item.details
                 %- if detail.id|string() in kform
 \begin{itemize}[noitemsep,nolistsep,leftmargin=*]
-    \item \textbf{\VAR{detail.des}} 
+    \item \VAR{detail.des} 
 \end{itemize}
                 %- endif
             %- endfor
@@ -67,7 +67,7 @@
             %- for detail in item.details
                 %- if detail.id|string() in kform
 \begin{itemize}[noitemsep,nolistsep,leftmargin=*]
-    \item \textbf{\VAR{detail.des}} 
+    \item \VAR{detail.des}
 \end{itemize}
                 %- endif
             %- endfor
@@ -107,7 +107,7 @@
             %- for detail in item.details
                 %- if detail.id|string() in kform
 \begin{itemize}[noitemsep,nolistsep,leftmargin=*]
-    \item \textbf{\VAR{detail.des}} 
+    \item \VAR{detail.des}
 \end{itemize}
                 %- endif
             %- endfor

@@ -244,7 +244,7 @@ let GeneratePage = () => {
                         field={github}
                         callback={setGithub}/>
                     <ContactField 
-                        label="Linkedin URL: " 
+                        label="Linkedin: linkedin.com/in/ " 
                         field={linkedin}
                         callback={setLinkedin}/>
                 </ListGroup>

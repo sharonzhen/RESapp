@@ -378,7 +378,7 @@ def generate_download_pdf():
     if form_values is None:
         return jsonify({'res':'failure to get form values'})
 
-    # print(f"form_values: {form_values}")
+    # print(f"form_values: {form_values}"), these seem to work though 
     tech_id_set = {key for key in form_values['tech'] if form_values['tech'][key] is True}
     proj_id_set = {key for key in form_values['proj'] if form_values['proj'][key] is True}
     work_id_set = {key for key in form_values['work'] if form_values['work'][key] is True}
@@ -386,15 +386,8 @@ def generate_download_pdf():
     course_id_set = {key for key in form_values['course'] if form_values['course'][key] is True}
     extra_id_set = {key for key in form_values['extra'] if form_values['extra'][key] is True}
     detail_id_set = form_values.get('detail')
+ 
 
-    # print(f"tech_id_set: {tech_id_set}")
-    # print(f"proj_id_set: {proj_id_set}")
-    # print(f"work_id_set: {work_id_set}")
-    # print(f"edu_id_set: {edu_id_set}")
-    # print(f"course_id_set: {course_id_set}")
-    # print(f"extra_id_set: {extra_id_set}")
-    # print(f"detail_id_set: {detail_id_set}")
-    # stable
     edu = [] # 1
     tech = [] # 2
     course = [] # 3
@@ -406,22 +399,31 @@ def generate_download_pdf():
 
     all_stitems = user.stitems
     all_dytems = user.dytems
+
     
     for item in all_stitems:
-        if item.id in tech_id_set:
+        if str(item.id) in tech_id_set:
             tech.append(item)
-        elif item.id in edu_id_set:
+        elif str(item.id) in edu_id_set:
             edu.append(item)
-        elif item.id in course_id_set:
+        elif str(item.id) in course_id_set:
             course.append(item)
     
     for item in all_dytems:
-        if item.id in proj_id_set:
+        if str(item.id) in proj_id_set:
             proj.append(item)
-        elif item.id in work_id_set:
+        elif str(item.id) in work_id_set:
             work.append(item)
-        elif item.id in extra_id_set:
+        elif str(item.id) in extra_id_set:
             extra.append(item)
+    
+    print(f"edu: {edu}")
+    print(f"tech: {tech}")
+    print(f"course: {course}")
+    print(f"work: {work}")
+    print(f"proj: {proj}")
+    print(f"extra: {extra}")
+
 
         
     # call rpdf, save return value (type tuple) as download path
@@ -429,9 +431,9 @@ def generate_download_pdf():
             works=work, schools=edu, courses=course, 
             extras=extra, key_form=detail_id_set)
 
-    #return send_from_directory(os.path.abspath(path_filename), 'resume.pdf', as_attachment=True)
     
-    return jsonify({'path':path_filename})
+    return send_from_directory(os.path.abspath(path_filename), 'resume.pdf', as_attachment=True)
+    #return jsonify({'path':path_filename})
 
 @app.route('/generation/files/<filename>')
 def get_file(filename):

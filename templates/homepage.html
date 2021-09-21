@@ -1,5 +1,11 @@
 {% extends 'base.html' %}
 
+{% block css %}
+<style>
+
+</style>
+{% endblock %}
+
 {% block title %}
     Welcome
 {% endblock %}
@@ -13,4 +19,5 @@
 {% endblock %}
 
 {% block js %}
+<script data-plugins="transform-es2015-modules-umd" type="text/babel" src="/static/js/homepage.jsx"></script>
 {% endblock %}

@@ -193,6 +193,8 @@ let GeneratePage = () => {
     const [extraChecked, setExtraChecked] = React.useState(extra.map(x=>false));
     const [detailChecked, setDetailChecked] = React.useState(Immutable.Set());
 
+    const [selectAll, setSelectAll] = React.useState(false);
+
     React.useEffect(()=> {
         let resumePromise = safeGet('/resume/api');
         resumePromise.then(data => {
@@ -242,22 +244,45 @@ let GeneratePage = () => {
             detail: detailJS
         }
 
-        let postResponse = safePost("/generation/files", formBody);
-        postResponse.then(data => {
-            if (data.path) {
-                let getResponse = safeDownload("/generation/files/resume.pdf");
-                getResponse.then(blob=>{
-                    const url = window.URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = "resume.pdf";
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                    window.URL.revokeObjectURL(url);
-                });
-            }
-        });
+        let postResponse = fetch(
+            "/generation/files",
+            {
+                method: 'POST',
+                headers:{'Content-Type':'application/json'},
+                body:JSON.stringify(formBody)
+
+            });
+            postResponse.then(res => res.blob()).then(blob => {
+                console.log(blob);
+                const url = window.URL.createObjectURL(blob);
+                console.log(url);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = "resume.pdf";
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            });
+        // let postResponse = safePost("/generation/files", formBody);
+        // postResponse.then(data => {
+        //     if (data.path) {
+        //         let getResponse = safeDownload("/generation/files/resume.pdf");
+        //         getResponse.then(blob => {
+        //             const url = window.URL.createObjectURL(blob);
+        //             console.log(url);
+        //             const a = document.createElement('a');
+        //             a.href = url;
+        //             a.download = "resume.pdf";
+        //             document.body.appendChild(a);
+        //             a.click();
+        //             document.body.removeChild(a);
+        //             window.URL.revokeObjectURL(url);
+        //         });
+        //     }
+        // });
+
+
         setTechChecked(tech.map(x=>false));
         setProjChecked(proj.map(x=>false));
         setEduChecked(edu.map(x=>false));
@@ -267,7 +292,9 @@ let GeneratePage = () => {
         setDetailChecked(Immutable.Set());
 
     };
-      
+
+
+
     return (
         <div id="form-container">
             <RenderChecked 
