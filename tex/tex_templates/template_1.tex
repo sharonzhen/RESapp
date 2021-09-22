@@ -40,7 +40,7 @@
 %- if projects
 \noindent \textbf{\underline{PROJECTS}} \\
     %- for item in projects
-\noindent \textbf{\VAR{item.name}} \hfill \VAR{item.d_from} - \VAR{item.d_to}\\
+\noindent \textbf{\VAR{item.name}} \hfill \VAR{item.d_from}\\
 \textit{\VAR{item.role}} %# no newline 
         %- if item.details
             %- for detail in item.details
@@ -61,7 +61,11 @@
 %- if workplaces
 \noindent \textbf{\underline{WORK EXPERIENCE}} \\
     %- for item in workplaces
+    %- if item.d_to
 \noindent \textbf{\VAR{item.name}} \hfill \VAR{item.d_from} - \VAR{item.d_to}\\
+    %- else
+    \noindent \textbf{\VAR{item.name}} \hfill \VAR{item.d_from} - present\\
+    %- endif
 \textit{\VAR{item.role}} \hfill \textit{\VAR{item.loc}} %# no newline 
         %- if item.details
             %- for detail in item.details
@@ -102,7 +106,11 @@
 %- if extracurriculars
 \noindent \textbf{\underline{EXTRACURRICULARS}} \\
     %- for item in extracurriculars
-\noindent \textbf{\VAR{item.name}} \hfill \VAR{item.d_from} - \VAR{item.d_to} %# no newline 
+        %- if item.d_to
+\noindent \textbf{\VAR{item.name}} \hfill \VAR{item.d_from} - \VAR{item.d_to}\\
+        %- else
+\noindent \textbf{\VAR{item.name}} \hfill \VAR{item.d_from} - present\\
+        %- endif
         %- if item.details
             %- for detail in item.details
                 %- if detail.id|string() in kform

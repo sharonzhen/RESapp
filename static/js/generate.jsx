@@ -22,7 +22,7 @@ let RenderChecked = ({itemType, parent, checkedList, setChecked, checkedDetails,
                 let detailID = `det${dkey}`;
                 detailList.push(
                 <ListGroup horizontal>
-                    <ListGroup.Item>
+                    <ListGroup.Item active={false}>
                     <Form.Check
                         type="switch"
                         id={detailID}
@@ -40,7 +40,7 @@ let RenderChecked = ({itemType, parent, checkedList, setChecked, checkedDetails,
                         }}
                     />
                     </ListGroup.Item>
-                    <ListGroup.Item className="detail-overwrites" eventKey={dkey}>
+                    <ListGroup.Item className="detail-overwrites" active={false} eventKey={dkey}>
                         {parent.getIn([ID, 'details', dkey])}
                     </ListGroup.Item>
                 </ListGroup>
@@ -54,7 +54,7 @@ let RenderChecked = ({itemType, parent, checkedList, setChecked, checkedDetails,
 
         if (itemType == "tech" || itemType == "course") {
             return (
-                <ListGroup.Item className="item-overwrites" eventKey={ID}> 
+                <ListGroup.Item className="item-overwrites" eventKey={ID} active={false}> 
                 <div><b>{parent.getIn([ID, 'name'])}</b>:</div> 
                 <div>{parent.getIn([ID, 'description'])}</div> 
                 </ListGroup.Item>
@@ -62,7 +62,7 @@ let RenderChecked = ({itemType, parent, checkedList, setChecked, checkedDetails,
         }
         else if (itemType == "edu") {
             return (
-                <ListGroup.Item className="item-overwrites" eventKey={ID}> 
+                <ListGroup.Item className="item-overwrites" eventKey={ID} active={false}> 
                 <div><h4>{parent.getIn([ID, 'name'])}</h4></div> 
                 <div><i>{parent.getIn([ID, 'description'])}</i></div>
                 <div>{parent.getIn([ID, 'location'])}</div><div>Graduated {parent.getIn([ID, 'dates'])}</div> 
@@ -70,7 +70,7 @@ let RenderChecked = ({itemType, parent, checkedList, setChecked, checkedDetails,
             );
         } else if (itemType == "proj") {            
             return (
-                    <ListGroup.Item className="item-overwrites" eventKey={ID}> 
+                    <ListGroup.Item className="item-overwrites" eventKey={ID} active={false}> 
                     <div><h4>{parent.getIn([ID, 'name'])}</h4></div>
                     <Table responsive="sm">
                         <tr>
@@ -92,7 +92,7 @@ let RenderChecked = ({itemType, parent, checkedList, setChecked, checkedDetails,
             );
         } else if (itemType == "work") {
             return (
-                    <ListGroup.Item className="item-overwrites" eventKey={ID}> 
+                    <ListGroup.Item className="item-overwrites" active={false} eventKey={ID}> 
                     <div><h4>{parent.getIn([ID, 'name'])}</h4></div>
                     <Table responsive="sm">
                         <tr>
@@ -114,7 +114,7 @@ let RenderChecked = ({itemType, parent, checkedList, setChecked, checkedDetails,
             );
         } else {
             return (
-                    <ListGroup.Item className="item-overwrites" eventKey={ID}> 
+                    <ListGroup.Item className="item-overwrites" active={false} eventKey={ID}> 
                     <div><h4>{parent.getIn([ID, 'name'])}</h4></div>
                     <Table responsive="sm">
                         <tr>
@@ -139,7 +139,7 @@ let RenderChecked = ({itemType, parent, checkedList, setChecked, checkedDetails,
 
     let SelectButton = ({ID}) => {
         return (
-            <ListGroup.Item>
+            <ListGroup.Item active={false}>
                 <Form.Check
                     type="switch"
                     id={ID}

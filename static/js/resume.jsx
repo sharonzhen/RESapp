@@ -213,7 +213,7 @@ let AddDetail = ({id1, parent, setParent}) => {
             <ListGroup>
             {
                 parent.map((item) => (
-                    <ListGroup.Item>{item}</ListGroup.Item>
+                    <ListGroup.Item active={false}>{item}</ListGroup.Item>
                 ))
             }
             </ListGroup>
@@ -559,7 +559,7 @@ let TechField = ({techSkills, setTechSkills}) => {
     let pushList = [];
     for (let [key] of techSkills) {
         pushList.push(
-                <ListGroup.Item action variant="light" eventKey={key}> 
+                <ListGroup.Item action variant="light" active={false} eventKey={key}> 
                 <div><b>{techSkills.getIn([key, 'name'])}</b>:</div> 
                 <div>{techSkills.getIn([key, 'description'])}</div> 
                 </ListGroup.Item>
@@ -597,7 +597,7 @@ let EduField = ({education, setEducation}) => {
     let pushList = [];
     for (let [key] of education) {
         pushList.push(
-                <ListGroup.Item action variant="light" eventKey={key}> 
+                <ListGroup.Item action variant="light" active={false} eventKey={key}> 
                 <div><h4>{education.getIn([key, 'name'])}</h4></div> 
                 <div><i>{education.getIn([key, 'description'])}</i></div>
                 <div>{education.getIn([key, 'location'])}</div><div>Graduated {education.getIn([key, 'dates'])}</div> 
@@ -636,7 +636,7 @@ let CourseField = ({coursework, setCoursework}) => {
     let pushList = [];
     for (let [key] of coursework) {
         pushList.push(
-                <ListGroup.Item action variant="light" eventKey={key}> 
+                <ListGroup.Item action variant="light" active={false} eventKey={key}> 
                 <div><b>{coursework.getIn([key, 'name'])}</b>:</div> 
                 <div>{coursework.getIn([key, 'description'])}</div> 
                 </ListGroup.Item>
@@ -675,13 +675,13 @@ let ProjField = ({projects, setProjects}) => {
         let detailList = [];
         for (let [dkey] of projects.getIn([key, 'details'])) {
             detailList.push(
-                <ListGroup.Item as="li" eventKey={dkey}>
+                <ListGroup.Item as="li" active={false} eventKey={dkey}>
                     {projects.getIn([key, 'details', dkey])}
                 </ListGroup.Item>
             );
         }
         pushList.push(
-                <ListGroup.Item action variant="light" eventKey={key}> 
+                <ListGroup.Item action variant="light" active={false} eventKey={key}> 
                 <div><h4>{projects.getIn([key, 'name'])}</h4></div>
                 <Table responsive="sm">
                     <tr>
@@ -745,13 +745,13 @@ let WorkField = ({works, setWorks}) => {
         let detailList = [];
         for (let [dkey] of works.getIn([key, 'details'])) {
             detailList.push(
-                <ListGroup.Item as="li" eventKey={dkey}>
+                <ListGroup.Item as="li" active={false} eventKey={dkey}>
                     {works.getIn([key, 'details', dkey])}
                 </ListGroup.Item>
             );
         }
         pushList.push(
-                <ListGroup.Item action variant="light" eventKey={key}> 
+                <ListGroup.Item action variant="light" active={false} eventKey={key}> 
                 <div><h4>{works.getIn([key, 'name'])}</h4></div>
                 <Table responsive="sm">
                     <tr>
@@ -816,13 +816,13 @@ let ExtraField = ({extras, setExtras}) => {
         let detailList = [];
         for (let [dkey] of extras.getIn([key, 'details'])) {
             detailList.push(
-                <ListGroup.Item variant="light" as="li" eventKey={dkey}>
+                <ListGroup.Item as="li" active={false} eventKey={dkey}>
                     {extras.getIn([key, 'details', dkey])}
                 </ListGroup.Item>
             );
         }
         pushList.push(
-                <ListGroup.Item  eventKey={key}> 
+                <ListGroup.Item action variant="light" active={false} eventKey={key}> 
                 <div><h4>{extras.getIn([key, 'name'])}</h4></div>
                 <Table responsive="sm">
                     <tr>
@@ -929,7 +929,6 @@ let GeneratePage = () => {
         <ExtraField 
             extras={extras}
             setExtras={setExtras}/>
-
     </div>
     );
 };
