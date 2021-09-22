@@ -816,13 +816,13 @@ let ExtraField = ({extras, setExtras}) => {
         let detailList = [];
         for (let [dkey] of extras.getIn([key, 'details'])) {
             detailList.push(
-                <ListGroup.Item as="li" eventKey={dkey}>
+                <ListGroup.Item variant="light" as="li" eventKey={dkey}>
                     {extras.getIn([key, 'details', dkey])}
                 </ListGroup.Item>
             );
         }
         pushList.push(
-                <ListGroup.Item action variant="light" eventKey={key}> 
+                <ListGroup.Item  eventKey={key}> 
                 <div><h4>{extras.getIn([key, 'name'])}</h4></div>
                 <Table responsive="sm">
                     <tr>

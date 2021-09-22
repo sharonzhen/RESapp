@@ -253,9 +253,9 @@ let GeneratePage = () => {
 
             });
             postResponse.then(res => res.blob()).then(blob => {
-                console.log(blob);
+                //console.log(blob);
                 const url = window.URL.createObjectURL(blob);
-                console.log(url);
+                //console.log(url);
                 const a = document.createElement('a');
                 a.href = url;
                 a.download = "resume.pdf";
@@ -264,23 +264,6 @@ let GeneratePage = () => {
                 document.body.removeChild(a);
                 window.URL.revokeObjectURL(url);
             });
-        // let postResponse = safePost("/generation/files", formBody);
-        // postResponse.then(data => {
-        //     if (data.path) {
-        //         let getResponse = safeDownload("/generation/files/resume.pdf");
-        //         getResponse.then(blob => {
-        //             const url = window.URL.createObjectURL(blob);
-        //             console.log(url);
-        //             const a = document.createElement('a');
-        //             a.href = url;
-        //             a.download = "resume.pdf";
-        //             document.body.appendChild(a);
-        //             a.click();
-        //             document.body.removeChild(a);
-        //             window.URL.revokeObjectURL(url);
-        //         });
-        //     }
-        // });
 
 
         setTechChecked(tech.map(x=>false));

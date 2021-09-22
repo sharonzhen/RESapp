@@ -1,4 +1,8 @@
 {% extends 'base.html' %}
+{% block title %}
+    Welcome
+{% endblock %}
+
 
 {% block css %}
 <style>
@@ -6,16 +10,15 @@
 </style>
 {% endblock %}
 
-{% block title %}
-    Welcome
-{% endblock %}
 
 {% block navbar %}
 <div id="navbar"></div>
 {% endblock %}
 
 {% block body %}
-<h1> Welcome to homepage </h1>
+<div id="homepage-root"></div>
+
+
 {% endblock %}
 
 {% block js %}
