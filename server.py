@@ -216,6 +216,9 @@ def resume_api():
     sort_items(stable_items, dynamic_items, edu, tech, 
             course, work, proj, extra)
 
+    for i in dynamic_items:
+        i.d_to
+
     return jsonify({
         'edu': edu,
         'tech': tech,
